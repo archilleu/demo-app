@@ -3,7 +3,7 @@
     <!--表格栏-->
     <el-table
       :data="data.content"
-      :hightlight-current-row="hightlightCurrentRow"
+      :highlight-current-row="hightlightCurrentRow"
       @selection-change="selectionChange"
       @current-change="handleCurrentChange"
       v-loading="loading"

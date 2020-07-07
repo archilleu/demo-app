@@ -2,7 +2,7 @@
  * 嵌套页面IFrame模块
  */
 
-import { baseUrl } from '@/utils/global'
+import { baseURL } from '@/utils/global'
 
 /**
  * 嵌套页面URL地址
@@ -28,7 +28,7 @@ export function getIFramePath (url) {
 export function getIFrameUrl (url) {
   let iframeUrl = ''
   if(/^iframe:.*/.test(url)) {
-    iframeUrl = baseUrl + url.replace('iframe:', '')
+    iframeUrl = baseURL + url.replace('iframe:', '')
   } else if(/^http[s]?:\/\/.*/.test(url)) {
     iframeUrl = url
   }

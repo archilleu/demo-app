@@ -2,6 +2,7 @@
   <div>
     <el-popover ref="popover" :placement="placement" trigger="click">
       <el-tree
+        class="popover"
         :data="data"
         :props="props"
         node-key="nodeKey"
@@ -9,16 +10,22 @@
         @current-change="currentChangeHandle"
         :default-expand-all="defaultExpandAll"
         :highlight-current="true"
-        :expand-on-click-node="true">
-      </el-tree>
+        :expand-on-click-node="true"
+      ></el-tree>
     </el-popover>
-    <el-input v-model="prop" v-popover:popover :readonly="true" :placeholder="placeholder" style="cursor:pointer;"></el-input>
+    <el-input
+      v-model="prop"
+      v-popover:popover
+      :readonly="true"
+      :placeholder="placeholder"
+      style="cursor:pointer;"
+    ></el-input>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PopupTreeInput',
+  name: "PopupTreeInput",
   props: {
     data: {
       type: Array,
@@ -30,19 +37,19 @@ export default {
     },
     prop: {
       type: String,
-      default: ''
+      default: ""
     },
     nodeKey: {
       type: String,
-      default: ''
+      default: ""
     },
     placeholder: {
       type: String,
-      default: '点击选择内容'
+      default: "点击选择内容"
     },
     placement: {
       type: String,
-      default: 'right-start'
+      default: "right-start"
     },
     defaultExpandAll: {
       type: Boolean,
@@ -53,9 +60,15 @@ export default {
       default: null
     }
   }
-}
+};
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.popover {
+  max-height: 364px;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 </style>

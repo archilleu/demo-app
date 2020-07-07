@@ -21,6 +21,7 @@
       :data="pageResult"
       :columns="columns"
       :loading="loading"
+      :hightlightCurrentRow="false"
       :showOverflowTooltip="true"
       @findPage="findPage"
       @handleEdit="handleEdit"

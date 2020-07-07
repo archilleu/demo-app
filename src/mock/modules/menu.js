@@ -368,47 +368,7 @@ export function findNavTree() {
             "delFlag": 0,
             "parentName": "使用案例",
             "level": 1,
-            "children": [
-              {
-                "id": 53,
-                "createBy": null,
-                "createTime": null,
-                "lastUpdateBy": null,
-                "lastUpdateTime": null,
-                "parentId": 52,
-                "name": "国际化",
-                "url": "/demo/i18n",
-                "perms": null,
-                "type": 1,
-                "icon": "el-icon-edit",
-                "orderNum": 1,
-                "delFlag": 0,
-                "parentName": "使用案例",
-                "level": 1,
-                "children": [
-                  {
-                    "id": 53,
-                    "createBy": null,
-                    "createTime": null,
-                    "lastUpdateBy": null,
-                    "lastUpdateTime": null,
-                    "parentId": 52,
-                    "name": "国际化",
-                    "url": "/demo/i18n",
-                    "perms": null,
-                    "type": 1,
-                    "icon": "el-icon-edit",
-                    "orderNum": 1,
-                    "delFlag": 0,
-                    "parentName": "使用案例",
-                    "level": 1,
-                    "children": [
-
-                    ]
-                  },
-                ]
-              },
-            ]
+            "children": []
           }
         ]
       }
@@ -1465,14 +1425,14 @@ export function findMenuTree() {
 }
 
 export function setParentName(data) {
-  if (data == null) {
+  if(data == null) {
     return
   }
   let len = data.length
-  for (let i = 0; i < len; i++) {
+  for(let i=0; i<len; i++) {
     let menu = data[i]
     menu.parentName = 'menu' + menu.parentId
-    if (menu.children != null) {
+    if(menu.children != null) {
       setParentName(menu.children)
     }
   }

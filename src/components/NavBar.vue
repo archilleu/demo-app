@@ -3,7 +3,7 @@
     <!-- logo 标题 -->
     <div class="title" :class="collapse?'title-collapse':'title-notcollapse'">
       <el-avatar :size="40" :src="url" fit="cover" @click.native="goHome"></el-avatar>
-      <span class="name" v-if="!collapse">智能云</span>
+      <span class="name" v-if="!collapse">警航</span>
       <i class="el-icon-d-arrow-left" title="收缩" v-if="!collapse" @click="onCollapse"></i>
       <i class="el-icon-d-arrow-right" title="展开" v-else-if="collapse" @click="onCollapse"></i>
     </div>

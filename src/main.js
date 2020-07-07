@@ -11,18 +11,16 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 
-import * as filters from '@/filter'
+Vue.config.productionTip = false;
+Vue.prototype.global = global;
 
-Vue.config.productionTip = false
-Vue.prototype.global = global
-
-for (const key in filters) {
-  Vue.filter(key, filters[key])
-}
-
+//启用ElementUI
 Vue.use(ElementUI)
+
+//启用api插件
 Vue.use(api)
 
+//在store中关联router
 sync(store, router)
 
 /* eslint-disable no-new */
@@ -32,4 +30,4 @@ new Vue({
   store,
   components: { App },
   template: '<App/>'
-})
+});

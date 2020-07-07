@@ -15,7 +15,7 @@
     <el-form-item prop="password">
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
-    <el-form-item>
+    <!-- <el-form-item>
       <el-col :span="12">
         <el-form-item prop="captcha">
           <el-input
@@ -33,12 +33,12 @@
           <img style="width: 100%;" class="pointer" :src="loginForm.src" @click="refreshCaptcha" />
         </el-form-item>
       </el-col>
-    </el-form-item>
+    </el-form-item>-->
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:48%;" @click.native.prevent="reset">重 置</el-button>
+      <el-button type="primary" style="width:45%;" @click.native.prevent="reset">重 置</el-button>
       <el-button
         type="primary"
-        style="width:48%;"
+        style="width:45%;"
         @click.native.prevent="login"
         :loading="loading"
       >登 录</el-button>
@@ -84,13 +84,13 @@ export default {
         this.$store.commit("menuRouteLoaded", false);
         router.push("/");
       } catch (e) {
-        debugger;
-        this.$message({ message: res.msg, type: "error" });
+        this.$message({ message: e, type: "error" });
+        this.loading = false;
       }
     },
     refreshCaptcha: function() {
       this.loginForm.src =
-        this.global.baseUrl + "/captcha.jpg?t=" + new Date().getTime();
+        this.global.baseURL + "/captcha.jpg?t=" + new Date().getTime();
     },
     reset() {
       this.$refs.loginForm.resetFields();
