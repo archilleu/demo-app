@@ -1,6 +1,6 @@
-# jh-app
+# demo-app
 
-> 警航app
+> demo-app
 
 ## Build Setup
 
