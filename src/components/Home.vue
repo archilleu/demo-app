@@ -8,16 +8,14 @@
 </template>
 
 <script>
-import HeadBar from "./HeadBar";
-import NavBar from "./NavBar";
-import MainContent from "./MainContent";
+import NavBar from './NavBar'
+import MainContent from './MainContent'
 export default {
   components: {
-    HeadBar,
     NavBar,
     MainContent
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -28,4 +26,4 @@ export default {
   right: 0;
   bottom: 0;
 }
-</style>  
+</style>

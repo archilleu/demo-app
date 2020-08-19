@@ -1,5 +1,5 @@
-import * as dataFormat from '@/filter/data.js'
+import * as dataFormat from '@/filter/date.js'
 
 export {
-    dataFormat
+  dataFormat
 }

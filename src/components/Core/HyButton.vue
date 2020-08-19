@@ -1,5 +1,7 @@
 <template>
   <el-button
+    v-if="!circle"
+    :circle="circle"
     :size="size"
     :type="type"
     :icon="icon"
@@ -7,27 +9,42 @@
     :disabled="!hasPerms(perms)"
     @click="handleClick"
   >{{label}}</el-button>
+  <el-button
+    v-else
+    :circle="circle"
+    :size="size"
+    :type="type"
+    :icon="icon"
+    :loading="loading"
+    :disabled="!hasPerms(perms)"
+    @click="handleClick"
+  ></el-button>
 </template>
 
 <script>
-import { hasPermission } from "@/permission/index.js";
+import { hasPermission } from '@/permission/index.js'
 export default {
-  name: "HyButton",
+  name: 'HyButton',
   props: {
     label: {
       // 按钮显示文本
       type: String,
-      default: "Button"
+      default: ''
     },
     icon: {
       // 按钮显示图标
       type: String,
-      default: ""
+      default: ''
     },
     size: {
       // 按钮尺寸
       type: String,
-      default: "mini"
+      default: 'mini'
+    },
+    circle: {
+      // 圆形按钮
+      type: Boolean,
+      default: false
     },
     type: {
       // 按钮类型
@@ -50,21 +67,21 @@ export default {
       default: null
     }
   },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {
-    handleClick: function() {
+    handleClick: function () {
       // 按钮操作处理函数
-      this.$emit("click", {});
+      this.$emit('click', {})
     },
-    hasPerms: function(perms) {
+    hasPerms: function (perms) {
       // 根据权限标识和外部指示状态进行权限判断
-      return hasPermission(perms) & !this.disabled;
+      return hasPermission(perms) & !this.disabled
     }
   },
-  mounted() {}
-};
+  mounted () {}
+}
 </script>
 
 <style scoped>

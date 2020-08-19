@@ -10,7 +10,6 @@
         class="tabs"
         :class="$store.state.app.collapse?'position-collapse-left':'position-left'"
         v-model="mainTabsActiveName"
-        :closable="true"
         type="card"
         @tab-click="selectedTabHandle"
         @tab-remove="removeTabHandle"
@@ -31,6 +30,7 @@
           :key="item.name"
           :label="item.title"
           :name="item.name"
+          :closable="item.closable"
         >
           <span slot="label">
             <i :class="item.icon"></i>
@@ -50,73 +50,77 @@
   </div>
 </template>
 
-
 <script>
 export default {
-  data() {
-    return {};
+  data () {
+    return {}
   },
   computed: {
     mainTabs: {
-      get() {
-        return this.$store.state.tab.mainTabs;
+      get () {
+        return this.$store.state.tab.mainTabs
       },
-      set(val) {
-        this.$store.commit("updateMainTabs", val);
+      set (val) {
+        this.$store.commit('updateMainTabs', val)
       }
     },
     mainTabsActiveName: {
-      get() {
-        return this.$store.state.tab.mainTabsActiveName;
+      get () {
+        return this.$store.state.tab.mainTabsActiveName
       },
-      set(val) {
-        this.$store.commit("updateMainTabsActiveName", val);
+      set (val) {
+        this.$store.commit('updateMainTabsActiveName', val)
       }
     }
   },
   methods: {
-    selectedTabHandle(tab) {
-      tab = this.mainTabs.filter(item => item.name === tab.name);
+    selectedTabHandle (tab) {
+      tab = this.mainTabs.filter(item => item.name === tab.name)
       if (tab.length >= 1) {
-        this.$router.push({ name: tab[0].name });
+        if (this.$router.currentRoute.name === tab[0].name) return
+        this.$router.push({ name: tab[0].name })
       }
     },
-    removeTabHandle(tabName) {
-      this.mainTabs = this.mainTabs.filter(item => item.name !== tabName);
+    removeTabHandle (tabName) {
+      if (tabName === '主页') return
+      this.mainTabs = this.mainTabs.filter(item => item.name !== tabName)
       if (this.mainTabs.length >= 1) {
         if (tabName === this.mainTabsActiveName) {
           this.$router.push(
             { name: this.mainTabs[this.mainTabs.length - 1].name },
             () => {
-              this.mainTabsActiveName = this.$route.name;
+              this.mainTabsActiveName = this.$route.name
             }
-          );
+          )
         }
       } else {
-        this.$router.push("/");
+        this.$router.push('/')
       }
     },
-    tabsCloseCurrentHandle() {
-      this.removeTabHandle(this.mainTabsActiveName);
+    tabsCloseCurrentHandle () {
+      this.removeTabHandle(this.mainTabsActiveName)
     },
-    tabsCloseOtherHandle() {
+    tabsCloseOtherHandle () {
       this.mainTabs = this.mainTabs.filter(
-        item => item.name === this.mainTabsActiveName
-      );
+        item => item.name === this.mainTabsActiveName || item.name === '主页'
+      )
     },
-    tabsCloseAllHandle() {
-      this.mainTabs = [];
-      this.$router.push("/");
+    tabsCloseAllHandle () {
+      if (this.mainTabs.length > 1) {
+        this.mainTabs.splice(0)
+        this.$router.push('/')
+      } else {
+      }
     },
-    tabsRefreshCurrentHandle() {
-      var tempTabName = this.mainTabsActiveName;
-      this.removeTabHandle(tempTabName);
+    tabsRefreshCurrentHandle () {
+      var tempTabName = this.mainTabsActiveName
+      this.removeTabHandle(tempTabName)
       this.$nextTick(() => {
-        this.$router.push({ name: tempTabName });
-      });
+        this.$router.push({ name: tempTabName })
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

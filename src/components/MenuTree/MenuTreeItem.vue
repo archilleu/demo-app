@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "MenuTreeItem",
+  name: 'MenuTreeItem',
   props: {
     label: {
       // 标签文本
@@ -36,22 +36,23 @@ export default {
       default: false
     }
   },
-  data() {
-    return {};
+
+  data () {
+    return {}
   },
   methods: {
-    handleClick: function() {
-      //URL为空
+    handleClick: function () {
+      // URL为空
       if (!this.url) {
-        this.$emit("click", {});
+        this.$emit('click', {})
       } else {
         // 通过菜单URL跳转至指定路由
-        this.$router.push("/" + this.url);
+        this.$router.push('/' + this.url)
       }
     }
   },
-  mounted() {}
-};
+  mounted () {}
+}
 </script>
 
 <style lang="scss" scoped>
