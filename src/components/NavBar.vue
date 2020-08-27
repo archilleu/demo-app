@@ -56,8 +56,8 @@
 <script>
 import Cookies from 'js-cookie'
 import { mapState } from 'vuex'
-import MenuTree from '@/components/MenuTree'
-import MenuTreeItem from '@/components/MenuTree/MenuTreeItem'
+import MenuTree from '@/components/ZCore/MenuTree'
+import MenuTreeItem from '@/components/ZCore/MenuTree/MenuTreeItem'
 export default {
   data () {
     return {
@@ -132,7 +132,7 @@ export default {
         window.sessionStorage.clear()
 
         // 刷新页面，清除vuex状态
-        window.location.href = '/login'
+        window.location.replace('/#/login')
       })
     }
   }

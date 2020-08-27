@@ -57,7 +57,10 @@ export default function $axios (options) {
         } else {
           if (err.response) {
             if (err.response.status === 401) {
-              if (router.currentRoute.path === '/login') { return }
+              if (router.currentRoute.path === '/login') {
+                Cookies.remove('token')
+                return
+              }
 
               router.push('/login')
             }

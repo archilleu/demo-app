@@ -24,6 +24,11 @@ export default {
   methods: {
     handleRoute (menu) {
       // 通过菜单URL跳转至指定路由
+      if (this.$router.currentRoute.path === `/${menu.url}`) {
+        return
+      }
+
+      // 通过菜单URL跳转至指定路由
       this.$router.push('/' + menu.url)
     }
   }

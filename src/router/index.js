@@ -5,6 +5,7 @@ import Home from '@/components/Home'
 import NotFound from '@/components/404'
 import Intro from '@/components/Intro/Intro'
 import Account from '@/components/Intro/Account'
+import api from '@/http/api'
 import store from '@/store'
 import Cookies from 'js-cookie'
 
@@ -53,7 +54,7 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const token = Cookies.get('token')
   if (to.path === '/login') {
     if (token) {
@@ -65,8 +66,8 @@ router.beforeEach((to, from, next) => {
     if (!token) {
       next({ path: '/login' })
     } else {
-      addDynamicMenuAndRoutes()
       next()
+      await addDynamicMenuAndRoutes()
     }
   }
 })
@@ -74,24 +75,28 @@ router.beforeEach((to, from, next) => {
 /**
 * 加载动态菜单和路由
 */
-function addDynamicMenuAndRoutes () {
+async function addDynamicMenuAndRoutes () {
   if (store.state.app.menuRouteLoaded) {
     return
   }
+  try {
+    // 获取导航树
+    const res = await api.sys.menu.findNavTree()
+    // 因为加载过程有等待，防止等待过程中二次调用
+    if (store.state.app.menuRouteLoaded) {
+      return
+    }
 
-  const navTreeStr = window.sessionStorage.getItem('navTree')
-  if (navTreeStr == null) {
-    return
+    const dynamicRoutes = buildDynamicRoutes(res.data)
+    router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
+    router.addRoutes(router.options.routes)
+
+    // 提交加载动态路由完毕状态
+    store.commit('menuRouteLoaded', true)
+    store.commit('setNavTree', res.data)
+  } catch (e) {
+    console.error(e)
   }
-
-  const navTree = JSON.parse(navTreeStr)
-  const dynamicRoutes = buildDynamicRoutes(navTree)
-  router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
-  router.addRoutes(router.options.routes)
-
-  // 提交加载动态路由完毕状态
-  store.commit('menuRouteLoaded', true)
-  store.commit('setNavTree', navTree)
 }
 
 /**
@@ -132,7 +137,7 @@ function buildDynamicRoutes (menuList = [], routes = []) {
         }
         url = url.substring(0, url.length - 1)
         route.component = resolve => require([`@/components/${url}`], resolve)
-      } catch (e) { }
+      } catch (e) {}
 
       routes.push(route)
     }

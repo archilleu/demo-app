@@ -113,11 +113,10 @@
   </div>
 </template>
 
-
 <script>
-import HyButton from "@/components/Core/HyButton";
-import HyTable from "@/components/Core/HyTable";
-import { formatDateTime } from "@/utils/datetime";
+import HyButton from '@/components/ZCore/HyButton'
+import HyTable from '@/components/ZCore/HyTableTemplate'
+import { formatDateTime } from '@/utils/datetime'
 
 export default {
   components: {
@@ -125,20 +124,20 @@ export default {
     HyTable
   },
 
-  data() {
+  data () {
     return {
-      size: "small",
+      size: 'small',
       filters: {
-        label: ""
+        label: ''
       },
       columns: [
-        { prop: "id", label: "ID", minWidth: 50 },
-        { prop: "name", label: "角色名", minWidth: 120 },
-        { prop: "remark", label: "备注", minWidth: 120 },
-        { prop: "createBy", label: "创建人", minWidth: 120 },
+        { prop: 'id', label: 'ID', minWidth: 50 },
+        { prop: 'name', label: '角色名', minWidth: 120 },
+        { prop: 'remark', label: '备注', minWidth: 120 },
+        { prop: 'createBy', label: '创建人', minWidth: 120 },
         {
-          prop: "createTime",
-          label: "创建时间",
+          prop: 'createTime',
+          label: '创建时间',
           minWidth: 120,
           formatter: formatDateTime
         }
@@ -151,13 +150,13 @@ export default {
       editLoading: false,
       loading: false,
       dataFormRules: {
-        name: [{ required: true, message: "请输入角色名", trigger: "blur" }]
+        name: [{ required: true, message: '请输入角色名', trigger: 'blur' }]
       },
       // 新增编辑界面数据
       dataForm: {
         id: 0,
-        name: "",
-        remark: ""
+        name: '',
+        remark: ''
       },
       selectRole: {},
       menuData: [],
@@ -167,183 +166,183 @@ export default {
       checkAll: false,
       currentRoleMenus: [],
       defaultProps: {
-        children: "children",
-        label: "name"
+        children: 'children',
+        label: 'name'
       }
-    };
+    }
   },
 
   methods: {
-    //获取分页数据
-    findPage(data) {
+    // 获取分页数据
+    findPage (data) {
       if (data !== null) {
-        this.pageRequest = data.pageRequest;
+        this.pageRequest = data.pageRequest
       }
 
-      this.loading = true;
-      this.pageRequest.params = [{ name: "label", value: this.filters.label }];
+      this.loading = true
+      this.pageRequest.params = [{ name: 'label', value: this.filters.label }]
       this.$api.role.findPage(this.pageRequest).then(res => {
-        this.pageResult = res.data;
-        this.findTreeData();
-        this.loading = false;
-      });
+        this.pageResult = res.data
+        this.findTreeData()
+        this.loading = false
+      })
     },
     // 批量删除
-    handleDelete: function(data) {
-      this.$api.role.batchDelete(data.params).then(data.callback);
+    handleDelete: function (data) {
+      this.$api.role.batchDelete(data.params).then(data.callback)
     },
     // 显示新增界面
-    handleAdd: function() {
-      this.dialogVisible = true;
-      this.operation = true;
+    handleAdd: function () {
+      this.dialogVisible = true
+      this.operation = true
       this.dataForm = {
         id: 0,
-        name: "",
-        remark: ""
-      };
+        name: '',
+        remark: ''
+      }
     },
     // 显示编辑界面
-    handleEdit: function(params) {
-      this.dialogVisible = true;
-      this.operation = false;
-      this.dataForm = Object.assign({}, params.row);
+    handleEdit: function (params) {
+      this.dialogVisible = true
+      this.operation = false
+      this.dataForm = Object.assign({}, params.row)
     },
     // 编辑
-    submitForm: function() {
+    submitForm: function () {
       this.$refs.dataForm.validate(valid => {
         if (valid) {
-          this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            this.editLoading = true;
-            let params = Object.assign({}, this.dataForm);
+          this.$confirm('确认提交吗？', '提示', {}).then(() => {
+            this.editLoading = true
+            let params = Object.assign({}, this.dataForm)
             this.$api.role.save(params).then(res => {
-              this.editLoading = false;
+              this.editLoading = false
               if (res.code == 200) {
-                this.$message({ message: "操作成功", type: "success" });
-                this.dialogVisible = false;
-                this.$refs["dataForm"].resetFields();
+                this.$message({ message: '操作成功', type: 'success' })
+                this.dialogVisible = false
+                this.$refs['dataForm'].resetFields()
               } else {
                 this.$message({
-                  message: "操作失败, " + res.msg,
-                  type: "error"
-                });
+                  message: '操作失败, ' + res.msg,
+                  type: 'error'
+                })
               }
-              this.findPage(null);
-            });
-          });
+              this.findPage(null)
+            })
+          })
         }
-      });
+      })
     },
     // 获取数据
-    findTreeData: function() {
-      this.menuLoading = true;
+    findTreeData: function () {
+      this.menuLoading = true
       this.$api.menu.findMenuTree().then(res => {
-        this.menuData = res.data;
-        this.menuLoading = false;
-      });
+        this.menuData = res.data
+        this.menuLoading = false
+      })
     },
     // 角色选择改变监听
-    handleRoleSelectChange(val) {
+    handleRoleSelectChange (val) {
       if (val == null || val.val == null) {
-        return;
+        return
       }
-      this.selectRole = val.val;
+      this.selectRole = val.val
       this.$api.role.findRoleMenus({ roleId: val.val.id }).then(res => {
-        this.currentRoleMenus = res.data;
-        this.$refs.menuTree.setCheckedNodes(res.data);
-      });
+        this.currentRoleMenus = res.data
+        this.$refs.menuTree.setCheckedNodes(res.data)
+      })
     },
     // 树节点选择监听
-    handleMenuCheckChange(data, check, subCheck) {
+    handleMenuCheckChange (data, check, subCheck) {
       if (check) {
         // 节点选中时同步选中父节点
-        let parentId = data.parentId;
-        this.$refs.menuTree.setChecked(parentId, true, false);
+        let parentId = data.parentId
+        this.$refs.menuTree.setChecked(parentId, true, false)
       } else {
         // 节点取消选中时同步取消选中子节点
         if (data.children != null) {
           data.children.forEach(element => {
-            this.$refs.menuTree.setChecked(element.id, false, false);
-          });
+            this.$refs.menuTree.setChecked(element.id, false, false)
+          })
         }
       }
     },
     // 重置选择
-    resetSelection() {
-      this.checkAll = false;
-      this.$refs.menuTree.setCheckedNodes(this.currentRoleMenus);
+    resetSelection () {
+      this.checkAll = false
+      this.$refs.menuTree.setCheckedNodes(this.currentRoleMenus)
     },
     // 全选操作
-    handleCheckAll() {
+    handleCheckAll () {
       if (this.checkAll) {
-        let allMenus = [];
-        this.checkAllMenu(this.menuData, allMenus);
-        this.$refs.menuTree.setCheckedNodes(allMenus);
+        let allMenus = []
+        this.checkAllMenu(this.menuData, allMenus)
+        this.$refs.menuTree.setCheckedNodes(allMenus)
       } else {
-        this.$refs.menuTree.setCheckedNodes([]);
+        this.$refs.menuTree.setCheckedNodes([])
       }
     },
     // 递归全选
-    checkAllMenu(menuData, allMenus) {
+    checkAllMenu (menuData, allMenus) {
       menuData.forEach(menu => {
-        allMenus.push(menu);
+        allMenus.push(menu)
         if (menu.children) {
-          this.checkAllMenu(menu.children, allMenus);
+          this.checkAllMenu(menu.children, allMenus)
         }
-      });
+      })
     },
     // 角色菜单授权提交
-    submitAuthForm() {
-      let roleId = this.selectRole.id;
-      if ("admin" == this.selectRole.name) {
+    submitAuthForm () {
+      let roleId = this.selectRole.id
+      if (this.selectRole.name == 'admin') {
         this.$message({
-          message: "超级管理员拥有所有菜单权限，不允许修改！",
-          type: "error"
-        });
-        return;
+          message: '超级管理员拥有所有菜单权限，不允许修改！',
+          type: 'error'
+        })
+        return
       }
-      this.authLoading = true;
-      let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, true);
-      let roleMenus = [];
+      this.authLoading = true
+      let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, true)
+      let roleMenus = []
       for (let i = 0, len = checkedNodes.length; i < len; i++) {
-        let roleMenu = { roleId: roleId, menuId: checkedNodes[i].id };
-        roleMenus.push(roleMenu);
+        let roleMenu = { roleId: roleId, menuId: checkedNodes[i].id }
+        roleMenus.push(roleMenu)
       }
       this.$api.role.saveRoleMenus(roleMenus).then(res => {
         if (res.code == 200) {
-          this.$message({ message: "操作成功", type: "success" });
+          this.$message({ message: '操作成功', type: 'success' })
         } else {
-          this.$message({ message: "操作失败, " + res.msg, type: "error" });
+          this.$message({ message: '操作失败, ' + res.msg, type: 'error' })
         }
-        this.authLoading = false;
-      });
+        this.authLoading = false
+      })
     },
-    renderContent(h, { node, data, store }) {
+    renderContent (h, { node, data, store }) {
       return (
         <div class="column-container">
           <span style="text-algin:center;margin-right:80px;">{data.name}</span>
           <span style="text-algin:center;margin-right:80px;">
             <el-tag
-              type={data.type === 0 ? "" : data.type === 1 ? "success" : "info"}
+              type={data.type === 0 ? '' : data.type === 1 ? 'success' : 'info'}
               size="small"
             >
-              {data.type === 0 ? "目录" : data.type === 1 ? "菜单" : "按钮"}
+              {data.type === 0 ? '目录' : data.type === 1 ? '菜单' : '按钮'}
             </el-tag>
           </span>
           <span style="text-algin:center;margin-right:80px;">
-            {" "}
+            {' '}
             <i class={data.icon}></i>
           </span>
           <span style="text-algin:center;margin-right:80px;">
-            {data.parentName ? data.parentName : "顶级菜单"}
+            {data.parentName ? data.parentName : '顶级菜单'}
           </span>
           <span style="text-algin:center;margin-right:80px;">
-            {data.url ? data.url : "\t"}
+            {data.url ? data.url : '\t'}
           </span>
         </div>
-      );
+      )
     }
   },
 
-  mounted() {}
-};
+  mounted () {}
+}
 </script>

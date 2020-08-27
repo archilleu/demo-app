@@ -6,13 +6,9 @@ body {
   margin: 0;
 }
 
-//工具条
-.page-container {
-  .toolbar {
-    float: left;
-    padding-top: 10px;
-    padding-left: 15px;
-  }
+//wrapper页
+.full-wrapper {
+  height: 100%;
 }
 
 ::-webkit-scrollbar {

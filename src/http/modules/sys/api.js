@@ -9,6 +9,7 @@ import * as log from './log'
 import * as loginlog from './loginlog'
 
 export default {
+
   login,
   user,
   dept,
@@ -19,3 +20,5 @@ export default {
   log,
   loginlog
 }
+
+export const baseUrl = 'sys'

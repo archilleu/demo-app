@@ -55,12 +55,8 @@ export default {
         // 登录
         const res = await this.$api.sys.login.login(this.loginForm)
 
-        // 获取导航树
-        const navTree = await this.$api.sys.menu.findNavTree()
-
         Cookies.set('token', res.data.token)
-        sessionStorage.setItem('user', this.loginForm.account)
-        sessionStorage.setItem('navTree', JSON.stringify(navTree.data))
+        sessionStorage.setItem('user', JSON.stringify(res.data))
 
         this.$store.commit('menuRouteLoaded', false)
         router.push('/')
@@ -73,7 +69,12 @@ export default {
       this.$refs.loginForm.resetFields()
     }
   },
-  mounted () {}
+  created () {
+    // 刷新路由，应为没有删除路由的方法
+    if (this.$store.state.app.menuRouteLoaded) {
+      location.reload()
+    }
+  }
 }
 </script>
 
