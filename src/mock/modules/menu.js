@@ -2,6 +2,31 @@
  * 菜单管理模块
  */
 
+// 保存
+export function save () {
+  return {
+    url: 'sys/menu/save',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
+}
+// 批量删除
+export function batchDelete () {
+  return {
+    url: 'sys/menu/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
+}
+
 // 获取导航菜单树
 export function findNavTree () {
   const navTreeData = {
@@ -51,7 +76,7 @@ export function findNavTree () {
             lastUpdateTime: null,
             parentId: 1,
             name: '机构管理',
-            url: '/sys/dept',
+            url: '/sys/dept/index',
             perms: null,
             type: 1,
             icon: 'el-icon-news',
@@ -87,7 +112,7 @@ export function findNavTree () {
             lastUpdateTime: null,
             parentId: 1,
             name: '菜单管理',
-            url: '/sys/menu',
+            url: '/sys/menu/index',
             perms: null,
             type: 1,
             icon: 'el-icon-menu',
@@ -375,7 +400,7 @@ export function findNavTree () {
     ]
   }
   return {
-    url: 'menu/findNavTree',
+    url: 'sys/menu/findNavTree',
     type: 'get',
     data: navTreeData
   }
@@ -1418,8 +1443,8 @@ export function findMenuTree () {
     ]
   }
   return {
-    url: 'menu/findMenuTree',
-    type: 'get',
+    url: 'sys/menu/findMenuTree',
+    type: 'post',
     data: menuTreeData
   }
 }

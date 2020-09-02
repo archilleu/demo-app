@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import { baseUrl } from './api'
 import axios from '../../axios'
 
 /*
@@ -5,25 +7,35 @@ import axios from '../../axios'
  */
 
 // 保存
-export const save = (data) => {
+export async function save (data) {
   return axios({
-    url: '/dept/save',
+    url: `${baseUrl}/dept/save`,
     method: 'post',
     data
   })
 }
+
 // 删除
-export const batchDelete = (data) => {
+export async function del (id) {
+  batchDelete([id])
+}
+
+// 批量删除
+export async function batchDelete (data) {
   return axios({
-    url: '/dept/delete',
+    url: `${baseUrl}/dept/delete`,
     method: 'post',
     data
   })
 }
+
 // 查询机构树
-export const findDeptTree = () => {
+export async function findDeptTree (data = {}) {
   return axios({
-    url: '/dept/findTree',
-    method: 'get'
+    url: `${baseUrl}/dept/findTree`,
+    method: 'post',
+    data: {
+      ..._.pickBy(data.filters, _.identity)
+    }
   })
 }

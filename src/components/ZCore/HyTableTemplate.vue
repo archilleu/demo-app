@@ -18,7 +18,7 @@
       :align="align"
     >
       <!-- 详情列 -->
-      <el-table-column v-if="columnsExpand.data.length!=0" type="expand">
+      <el-table-column v-if="columnsExpand && columnsExpand.data.length!=0" type="expand">
         <template slot-scope="props">
           <el-form
             label-position="left"
@@ -56,7 +56,12 @@
         :formatter="column.formatter"
         :sortable="column.sortable==null?true:column.sortable"
         show-overflow-tooltip
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          <div v-if="!column.template">{{ scope.row[scope.column.property] }}</div>
+          <div v-else v-html="column.template(scope.row)"></div>
+        </template>
+      </el-table-column>
 
       <!-- 左边固定操作列 -->
       <el-table-column

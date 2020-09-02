@@ -5,7 +5,7 @@
         class="popover"
         :data="data"
         :props="props"
-        node-key="nodeKey"
+        :node-key="nodeKey"
         ref="popupTree"
         @current-change="currentChangeHandle"
         :default-expand-all="defaultExpandAll"
@@ -18,38 +18,41 @@
       v-popover:popover
       :readonly="true"
       :placeholder="placeholder"
-      style="cursor:pointer;"
     ></el-input>
   </div>
 </template>
 
 <script>
 export default {
-  name: "PopupTreeInput",
+  name: 'PopupTreeInput',
   props: {
     data: {
       type: Array,
-      default: []
+      default () {
+        return []
+      }
     },
     props: {
       type: Object,
-      default: {}
+      default () {
+        return []
+      }
     },
     prop: {
       type: String,
-      default: ""
+      default: ''
     },
     nodeKey: {
       type: String,
-      default: ""
+      default: ''
     },
     placeholder: {
       type: String,
-      default: "点击选择内容"
+      default: '点击选择内容'
     },
     placement: {
       type: String,
-      default: "right-start"
+      default: 'right-start'
     },
     defaultExpandAll: {
       type: Boolean,
@@ -60,7 +63,7 @@ export default {
       default: null
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

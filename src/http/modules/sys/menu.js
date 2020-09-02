@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import { baseUrl } from './api'
 import axios from '../../axios'
 
 /*
@@ -5,33 +7,36 @@ import axios from '../../axios'
  */
 
 // 保存
-export const save = (data) => {
+export async function save (data) {
   return axios({
-    url: '/menu/save',
+    url: `${baseUrl}/menu/save`,
     method: 'post',
     data
   })
 }
 // 删除
-export const batchDelete = (data) => {
+export async function batchDelete (data) {
   return axios({
-    url: '/menu/delete',
+    url: `${baseUrl}/menu/delete`,
     method: 'post',
     data
   })
 }
 // 查找导航菜单树
-export const findNavTree = (params) => {
+export async function findNavTree (params) {
   return axios({
-    url: '/menu/findNavTree',
+    url: `${baseUrl}/menu/findNavTree`,
     method: 'get',
     params
   })
 }
 // 查找导航菜单树
-export const findMenuTree = () => {
+export async function findMenuTree (data) {
   return axios({
-    url: '/menu/findMenuTree',
-    method: 'get'
+    url: `${baseUrl}/menu/findMenuTree`,
+    method: 'post',
+    data: {
+      ..._.pickBy(data.filters, _.identity)
+    }
   })
 }

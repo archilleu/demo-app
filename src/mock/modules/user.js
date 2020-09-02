@@ -5,7 +5,7 @@
 // 保存
 export function save () {
   return {
-    url: 'user/save',
+    url: 'sys/user/save',
     type: 'post',
     data: {
       code: 200,
@@ -17,7 +17,7 @@ export function save () {
 // 批量删除
 export function batchDelete () {
   return {
-    url: 'user/delete',
+    url: 'sys/user/delete',
     type: 'post',
     data: {
       code: 200,

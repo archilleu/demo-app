@@ -209,6 +209,7 @@ export default {
     // 重置
     async findReset () {
       try {
+        this.$refs.filtersForm.resetFields()
         this.resetLoading = true
         await this.findPage()
       } finally {
@@ -238,11 +239,12 @@ export default {
         try {
           this.loading = true
           await this.api.batchDelete(ids)
+          await this.findPage({ pageRequest: this.pageRequest })
+          this.$message({ message: '删除成功', type: 'success', center: true })
         } catch (e) {
           this.$message({ message: e, type: 'error', center: true })
         } finally {
           this.loading = false
-          await this.findPage({ pageRequest: this.pageRequest })
         }
       }).catch(() => {})
     },
