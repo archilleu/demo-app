@@ -94,7 +94,7 @@ export function findNavTree () {
             lastUpdateTime: null,
             parentId: 1,
             name: '角色管理',
-            url: '/sys/role',
+            url: '/sys/role/index',
             perms: null,
             type: 1,
             icon: 'el-icon-view',

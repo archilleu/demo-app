@@ -123,8 +123,16 @@ export default {
 }
 </script>
 
+<style lang="scss">
+@import "@/assets/toolbar.scss";
+</style>
+
 <style scoped lang="scss">
-@import "../assets/base.scss";
+
+@import "@/assets/base.scss";
+
+//MainContent标签栏高度
+$mainContentTabsHeight: 40px;
 
 .main-container {
   padding: 0 5px 5px;
@@ -134,38 +142,41 @@ export default {
   right: 0;
   bottom: 0;
   background-color: white;
-  .tabs {
-    position: fixed;
-    top: 0;
-    right: 50px;
-    padding-left: 0px;
-    padding-right: 2px;
-    height: $mainContentTabsHeight;
-    line-height: $mainContentTabsHeight;
-    font-size: 14px;
-    background: rgb(255, 253, 255);
-  }
-  .tabs-tools {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: $mainContentTabsHeight;
-    font-size: 14px;
-    line-height: $mainContentTabsHeight;
-    cursor: pointer;
-    border-color: rgba(200, 206, 206, 0.5);
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-left-width: 1px;
-    border-left-style: solid;
-    background: rgba(255, 255, 255, 1);
-    i {
-      width: 50px;
-      text-align: center;
+  .tab-container {
+    overflow: hidden;
+    .tabs {
+      position: fixed;
+      top: 0;
+      right: 50px;
+      padding-left: 0px;
+      padding-right: 2px;
+      height: $mainContentTabsHeight;
+      line-height: $mainContentTabsHeight;
+      font-size: 14px;
+      background: rgb(255, 253, 255);
+      .tabs-tools {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: $mainContentTabsHeight;
+        font-size: 14px;
+        line-height: $mainContentTabsHeight;
+        cursor: pointer;
+        border-color: rgba(200, 206, 206, 0.5);
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-left-width: 1px;
+        border-left-style: solid;
+        background: rgba(255, 255, 255, 1);
+        i {
+          width: 50px;
+          text-align: center;
+        }
+      }
+      .tabs-tools:hover {
+        background: rgba(200, 206, 206, 1);
+      }
     }
-  }
-  .tabs-tools:hover {
-    background: rgba(200, 206, 206, 1);
   }
   .main-content {
     position: absolute;

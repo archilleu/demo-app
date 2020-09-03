@@ -1,6 +1,6 @@
 <template>
-  <div class="lazyTable">
-    <div ref="toolbar" class="toolbar">
+  <div class="hy-height-100 lazyTable">
+    <div ref="hy-toolbar" class="hy-toolbar">
       <el-form :inline="true" size="mini">
         <!-- 自定义工具栏 -->
         <el-form-item>
@@ -41,56 +41,58 @@
       </el-drawer>
     </div>
     <!--表格树内容栏-->
-    <el-table
-      lazy
-      stripe
-      rowKey="id"
-      size="mini"
-      :load="load"
-      :data="tableData"
-      style="width: 100%; overflow: auto"
-      v-loading="loading"
-      highlight-current-row
-      element-loading-text="加载中..."
-    >
-      <!-- 自定义列 -->
-      <el-table-column
-        v-for="column in columns"
-        :prop="column.prop"
-        :label="column.label"
-        :min-width="column.minWidth"
-        :key="column.prop"
-        :formatter="column.formatter"
-        show-overflow-tooltip
-      ></el-table-column>
+    <div class=tree-table>
+      <el-table
+        lazy
+        stripe
+        rowKey="id"
+        size="mini"
+        :load="load"
+        :data="tableData"
+        style="width: 100%"
+        v-loading="loading"
+        highlight-current-row
+        element-loading-text="加载中..."
+      >
+        <!-- 自定义列 -->
+        <el-table-column
+          v-for="column in columns"
+          :prop="column.prop"
+          :label="column.label"
+          :min-width="column.minWidth"
+          :key="column.prop"
+          :formatter="column.formatter"
+          show-overflow-tooltip
+        ></el-table-column>
 
-      <!-- 左边固定操作列 -->
-      <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
-        <template slot-scope="scope">
-          <hy-button
-            icon="fa fa-edit"
-            :circle="true"
-            size="mini"
-            type="primary"
-            @click="handleEdit(scope.row)"
-          />
-          <hy-button
-            icon="fa fa-envelope-o"
-            :circle="true"
-            size="mini"
-            type="info"
-            @click="handleInfo(scope.row)"
-          />
-          <hy-button
-            icon="fa fa-trash"
-            :circle="true"
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row)"
-          />
-        </template>
-      </el-table-column>
-    </el-table>
+        <!-- 左边固定操作列 -->
+        <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
+          <template slot-scope="scope">
+            <hy-button
+              icon="fa fa-edit"
+              :circle="true"
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.row)"
+            />
+            <hy-button
+              icon="fa fa-envelope-o"
+              :circle="true"
+              size="mini"
+              type="info"
+              @click="handleInfo(scope.row)"
+            />
+            <hy-button
+              icon="fa fa-trash"
+              :circle="true"
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)"
+            />
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <!--自定义新增\编辑\查看-->
     <hy-dialog-template
@@ -260,57 +262,9 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  .toolbar {
-    padding-top: 10px;
-    padding-left: 15px;
-    position: relative;
-    .search-btn {
-      position: absolute;
-      top: 12px;
-      right: -5px;
-      outline: none;
-      cursor: pointer;
-      color: white;
-      background-color: #409eff;
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-      z-index: 100;
-      box-sizing: border-box;
-      width: 30px;
-      height: 28px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 4px 4px 6px 0px #0000004d;
-      i {
-        margin-left: 4px;
-      }
-    }
-  }
-}
-</style>
-<style lang="scss">
-.filtersForm {
-  margin: 0 20px;
-  .warning {
-    margin-bottom: 15px;
-    font-size: 12px;
-    color: grey;
-    text-align: center;
-  }
-  .footer {
-    text-align: right;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    right: 20px;
-  }
-}
-.search-drawer {
-  header {
-    span {
-      outline: none;
-    }
+  .tree-table {
+    flex-grow: 1;
+    overflow: auto;
   }
 }
 </style>

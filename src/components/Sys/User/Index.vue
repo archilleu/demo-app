@@ -1,5 +1,5 @@
 <template>
-  <div class="full-wrapper">
+  <div class="hy-height-100">
     <!-- 表格栏目 -->
     <HyListTemplate
       :api="$api.sys.user"
@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       columns: [
-        {prop: 'id', label: 'ID', minWidth: 50},
+        {prop: 'id', label: 'ID', minWidth: 80},
         {prop: 'name', label: '用户名', minWidth: 120},
         {prop: 'nickName', label: '昵称', minWidth: 120},
         {prop: 'deptName', label: '机构', minWidth: 120},

@@ -1,6 +1,6 @@
 <template>
   <div ref="hyListTemplateContainer" class="hy-list-template-container">
-    <div ref="toolbar" class="toolbar">
+    <div ref="hy-toolbar" class="hy-toolbar">
       <el-form :inline="true" :size="size">
         <!-- 自定义工具栏 -->
         <el-form-item v-if="showOperation & showAdd">
@@ -67,7 +67,6 @@
       :size="size"
       @handleCurrentChange="handleCurrentChange"
       @selection-change="selectionChange"
-      @handleAdd="handleAdd"
       @handleEdit="handleEdit"
       @handleInfo="handleInfo"
       @handleBatchDelete="handleBatchDelete"
@@ -288,64 +287,9 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  .toolbar {
-    padding-top: 10px;
-    padding-left: 15px;
-    position: relative;
-    .search-btn {
-      position: absolute;
-      top: 12px;
-      right: -5px;
-      outline: none;
-      cursor: pointer;
-      color: white;
-      background-color: #409eff;
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-      z-index: 100;
-      box-sizing: border-box;
-      width: 30px;
-      height: 28px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 4px 4px 6px 0px #0000004d;
-      i {
-        margin-left: 4px;
-      }
-    }
-  }
   .table-pagination {
     flex-grow: 1;
     border-top: 1px solid #8080806e;
-  }
-}
-</style>
-<style lang="scss">
-.filtersForm {
-  margin: 0 20px;
-  .warning {
-    margin-bottom: 15px;
-    font-size: 12px;
-    color: grey;
-    text-align: center;
-  }
-  .footer {
-    text-align: right;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    right: 20px;
-  }
-}
-</style>
-
-<style lang="scss">
-.search-drawer {
-  header {
-    span {
-      outline: none;
-    }
   }
 }
 </style>

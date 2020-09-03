@@ -1,6 +1,6 @@
 <template>
-  <div class="treeTable">
-    <div ref="toolbar" class="toolbar">
+  <div class="menu-table">
+    <div ref="hy-toolbar" class="hy-toolbar">
       <el-form :inline="true" size="mini">
         <!-- 自定义工具栏 -->
         <el-form-item>
@@ -41,62 +41,64 @@
       </el-drawer>
     </div>
     <!--表格树内容栏-->
-    <el-table
-      stripe
-      rowKey="id"
-      size="mini"
-      :data="tableData"
-      style="width: 100%; overflow: auto"
-      v-loading="loading"
-      highlight-current-row
-      element-loading-text="加载中..."
-    >
-      <el-table-column prop="id" header-align="center" align="left" width="100" label="ID"></el-table-column>
-      <!-- 自定义列 -->
-      <el-table-column
-        v-for="column in columns"
-        align="center"
-        header-align="center"
-        :prop="column.prop"
-        :label="column.label"
-        :min-width="column.minWidth"
-        :key="column.prop"
-        :formatter="column.formatter"
-        show-overflow-tooltip
+    <div class="tree-table">
+      <el-table
+        stripe
+        rowKey="id"
+        size="mini"
+        :data="tableData"
+        style="width: 100%;"
+        v-loading="loading"
+        highlight-current-row
+        element-loading-text="加载中..."
       >
-        <template slot-scope="scope">
-          <div v-if="!column.template">{{ scope.row[scope.column.property] }}</div>
-          <div v-else v-html="column.template(scope.row)"></div>
-        </template>
-      </el-table-column>
+        <el-table-column prop="id" header-align="center" align="left" width="100" label="ID"></el-table-column>
+        <!-- 自定义列 -->
+        <el-table-column
+          v-for="column in columns"
+          align="center"
+          header-align="center"
+          :prop="column.prop"
+          :label="column.label"
+          :min-width="column.minWidth"
+          :key="column.prop"
+          :formatter="column.formatter"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <div v-if="!column.template">{{ scope.row[scope.column.property] }}</div>
+            <div v-else v-html="column.template(scope.row)"></div>
+          </template>
+        </el-table-column>
 
-      <!-- 左边固定操作列 -->
-      <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
-        <template slot-scope="scope">
-          <hy-button
-            icon="fa fa-edit"
-            :circle="true"
-            size="mini"
-            type="primary"
-            @click="handleEdit(scope.row)"
-          />
-          <hy-button
-            icon="fa fa-envelope-o"
-            :circle="true"
-            size="mini"
-            type="info"
-            @click="handleInfo(scope.row)"
-          />
-          <hy-button
-            icon="fa fa-trash"
-            :circle="true"
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row)"
-          />
-        </template>
-      </el-table-column>
-    </el-table>
+        <!-- 左边固定操作列 -->
+        <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
+          <template slot-scope="scope">
+            <hy-button
+              icon="fa fa-edit"
+              :circle="true"
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.row)"
+            />
+            <hy-button
+              icon="fa fa-envelope-o"
+              :circle="true"
+              size="mini"
+              type="info"
+              @click="handleInfo(scope.row)"
+            />
+            <hy-button
+              icon="fa fa-trash"
+              :circle="true"
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)"
+            />
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <!--自定义新增\编辑\查看-->
     <hy-dialog-template
@@ -263,61 +265,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.treeTable {
+.menu-table {
   height: 100%;
   display: flex;
   flex-direction: column;
-  .toolbar {
-    padding-top: 10px;
-    padding-left: 15px;
-    position: relative;
-    .search-btn {
-      position: absolute;
-      top: 12px;
-      right: -5px;
-      outline: none;
-      cursor: pointer;
-      color: white;
-      background-color: #409eff;
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-      z-index: 100;
-      box-sizing: border-box;
-      width: 30px;
-      height: 28px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 4px 4px 6px 0px #0000004d;
-      i {
-        margin-left: 4px;
-      }
-    }
-  }
-}
-</style>
-<style lang="scss">
-.filtersForm {
-  margin: 0 20px;
-  .warning {
-    margin-bottom: 15px;
-    font-size: 12px;
-    color: grey;
-    text-align: center;
-  }
-  .footer {
-    text-align: right;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    right: 20px;
-  }
-}
-.search-drawer {
-  header {
-    span {
-      outline: none;
-    }
+  .tree-table {
+    flex-grow: 1;
+    overflow: auto;
   }
 }
 </style>

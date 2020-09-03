@@ -31,7 +31,7 @@ export async function findNavTree (params) {
   })
 }
 // 查找导航菜单树
-export async function findMenuTree (data) {
+export async function findMenuTree (data = {}) {
   return axios({
     url: `${baseUrl}/menu/findMenuTree`,
     method: 'post',

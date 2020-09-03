@@ -1,5 +1,5 @@
 <template>
-  <div class="full-wrapper">
+  <div class="hy-height-100">
     <!-- 表格栏目 -->
     <HyListTemplate
       :api="$api.sys.dict"

@@ -6,11 +6,24 @@ body {
   margin: 0;
 }
 
-//wrapper页
-.full-wrapper {
+/**
+*高度100%
+*/
+.hy-height-100 {
   height: 100%;
 }
 
+
+//导航栏宽度
+$navBarWeight: 200px;
+
+//收缩导航栏宽度
+$navBarCollapseWeight: 64px;
+
+
+/**
+* 滚动条
+*/
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -28,14 +41,3 @@ body {
 ::-webkit-scrollbar-track {
   background-color: #1e374f;
 }
-
-//导航条高度
-$headBarHeight: 60px;
-
-//导航栏宽度
-$navBarWeight: 200px;
-//收缩导航栏宽度
-$navBarCollapseWeight: 64px;
-
-//MainContent标签栏高度
-$mainContentTabsHeight: 40px;
