@@ -127,16 +127,21 @@ function buildDynamicRoutes (menuList = [], routes = []) {
         }
       }
       try {
+        if (/^http[s]?:\/\/.*/.test(menuList[i].url)) {
+          route.path = `/${route.path}`
+          route.component = resolve => require(['@/components/ZCore/IFrame/IFrame'], resolve)
+        } else {
         // 根据菜单URL动态加载vue组件，这里要求vue组件须按照url路径存储
         // 如url="sys/user"，则组件路径应是"@/components/sys/user.vue",否则组件加载不到
-        const array = menuList[i].url.split('/')
-        let url = ''
-        for (let i = 0; i < array.length; i++) {
+          const array = menuList[i].url.split('/')
+          let url = ''
+          for (let i = 0; i < array.length; i++) {
           // 路径第一个字符大写，用来标识路径
-          url += array[i].substring(0, 1).toUpperCase() + array[i].substring(1) + '/'
+            url += array[i].substring(0, 1).toUpperCase() + array[i].substring(1) + '/'
+          }
+          url = url.substring(0, url.length - 1)
+          route.component = resolve => require([`@/components/${url}`], resolve)
         }
-        url = url.substring(0, url.length - 1)
-        route.component = resolve => require([`@/components/${url}`], resolve)
       } catch (e) {}
 
       routes.push(route)

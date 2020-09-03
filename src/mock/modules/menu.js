@@ -394,6 +394,42 @@ export function findNavTree () {
             parentName: '使用案例',
             level: 1,
             children: []
+          },
+          {
+            id: 56,
+            createBy: null,
+            createTime: null,
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            parentId: 52,
+            name: '百度',
+            url: 'http://www.baidu.com',
+            perms: null,
+            type: 1,
+            icon: 'fa fa-globe',
+            orderNum: 2,
+            delFlag: 0,
+            parentName: '使用案例',
+            level: 1,
+            children: []
+          },
+          {
+            id: 57,
+            createBy: null,
+            createTime: null,
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            parentId: 52,
+            name: 'Bing',
+            url: 'http://bing.com',
+            perms: null,
+            type: 1,
+            icon: 'fa fa-globe',
+            orderNum: 2,
+            delFlag: 0,
+            parentName: '使用案例',
+            level: 1,
+            children: []
           }
         ]
       }
