@@ -14,15 +14,16 @@ export async function del (id) {
 // 删除
 export async function batchDelete (data) {
   return axios({
-    url: `${baseUrl}/log/delete`,
+    url: `${baseUrl}/login-log/delete`,
     method: 'post',
     data
   })
 }
+
 // 分页查询
 export async function findPage (data) {
   return axios({
-    url: `${baseUrl}/log/findPage`,
+    url: `${baseUrl}/login-log/findPage`,
     method: 'post',
     data: {
       ...data.pageRequest,

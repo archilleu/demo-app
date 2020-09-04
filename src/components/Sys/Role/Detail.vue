@@ -16,7 +16,7 @@
 import HyFormTemplate from '@/components/ZCore/HyFormTemplate'
 
 export default {
-  name: 'dict-detail',
+  name: 'role-detail',
   components: {
     HyFormTemplate
   },

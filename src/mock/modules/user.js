@@ -292,7 +292,7 @@ export function findPage (params) {
   }
 
   return {
-    url: 'user/findPage',
+    url: 'sys/user/findPage',
     type: 'post',
     data: findPageData
   }
@@ -328,7 +328,7 @@ export function findPermissions () {
     ]
   }
   return {
-    url: 'user/findPermissions',
+    url: 'sys/user/findPermissions',
     type: 'get',
     data: permsData
   }
@@ -370,7 +370,7 @@ export function findByName (params) {
     }
   }
   return {
-    url: 'user/findByName',
+    url: 'sys/user/findByName',
     type: 'get',
     data: findPageData
   }
@@ -379,7 +379,7 @@ export function findByName (params) {
 export function updatePassword (params) {
   const findPageData = { code: 200, msg: null, data: 1 }
   return {
-    url: 'user/updatePassword',
+    url: 'sys/user/updatePassword',
     type: 'get',
     data: findPageData
   }

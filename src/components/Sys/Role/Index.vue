@@ -240,7 +240,8 @@ export default {
 
 <style lang="scss" scope>
 .hy-height-100 {
-  > div {
+  .table-menu,
+  .table-role {
     height: 50%;
     &.table-menu {
       box-sizing: border-box;

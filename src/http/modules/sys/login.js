@@ -6,7 +6,7 @@ import axios from '../../axios'
 
 // 登录
 export async function login (data) {
-  return await axios({
+  return axios({
     url: 'login',
     method: 'post',
     data
@@ -15,7 +15,7 @@ export async function login (data) {
 
 // 登出
 export async function logout () {
-  return await axios({
+  return axios({
     url: 'logout',
     method: 'get'
   })

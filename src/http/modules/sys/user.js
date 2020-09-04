@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import { baseUrl } from './api'
 import axios from '../../axios'
 
 /*
@@ -5,33 +7,44 @@ import axios from '../../axios'
  */
 
 // 保存
-export const save = (data) => {
+export async function save (data) {
   return axios({
-    url: '/user/save',
+    url: `${baseUrl}/user/save`,
     method: 'post',
     data
   })
 }
+
 // 删除
-export const batchDelete = (data) => {
+export async function del (id) {
+  batchDelete([id])
+}
+
+// 删除
+export async function batchDelete (data) {
   return axios({
-    url: '/user/delete',
+    url: `${baseUrl}/user/delete`,
     method: 'post',
     data
   })
 }
+
 // 分页查询
-export const findPage = (data) => {
+export async function findPage (data) {
   return axios({
-    url: '/user/findPage',
+    url: `${baseUrl}/user/findPage`,
     method: 'post',
-    data
+    data: {
+      ...data.pageRequest,
+      ..._.pickBy(data.filters, _.identity)
+    }
   })
 }
+
 // 查找用户的菜单权限标识集合
-export const findPermissions = (params) => {
+export async function findPermissions (params) {
   return axios({
-    url: '/user/findPermissions',
+    url: `${baseUrl}/user/findPermissions`,
     method: 'get',
     params
   })

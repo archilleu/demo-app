@@ -6,7 +6,7 @@ import * as menu from './menu'
 import * as dict from './dict'
 import * as config from './config'
 import * as log from './log'
-import * as loginlog from './loginlog'
+import * as loginLog from './login-log'
 
 export default {
 
@@ -18,7 +18,7 @@ export default {
   dict,
   config,
   log,
-  loginlog
+  loginLog
 }
 
 export const baseUrl = 'sys'

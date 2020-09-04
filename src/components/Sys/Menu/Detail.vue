@@ -75,7 +75,7 @@ import HyFormTemplate from '@/components/ZCore/HyFormTemplate'
 import PopupTreeInput from '@/components/ZCore/PopupTreeInput'
 
 export default {
-  name: 'dept-detail',
+  name: 'menu-detail',
   components: {
     HyFormTemplate,
     PopupTreeInput

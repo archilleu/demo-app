@@ -60,6 +60,9 @@ export async function saveRoleMenus (data) {
   return axios({
     url: `${baseUrl}/role/saveRoleMenus`,
     method: 'post',
-    data
+    data: {
+      ...data.pageRequest,
+      ..._.pickBy(data.filters, _.identity)
+    }
   })
 }
