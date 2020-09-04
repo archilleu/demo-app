@@ -13,12 +13,15 @@ import global from '@/utils/global'
 /* eslint-disable no-unused-vars */
 import mock from '@/mock/index.js'
 
+import _ from 'lodash'
+
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 
-Vue.config.productionTip = false
 Vue.prototype.global = global
+
+Vue.prototype._ = _
 
 // 启用ElementUI
 Vue.use(ElementUI)

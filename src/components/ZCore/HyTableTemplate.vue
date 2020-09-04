@@ -104,10 +104,11 @@
     <!--分页栏-->
     <div class="pagination" ref="pagination">
       <el-pagination
+        :small="paginationSmall"
         :current-page="pageRequest.page"
         :page-sizes="[10, 20, 30, 40, 50]"
         :page-size="pageRequest.rows"
-        layout="sizes, prev, pager, next, jumper, total"
+        :layout="layout"
         :total="data.totalSize"
         :pager-count="5"
         background
@@ -166,6 +167,11 @@ export default {
       // 文本对齐方式
       type: String,
       default: 'left'
+    },
+    paginationSmall: {
+      // 分页组件大小
+      type: Boolean,
+      default: false
     },
     showDelete: {
       // 是否显示操作组件(删除)
@@ -228,6 +234,15 @@ export default {
 
       // 当前行
       currentRow: null
+    }
+  },
+  computed: {
+    layout () {
+      if (!this.paginationSmall) {
+        return 'total, sizes, prev, pager, next, jumper'
+      } else {
+        return 'total, prev, pager, next, jumper'
+      }
     }
   },
   methods: {
@@ -317,11 +332,12 @@ export default {
   .pagination {
     display: flex;
     padding: 10px 0 0 0;
+    align-items: center;
+    justify-content: flex-end;
     > button {
       margin-right: 15px;
     }
     .el-icon-refresh {
-      padding: 8px 0;
       cursor: pointer;
     }
   }

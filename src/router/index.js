@@ -112,7 +112,19 @@ function buildDynamicRoutes (menuList = [], routes = []) {
       temp = temp.concat(menuList[i].children)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) { /* /\S/ 匹配非空白字符 */
       // url有效并且不是空白字符串
-      menuList[i].url = menuList[i].url.replace(/^\//, '') /* /^\// 去掉第一个斜杠 */
+
+      // 分离url参数
+      const urlParams = menuList[i].url.replace(/^\//, '').split('?')
+      menuList[i].url = urlParams[0]
+      const params = {}
+      if (urlParams[1]) {
+        var paramsArr = this._.split(urlParams[1], '&')
+        _.forEach(paramsArr, function (item) {
+          var key = this._.split(item, '=')[0]
+          var value = this._.split(item, '=')[1]
+          params[key] = value
+        })
+      }
 
       // 创建路由配置
       const route = {
@@ -123,7 +135,8 @@ function buildDynamicRoutes (menuList = [], routes = []) {
           name: menuList[i].name,
           icon: menuList[i].icon,
           index: menuList[i].id,
-          closable: true
+          closable: true,
+          params
         }
       }
       try {

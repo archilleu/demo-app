@@ -14,7 +14,13 @@ export async function save (data) {
     data
   })
 }
+
 // 删除
+export async function del (id) {
+  batchDelete([id])
+}
+
+// 批量删除
 export async function batchDelete (data) {
   return axios({
     url: `${baseUrl}/menu/delete`,

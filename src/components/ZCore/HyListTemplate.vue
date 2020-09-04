@@ -65,6 +65,8 @@
       :hightlightCurrentRow="true"
       :showOverflowTooltip="true"
       :size="size"
+      :pageRequest="pageRequest"
+      :paginationSmall="paginationSmall"
       @handleCurrentChange="handleCurrentChange"
       @selection-change="selectionChange"
       @handleEdit="handleEdit"
@@ -112,12 +114,6 @@ export default {
       // 表格数据
       pageResult: {},
 
-      // 表格分页
-      pageRequest: {
-        page: 1,
-        rows: 20
-      },
-
       // 选中的所有行
       selections: [],
 
@@ -157,6 +153,23 @@ export default {
       type: Object,
       required: true
     },
+    // 表格分页
+    pageRequest: {
+      type: Object,
+      default () {
+        return {
+          page: 1,
+          rows: 20
+        }
+      }
+    },
+
+    paginationSmall: {
+      // 分页组件大小
+      type: Boolean,
+      default: false
+    },
+
     // 是否显示新增
     showAdd: {
       type: Boolean,

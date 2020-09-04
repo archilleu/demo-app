@@ -3,10 +3,12 @@
     <!-- 表格栏目 -->
     <div class="table-role">
       <HyListTemplate
-        :api="$api.sys.dict"
+        :api="$api.sys.role"
         :columns="columns"
-        :columnsExpand="columnsExpand"
         :showBatchDelete="false"
+        :pageRequest="pageRequest"
+        :paginationSmall="true"
+        @handleCurrentChange="handleRoleSelectChange"
       >
         <!-- 工具条栏 -->
         <template v-slot:toolbar></template>
@@ -36,42 +38,40 @@
         :data="menuData"
         size="mini"
         show-checkbox
+        highlight-current
         node-key="id"
         :props="defaultProps"
-        style="width: 100%;pading-top:20px; overflow-x: auto"
         class="menu-tree"
         ref="menuTree"
         :render-content="renderContent"
         v-loading="menuLoading"
-        element-loading-text="拼命加载中"
-        :check-strictly="true"
-        @check-change="handleMenuCheckChange"
+        element-loading-text="加载中..."
       ></el-tree>
-      <div style="float:left;padding-left:24px;padding-top:12px;padding-bottom:4px;">
-        <el-checkbox
-          v-model="checkAll"
-          @change="handleCheckAll"
-          :disabled="this.selectRole.id == null"
-        >
-          <b>全选</b>
-        </el-checkbox>
-      </div>
-      <div style="float:right;padding-right:15px;padding-top:4px;padding-bottom:4px;">
-        <hy-button
-          label="重置"
-          perms="sys:role:edit"
-          type="primary"
-          @click="resetSelection"
-          :disabled="this.selectRole.id == null"
-        />
-        <hy-button
-          label="提交"
-          perms="sys:role:edit"
-          type="primary"
-          @click="submitAuthForm"
-          :disabled="this.selectRole.id == null"
-          :loading="authLoading"
-        />
+      <div class="menu-footer">
+        <div>
+          <el-checkbox
+            v-model="checkAll"
+            @change="handleCheckAll"
+            :disabled="this.selectRole == null"
+          >
+            <b>全选</b>
+          </el-checkbox>
+        </div>
+        <div>
+          <hy-button
+            label="重置"
+            type="primary"
+            @click="resetSelection"
+            :disabled="this.selectRole == null"
+          />
+          <hy-button
+            label="提交"
+            type="primary"
+            @click="submitAuthForm"
+            :disabled="this.selectRole == null"
+            :loading="authLoading"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -95,13 +95,9 @@ export default {
   data () {
     return {
       columns: [
-        {prop: 'id', label: 'ID', minWidth: 60},
-        {prop: 'label', label: '名称', minWidth: 100},
-        {prop: 'value', label: '值', minWidth: 100},
-        {prop: 'type', label: '类型', minWidth: 80},
-        {prop: 'sort', label: '排序', minWidth: 80},
-        {prop: 'description', label: '描述', minWidth: 120},
-        {prop: 'remarks', label: '备注', minWidth: 120},
+        {prop: 'id', label: 'ID', minWidth: 80},
+        {prop: 'name', label: '名称', minWidth: 100},
+        {prop: 'remark', label: '备注', minWidth: 120},
         {prop: 'createBy', label: '创建人', minWidth: 100},
         {
           prop: 'createTime',
@@ -110,26 +106,13 @@ export default {
           formatter: formatDateTime
         }
       ],
-      columnsExpand: {
-        labelWidth: '80px',
-        data: [
-          {prop: 'id', label: 'ID'},
-          {prop: 'label', label: '名称'},
-          {prop: 'value', label: '值'},
-          {prop: 'type', label: '类型'},
-          {prop: 'sort', label: '排序'},
-          {prop: 'description', label: '描述'},
-          {prop: 'remarks', label: '备注'},
-          {prop: 'createBy', label: '创建人'},
-          {
-            prop: 'createTime',
-            label: '创建时间',
-            formatter: formatDateTime
-          }
-        ]
+
+      pageRequest: {
+        page: 1,
+        rows: 10
       },
 
-      selectRole: {},
+      selectRole: null,
       menuData: [],
       menuSelections: [],
       menuLoading: false,
@@ -142,40 +125,45 @@ export default {
       }
     }
   },
+  computed: {
+    // 当前全部的菜单数组列表
+    menuListData () {
+      let menuList = []
+      let list = this._.clone(this.menuData)
+      while (list.length > 0) {
+        const menu = list.pop()
+        menuList.push({id: menu.id})
+        if (menu.children && menu.children.length > 0) {
+          list = list.concat(menu.children)
+        }
+      }
+      return menuList
+    }
+  },
 
   methods: {
-    // 获取数据
-    findTreeData: function () {
+    // 获取菜单树数据
+    async findMenuTree () {
       this.menuLoading = true
-      this.$api.menu.findMenuTree().then(res => {
-        this.menuData = res.data
-        this.menuLoading = false
-      })
+      const res = await this.$api.sys.menu.findMenuTree()
+      this.menuData = res.data
+      this.menuLoading = false
     },
     // 角色选择改变监听
-    handleRoleSelectChange (val) {
-      if (val == null || val.val == null) {
+    async handleRoleSelectChange ({val}) {
+      if (val == null) {
         return
       }
-      this.selectRole = val.val
-      this.$api.role.findRoleMenus({ roleId: val.val.id }).then(res => {
+      try {
+        this.menuLoading = true
+        this.selectRole = val
+        const res = await this.$api.sys.role.findRoleMenus({ roleId: val.id })
         this.currentRoleMenus = res.data
         this.$refs.menuTree.setCheckedNodes(res.data)
-      })
-    },
-    // 树节点选择监听
-    handleMenuCheckChange (data, check, subCheck) {
-      if (check) {
-        // 节点选中时同步选中父节点
-        let parentId = data.parentId
-        this.$refs.menuTree.setChecked(parentId, true, false)
-      } else {
-        // 节点取消选中时同步取消选中子节点
-        if (data.children != null) {
-          data.children.forEach(element => {
-            this.$refs.menuTree.setChecked(element.id, false, false)
-          })
-        }
+      } catch (e) {
+        this.$message({ message: e, type: 'error', center: true })
+      } finally {
+        this.menuLoading = false
       }
     },
     // 重置选择
@@ -186,29 +174,19 @@ export default {
     // 全选操作
     handleCheckAll () {
       if (this.checkAll) {
-        let allMenus = []
-        this.checkAllMenu(this.menuData, allMenus)
-        this.$refs.menuTree.setCheckedNodes(allMenus)
+        this.$refs.menuTree.setCheckedNodes(this.menuListData)
       } else {
         this.$refs.menuTree.setCheckedNodes([])
       }
     },
-    // 递归全选
-    checkAllMenu (menuData, allMenus) {
-      menuData.forEach(menu => {
-        allMenus.push(menu)
-        if (menu.children) {
-          this.checkAllMenu(menu.children, allMenus)
-        }
-      })
-    },
     // 角色菜单授权提交
-    submitAuthForm () {
+    async submitAuthForm () {
       let roleId = this.selectRole.id
-      if (this.selectRole.name == 'admin') {
+      if (this.selectRole.name === 'admin') {
         this.$message({
           message: '超级管理员拥有所有菜单权限，不允许修改！',
-          type: 'error'
+          type: 'error',
+          center: true
         })
         return
       }
@@ -219,20 +197,21 @@ export default {
         let roleMenu = { roleId: roleId, menuId: checkedNodes[i].id }
         roleMenus.push(roleMenu)
       }
-      this.$api.role.saveRoleMenus(roleMenus).then(res => {
-        if (res.code == 200) {
-          this.$message({ message: '操作成功', type: 'success' })
-        } else {
-          this.$message({ message: '操作失败, ' + res.msg, type: 'error' })
-        }
+
+      try {
+        this.$api.sys.role.saveRoleMenus(roleMenus)
+        this.$message({ message: '操作成功', type: 'success', center: true })
+      } catch (e) {
+        this.$message({ message: e, type: 'error', center: true })
+      } finally {
         this.authLoading = false
-      })
+      }
     },
     renderContent (h, { node, data, store }) {
       return (
         <div class="column-container">
-          <span style="text-algin:center;margin-right:80px;">{data.name}</span>
-          <span style="text-algin:center;margin-right:80px;">
+          <span class='title' style1="text-algin:center;margin-right:80px;">{data.name}</span>
+          <span class='typ' style1="text-algin:center;margin-right:80px;">
             <el-tag
               type={data.type === 0 ? '' : data.type === 1 ? 'success' : 'info'}
               size="small"
@@ -240,19 +219,21 @@ export default {
               {data.type === 0 ? '目录' : data.type === 1 ? '菜单' : '按钮'}
             </el-tag>
           </span>
-          <span style="text-algin:center;margin-right:80px;">
-            {' '}
+          <span class='icon' style1="text-algin:center;margin-right:80px;">
             <i class={data.icon}></i>
           </span>
-          <span style="text-algin:center;margin-right:80px;">
+          <span class='parent-name' style1="text-algin:center;margin-right:80px;">
             {data.parentName ? data.parentName : '顶级菜单'}
           </span>
-          <span style="text-algin:center;margin-right:80px;">
+          <span class='url' style1="text-algin:center;margin-right:80px;">
             {data.url ? data.url : '\t'}
           </span>
         </div>
       )
     }
+  },
+  async mounted () {
+    await this.findMenuTree()
   }
 }
 </script>
@@ -261,6 +242,54 @@ export default {
 .hy-height-100 {
   > div {
     height: 50%;
+    &.table-menu {
+      box-sizing: border-box;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      .menu-header {
+        border-top: 1px solid #8080803d;
+        padding-top: 8px;
+        padding-left: 8px;
+        margin-bottom: 8px;
+        span {
+          color: #4f5154;
+        }
+      }
+      .el-tree {
+        flex-grow: 1;
+        width: 100%;
+        overflow-x: auto;
+        .column-container {
+          .title {
+            text-align: center;
+            margin-right: 80px;
+          }
+          .typ {
+            text-align: center;
+            margin-right: 80px;
+          }
+          .icon {
+            text-align: center;
+            margin-right: 80px;
+          }
+          .parent-name {
+            text-align: center;
+            margin-right: 80px;
+          }
+          .url {
+            text-align: center;
+            margin-right: 80px;
+          }
+        }
+      }
+      .menu-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 10px;
+      }
+    }
   }
 }
 </style>
