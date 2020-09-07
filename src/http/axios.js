@@ -54,6 +54,7 @@ export default function $axios (options) {
         if (!err) {
           err.response = {}
           err.response.status = -1
+          err.response.message = '未知错误'
         } else {
           if (err.response) {
             if (err.response.status === 401) {
@@ -66,7 +67,12 @@ export default function $axios (options) {
             }
           }
         }
-        return Promise.reject(err) // 返回接口返回的错误信息
+
+        // 返回接口返回的错误信息
+        if (!err.response.data.data) {
+          delete err.response.data.data
+        }
+        return Promise.reject(JSON.stringify(err.response.data))
       }
     )
     // 请求处理
