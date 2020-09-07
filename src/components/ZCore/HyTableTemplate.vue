@@ -58,8 +58,9 @@
         show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <div v-if="!column.template">{{ scope.row[scope.column.property] }}</div>
-          <div v-else v-html="column.template(scope.row)"></div>
+          <div v-if="column.formatter">{{ column.formatter(scope.row, scope.column) }}</div>
+          <div v-else-if="column.template" v-html="column.template(scope.row)"></div>
+          <div v-else>{{ scope.row[scope.column.property] }}</div>
         </template>
       </el-table-column>
 
@@ -115,7 +116,7 @@
         @current-change="refreshPageRequest"
         @size-change="handleSizeChange"
       ></el-pagination>
-      <i class="el-icon-refresh" @click="findPage"></i>
+      <i class="el-icon-refresh" @click="findPage(filters)"></i>
     </div>
   </div>
 </template>
