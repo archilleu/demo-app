@@ -49,7 +49,9 @@ export default {
   data () {
     return {
       dataFormRules: {
-        label: [{ required: true, message: '请输入名字', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
 
       // 角色
@@ -87,6 +89,11 @@ export default {
   },
   async mounted () {
     try {
+      // 响应式设置
+      // https://cn.vuejs.org/v2/guide/reactivity.html
+      if (!this.dataForm.deptName) {
+        this.$set(this.dataForm, 'deptName', '')
+      }
       const res = await this.$api.sys.dept.findDeptTree()
       this.popupTreeData = res.data
     } catch (e) {

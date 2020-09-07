@@ -7,8 +7,8 @@ import axios from '../../axios'
  */
 
 // 删除
-export async function del (id) {
-  batchDelete([id])
+export async function del (data) {
+  return batchDelete([data])
 }
 
 // 删除

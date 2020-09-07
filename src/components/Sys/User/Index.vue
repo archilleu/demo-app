@@ -8,7 +8,9 @@
       :showBatchDelete="false"
     >
       <!-- 工具条栏 -->
-      <template v-slot:toolbar></template>
+      <template v-slot:toolbar>
+          <hy-button icon="fa fa-plus" label="选择角色" size="mini" type="success" @click="handleSelectRole" />
+      </template>
 
       <!-- 过滤栏 -->
       <template v-slot:filters="props">
@@ -25,22 +27,32 @@
         <Detail :dataForm="props.dataForm" :readOnly="props.readOnly"></Detail>
       </template>
     </HyListTemplate>
+
+    <!-- 角色栏 -->
+    <HyDialogTemplate title="选择角色" width="80%" :visible.sync="roleVisibleDlg">
+      <Role></Role>
+    </HyDialogTemplate>
+
   </div>
 </template>
 
 <script>
 import HyButton from '@/components/ZCore/HyButton'
 import HyListTemplate from '@/components/ZCore/HyListTemplate'
-import { formatDateTime } from '@/utils/datetime'
+import HyDialogTemplate from '@/components/ZCore/HyDialogTemplate'
+import { formatDateTime, formatDate } from '@/utils/datetime'
 
 import Detail from './Detail'
+import Role from './Role'
 
 export default {
   components: {
     HyButton,
     HyListTemplate,
+    HyDialogTemplate,
 
-    Detail
+    Detail,
+    Role
   },
 
   data () {
@@ -58,7 +70,7 @@ export default {
           prop: 'createTime',
           label: '创建时间',
           minWidth: 140,
-          formatter: formatDateTime
+          formatter: formatDate
         }
       ],
       columnsExpand: {
@@ -79,11 +91,16 @@ export default {
             formatter: formatDateTime
           }
         ]
-      }
+      },
+
+      roleVisibleDlg: false
     }
   },
 
   methods: {
+    handleSelectRole () {
+      this.roleVisibleDlg = true
+    }
   }
 }
 </script>

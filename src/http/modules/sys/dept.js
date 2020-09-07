@@ -16,8 +16,8 @@ export async function save (data) {
 }
 
 // 删除
-export async function del (id) {
-  batchDelete([id])
+export async function del (data) {
+  return batchDelete([data])
 }
 
 // 批量删除
@@ -33,7 +33,7 @@ export async function batchDelete (data) {
 export async function findDeptTree (data = {}) {
   return axios({
     url: `${baseUrl}/dept/findTree`,
-    method: 'post',
+    method: 'get',
     data: {
       params: {
         ..._.pickBy(data.filters, _.identity)
