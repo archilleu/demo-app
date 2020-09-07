@@ -306,7 +306,7 @@ export default {
         .then(async () => {
           try {
             this.loading = true
-            await this.api.del(row.id)
+            await this.api.del(row)
             await this.findPage(this.filters)
             this.$message({ message: '删除成功', type: 'success', center: true })
           } catch (e) {

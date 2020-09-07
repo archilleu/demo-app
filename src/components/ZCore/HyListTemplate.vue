@@ -237,10 +237,10 @@ export default {
 
     // 批量删除
     handleBatchDelete () {
-      let ids = this.selections.map((item) => {
-        return item.id
-      })
-      this.batchDelete(ids)
+      // let ids = this.selections.map((item) => {
+      //   return item.id
+      // })
+      this.batchDelete(this.selections)
     },
 
     // 批量删除
