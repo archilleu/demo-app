@@ -60,7 +60,7 @@
       :columnsExpand="columnsExpand"
       :showEdit="showEdit"
       :showDelete="showDelete"
-      :showCheckbox="showBatchDelete"
+      :showCheckbox="showCheckbox"
       :showOperation="showOperation"
       :hightlightCurrentRow="true"
       :showOverflowTooltip="true"
@@ -184,6 +184,11 @@ export default {
     showDelete: {
       type: Boolean,
       default: true
+    },
+    // 是否显示复选框
+    showCheckbox: {
+      type: Boolean,
+      default: false
     },
     // 是否显示批量删除
     showBatchDelete: {
