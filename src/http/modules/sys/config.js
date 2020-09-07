@@ -36,7 +36,9 @@ export async function findPage (data) {
     method: 'post',
     data: {
       ...data.pageRequest,
-      ..._.pickBy(data.filters, _.identity)
+      params: {
+        ..._.pickBy(data.filters, _.identity)
+      }
     }
   })
 }

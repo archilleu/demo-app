@@ -1,4 +1,5 @@
 import axios from '../../axios'
+import { baseUrl } from '../user/api'
 
 /*
  * 系统登录模块
@@ -7,7 +8,7 @@ import axios from '../../axios'
 // 登录
 export async function login (data) {
   return axios({
-    url: 'login',
+    url: `${baseUrl}/login`,
     method: 'post',
     data
   })
@@ -16,7 +17,7 @@ export async function login (data) {
 // 登出
 export async function logout () {
   return axios({
-    url: 'logout',
+    url: `${baseUrl}/logout`,
     method: 'get'
   })
 }

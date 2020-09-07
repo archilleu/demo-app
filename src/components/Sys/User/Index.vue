@@ -12,8 +12,11 @@
 
       <!-- 过滤栏 -->
       <template v-slot:filters="props">
-        <el-form-item label="名称" label-width="50px" prop="label">
-          <el-input v-model="props.filters.label" autocomplete="off"></el-input>
+        <el-form-item label="名称" label-width="50px" prop="name">
+          <el-input v-model="props.filters.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="email" label-width="50px" prop="email">
+          <el-input v-model="props.filters.email" autocomplete="off"></el-input>
         </el-form-item>
       </template>
 

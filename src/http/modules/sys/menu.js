@@ -42,7 +42,9 @@ export async function findMenuTree (data = {}) {
     url: `${baseUrl}/menu/findMenuTree`,
     method: 'post',
     data: {
-      ..._.pickBy(data.filters, _.identity)
+      params: {
+        ..._.pickBy(data.filters, _.identity)
+      }
     }
   })
 }

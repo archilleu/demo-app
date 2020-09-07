@@ -28,7 +28,7 @@
 <script>
 import HyButton from '@/components/ZCore/HyButton'
 import HyListTemplate from '@/components/ZCore/HyListTemplate'
-import { formatDateTime } from '@/utils/datetime'
+import { formatDateTime, formatDate } from '@/utils/datetime'
 
 import Detail from './Detail'
 
@@ -55,7 +55,7 @@ export default {
           prop: 'createTime',
           label: '创建时间',
           minWidth: 140,
-          formatter: formatDateTime
+          formatter: formatDate
         }
       ],
       columnsExpand: {

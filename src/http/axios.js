@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from './config'
-import Cookies from 'js-cookie'
+import { getToken, clearToken } from '@/utils/token'
 import router from '@/router'
 
 export default function $axios (options) {
@@ -14,7 +14,7 @@ export default function $axios (options) {
     // request 请求拦截器
     instance.interceptors.request.use(
       config => {
-        const token = Cookies.get('token')
+        const token = getToken()
         // 发送请求时携带token
         if (token) {
           config.headers.token = token
@@ -58,7 +58,7 @@ export default function $axios (options) {
           if (err.response) {
             if (err.response.status === 401) {
               if (router.currentRoute.path === '/login') {
-                Cookies.remove('token')
+                clearToken()
                 return
               }
 

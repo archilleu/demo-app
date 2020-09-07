@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
 import router from '@/router'
+import { saveToken } from '@/utils/token'
 
 export default {
   name: 'Login',
@@ -53,10 +53,10 @@ export default {
         this.loading = true
 
         // 登录
-        const res = await this.$api.sys.login.login(this.loginForm)
+        const res = await this.$api.user.login.login(this.loginForm)
 
-        Cookies.set('token', res.data.token)
-        sessionStorage.setItem('user', JSON.stringify(res.data))
+        // 保存token
+        saveToken(res.data)
 
         this.$store.commit('menuRouteLoaded', false)
         router.push('/')

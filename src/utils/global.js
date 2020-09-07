@@ -5,7 +5,7 @@
  */
 
 // 后台管理系统服务器地址
-export const baseURL = 'http://127.0.0.1:8088/VisualChart/'
+export const baseURL = 'http://localhost:8081'
 // 系统数据备份还原服务器地址
 export const backupBaseURL = 'http://localhost:8002'
 

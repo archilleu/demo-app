@@ -7,7 +7,7 @@ import Intro from '@/components/Intro/Intro'
 import Account from '@/components/Intro/Account'
 import api from '@/http/api'
 import store from '@/store'
-import Cookies from 'js-cookie'
+import { getToken } from '@/utils/token'
 
 Vue.use(Router)
 
@@ -55,7 +55,7 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const token = Cookies.get('token')
+  const token = getToken()
   if (to.path === '/login') {
     if (token) {
       next({ path: '/' })
@@ -81,7 +81,7 @@ async function addDynamicMenuAndRoutes () {
   }
   try {
     // 获取导航树
-    const res = await api.sys.menu.findNavTree()
+    const res = await api.user.menu.findNavTree()
     // 因为加载过程有等待，防止等待过程中二次调用
     if (store.state.app.menuRouteLoaded) {
       return

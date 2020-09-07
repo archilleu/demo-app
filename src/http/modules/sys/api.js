@@ -1,4 +1,3 @@
-import * as login from './login'
 import * as user from './user'
 import * as dept from './dept'
 import * as role from './role'
@@ -10,7 +9,6 @@ import * as loginLog from './login-log'
 
 export default {
 
-  login,
   user,
   dept,
   role,

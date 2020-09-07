@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
+import { clearToken } from '@/utils/token'
 import { mapState } from 'vuex'
 import MenuTree from '@/components/ZCore/MenuTree'
 import MenuTreeItem from '@/components/ZCore/MenuTree/MenuTreeItem'
@@ -128,7 +128,7 @@ export default {
     },
     logout () {
       this.$confirm('确认退出吗？', '提示', {}).then(() => {
-        Cookies.remove('token')
+        clearToken()
         window.sessionStorage.clear()
 
         // 刷新页面，清除vuex状态

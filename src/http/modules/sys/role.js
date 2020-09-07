@@ -62,7 +62,9 @@ export async function saveRoleMenus (data) {
     method: 'post',
     data: {
       ...data.pageRequest,
-      ..._.pickBy(data.filters, _.identity)
+      params: {
+        ..._.pickBy(data.filters, _.identity)
+      }
     }
   })
 }

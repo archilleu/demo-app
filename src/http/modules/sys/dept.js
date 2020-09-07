@@ -35,7 +35,9 @@ export async function findDeptTree (data = {}) {
     url: `${baseUrl}/dept/findTree`,
     method: 'post',
     data: {
-      ..._.pickBy(data.filters, _.identity)
+      params: {
+        ..._.pickBy(data.filters, _.identity)
+      }
     }
   })
 }

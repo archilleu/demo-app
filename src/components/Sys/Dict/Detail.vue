@@ -36,7 +36,9 @@ export default {
   data () {
     return {
       dataFormRules: {
-        label: [{ required: true, message: '请输入名字', trigger: 'blur' }]
+        label: [{ required: true, message: '请输入名字', trigger: 'blur' }],
+        value: [{ required: true, message: '请输入值', trigger: 'blur' }],
+        type: [{ required: true, message: '请输入类型', trigger: 'blur' }]
       }
     }
   },
