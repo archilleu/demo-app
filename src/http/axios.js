@@ -57,7 +57,7 @@ export default function $axios (options) {
         }
 
         // 响应空内容
-        if (err.response) {
+        if (!err.response) {
           err.response = {}
           err.response.status = -1
           err.response.message = '未知错误'
