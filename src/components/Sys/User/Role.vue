@@ -1,39 +1,40 @@
 <template>
   <div class="hy-height-100">
+    <!-- 搜索栏 -->
     <div ref="hyListTemplateContainer" class="hy-list-template-container">
-        <div ref="hy-toolbar" class="hy-toolbar">
-            <el-form :inline="true" size="mini">
-                <el-form-item class="footer">
-                    <hy-button label="重置" :loading="resetLoading" @click="findReset" />
-                    <hy-button label="搜索" type="success" :loading="filtersLoading" @click="filtersPage" />
-                </el-form-item>
-
-                <slot name="toolbar"></slot>
-            </el-form>
-        </div>
+      <el-form :inline="true" size="mini">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="filters.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <hy-button label="搜索" type="success" :loading="filtersLoading" @click="filtersPage" />
+        </el-form-item>
+      </el-form>
     </div>
     <!-- 表格栏目 -->
     <HyTableTemplate
       ref="hyTableTemplate"
       :api="$api.sys.role"
       :columns="columns"
-      :columnsExpand="columnsExpand"
       :showOperation="false"
+      :showCheckbox="true"
       :hightlightCurrentRow="true"
       :showOverflowTooltip="true"
       size="mini"
+      style="height:300px"
       :paginationSmall="true"
       @selection-change="selectionChange"
     ></HyTableTemplate>
 
+    <div class="footer">
+      <hy-button label="保存" type="success" :loading="saveLoading" @click="submit" />
+    </div>
   </div>
 </template>
 
 <script>
 import HyButton from '@/components/ZCore/HyButton'
 import HyTableTemplate from '@/components/ZCore/HyTableTemplate'
-import HyListTemplate from '@/components/ZCore/HyListTemplate'
-import { formatDateTime, formatDate } from '@/utils/datetime'
 
 import Detail from './Detail'
 
@@ -41,7 +42,6 @@ export default {
   components: {
     HyButton,
     HyTableTemplate,
-    HyListTemplate,
 
     Detail
   },
@@ -49,36 +49,24 @@ export default {
   data () {
     return {
       columns: [
-        {prop: 'id', label: 'ID', minWidth: 80},
         {prop: 'name', label: '名称', minWidth: 100},
-        {prop: 'remark', label: '备注', minWidth: 120},
-        {prop: 'createBy', label: '创建人', minWidth: 100},
-        {
-          prop: 'createTime',
-          label: '创建时间',
-          minWidth: 140,
-          formatter: formatDate
-        }
+        {prop: 'remark', label: '备注', minWidth: 120}
       ],
-      columnsExpand: {
-        labelWidth: '80px',
-        data: [
-          {prop: 'id', label: 'ID', minWidth: 80},
-          {prop: 'name', label: '名称', minWidth: 100},
-          {prop: 'remark', label: '备注', minWidth: 120},
-          {prop: 'createBy', label: '创建人', minWidth: 100},
-          {
-            prop: 'createTime',
-            label: '创建时间',
-            minWidth: 140,
-            formatter: formatDateTime
-          }
-        ]
-      },
 
-      // 搜索加载状态
+      filters: {
+        name: null
+      },
       filtersLoading: false,
-      resetLoading: false
+
+      selections: null,
+
+      saveLoading: false
+    }
+  },
+  props: {
+    user: {
+      type: Object,
+      required: true
     }
   },
 
@@ -88,27 +76,38 @@ export default {
     async filtersPage () {
       try {
         this.filtersLoading = true
-        await this.findPage()
+        await this.$refs.hyTableTemplate.findPage(this.filters)
       } finally {
         this.filtersLoading = false
-      }
-    },
-    // 重置
-    async findReset () {
-      try {
-        this.$refs.filtersForm.resetFields()
-        this.resetLoading = true
-        await this.findPage()
-      } finally {
-        this.resetLoading = false
       }
     },
 
     // 选中行改变
     selectionChange (selections) {
       this.selections = selections
-      this.$emit('selection-change', selections)
     },
+
+    async submit () {
+      try {
+        const data = {
+          user: this.user,
+          userRoles: this.selections
+        }
+        this.saveLoading = true
+        await this.$api.sys.user.saveUserRoles(data)
+      } catch (e) {
+        this.$message({ message: e, type: 'error', center: true })
+      } finally {
+        this.saveLoading = false
+      }
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.footer {
+  margin-top: 20px;
+  text-align: right;
+}
+</style>

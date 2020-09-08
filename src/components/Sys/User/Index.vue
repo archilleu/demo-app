@@ -5,11 +5,19 @@
       :api="$api.sys.user"
       :columns="columns"
       :columnsExpand="columnsExpand"
+      @handleCurrentChange="handleCurrentChange"
       :showBatchDelete="false"
     >
       <!-- 工具条栏 -->
       <template v-slot:toolbar>
-          <hy-button icon="fa fa-plus" label="选择角色" size="mini" type="success" @click="handleSelectRole" />
+        <hy-button
+          icon="fa fa-check"
+          label="选择角色"
+          size="mini"
+          type="primary"
+          @click="handleSelectRole"
+          :disabled="!selectedUser"
+        />
       </template>
 
       <!-- 过滤栏 -->
@@ -29,10 +37,9 @@
     </HyListTemplate>
 
     <!-- 角色栏 -->
-    <HyDialogTemplate title="选择角色" width="80%" :visible.sync="roleVisibleDlg">
-      <Role></Role>
+    <HyDialogTemplate :title="title" width="50%" :visible.sync="roleVisibleDlg">
+      <Role :user="selectedUser"></Role>
     </HyDialogTemplate>
-
   </div>
 </template>
 
@@ -93,13 +100,27 @@ export default {
         ]
       },
 
-      roleVisibleDlg: false
+      roleVisibleDlg: false,
+      selectedUser: null
+    }
+  },
+  computed: {
+    title () {
+      if (!this.selectedUser) {
+        return ''
+      }
+
+      return `选择角色:${this.selectedUser.name}`
     }
   },
 
   methods: {
     handleSelectRole () {
       this.roleVisibleDlg = true
+    },
+    handleCurrentChange (row) {
+      if (!row) { return }
+      this.selectedUser = row.val
     }
   }
 }

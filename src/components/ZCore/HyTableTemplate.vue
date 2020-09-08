@@ -40,7 +40,7 @@
         header-align="center"
         align="center"
         width="50"
-        v-if="showCheckbox & showOperation"
+        v-if="showCheckbox"
       ></el-table-column>
 
       <!-- 自定义列 -->
