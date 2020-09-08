@@ -27,19 +27,6 @@ export default function $axios (options) {
         return config
       },
       error => {
-        // 判断请求超时
-        if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
-          console.error('请求超时:' + error)
-        }
-        // 需要重定向到错误页面
-        const errorInfo = error.response
-        if (errorInfo) {
-          error = errorInfo.data // reject需要的数据
-          router.push({
-            path: `/error/${errorInfo.status}`
-          })
-        }
-        // 在调用的那边可以拿到(catch)返回的错误信息
         return Promise.reject(error)
       }
     )
@@ -50,8 +37,27 @@ export default function $axios (options) {
         return response.data
       },
       err => {
+        // 请求超时
+        if (err.code === 'ECONNABORTED') {
+          console.error('请求超时')
+          const res = {
+            status: -1,
+            message: '请求超时'
+          }
+          return Promise.reject(JSON.stringify(res))
+        }
+        // 网络不可达
+        if (err.message.indexOf('Network Error') !== -1) {
+          console.error('网络不可达:' + err)
+          const res = {
+            status: -2,
+            message: '网络不可达'
+          }
+          return Promise.reject(JSON.stringify(res))
+        }
+
         // 响应空内容
-        if (!err) {
+        if (err.response) {
           err.response = {}
           err.response.status = -1
           err.response.message = '未知错误'
