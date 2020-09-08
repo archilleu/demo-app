@@ -2,13 +2,14 @@
   <div class="table-pagination" ref="tablePagination">
     <!--表格栏-->
     <el-table
-      ref="hy-table"
+      ref="hyTable"
       class="hy-table"
       height="100%"
       :data="data.content"
       :highlight-current-row="hightlightCurrentRow"
       @selection-change="selectionChange"
       @current-change="handleCurrentChange"
+      row-key="id"
       v-loading="loading"
       element-loading-text="加载中..."
       :border="border"
@@ -53,6 +54,7 @@
         :fixed="column.fixed"
         :key="column.prop"
         :type="column.type"
+        :reserve-selection="true"
         :formatter="column.formatter"
         :sortable="column.sortable==null?true:column.sortable"
         show-overflow-tooltip
@@ -258,6 +260,7 @@ export default {
         }
         const res = await this.api.findPage(data)
         this.data = res.data
+
       } catch (e) {
         this.$message({ message: e, type: 'error', center: true })
       } finally {
@@ -275,7 +278,21 @@ export default {
       this.currentRow = val
       this.$emit('handleCurrentChange', { val: val })
     },
+    // 设置选中行
+    async toggleRowSelection (rows) {
+      this.$refs.hyTable.clearSelection()
 
+      let selected = []
+      rows.forEach(row => {
+        this.data.content.forEach(item => {
+          if (item.id === row.roleId) { selected.push(item) }
+        })
+      })
+
+      selected.forEach(row => {
+        this.$refs.hyTable.toggleRowSelection(row)
+      })
+    },
     // 换页刷新
     refreshPageRequest (page) {
       this.pageRequest.page = page

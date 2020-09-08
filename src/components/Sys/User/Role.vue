@@ -77,6 +77,7 @@ export default {
       try {
         this.filtersLoading = true
         await this.$refs.hyTableTemplate.findPage(this.filters)
+        this.$refs.hyTableTemplate.toggleRowSelection(this.user.userRoles)
       } finally {
         this.filtersLoading = false
       }

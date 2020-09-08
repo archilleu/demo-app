@@ -270,7 +270,10 @@ export default {
     handleCurrentChange (data) {
       this.$emit('handleCurrentChange', data)
     },
-
+    // 设置选中行
+    toggleRowSelection (rows) {
+      this.$refs.hyTableTemplate.toggleRowSelection(rows)
+    },
     // 显示新增界面
     handleAdd () {
       this.dialogVisible = true
