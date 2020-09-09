@@ -30,14 +30,9 @@ export async function batchDelete (data) {
 }
 
 // 查询机构树
-export async function findDeptTree (data = {}) {
+export async function findDeptTree () {
   return axios({
     url: `${baseUrl}/dept/findTree`,
-    method: 'get',
-    data: {
-      params: {
-        ..._.pickBy(data.filters, _.identity)
-      }
-    }
+    method: 'get'
   })
 }

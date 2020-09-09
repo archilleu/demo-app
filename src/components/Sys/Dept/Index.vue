@@ -8,7 +8,7 @@
         </el-form-item>
       </el-form>
 
-      <el-tooltip effect="dark" content="打开查询选项" placement="bottom-end">
+      <el-tooltip v-if="false" effect="dark" content="打开查询选项" placement="bottom-end">
         <span class="search-btn" @click="showFiltersDialog = true">
           <i class="el-icon-search"></i>
         </span>
@@ -41,7 +41,7 @@
       </el-drawer>
     </div>
     <!--表格树内容栏-->
-    <div class=tree-table>
+    <div class="tree-table">
       <el-table
         lazy
         stripe
@@ -124,8 +124,8 @@ export default {
     return {
       loading: false,
       columns: [
-        {prop: 'id', label: 'ID', minWidth: 100},
-        {prop: 'name', label: '名称', minWidth: 100},
+        { prop: 'id', label: 'ID', minWidth: 100 },
+        { prop: 'name', label: '名称', minWidth: 100 },
         {
           prop: 'parentName',
           label: '上级机构',
@@ -138,8 +138,8 @@ export default {
             }
           }
         },
-        {prop: 'orderNum', label: '排序', minWidth: 80},
-        {prop: 'createBy', label: '创建人', minWidth: 100},
+        { prop: 'orderNum', label: '排序', minWidth: 80 },
+        { prop: 'createBy', label: '创建人', minWidth: 100 },
         {
           prop: 'createTime',
           label: '创建时间',
@@ -157,8 +157,7 @@ export default {
 
       // 搜索对话框
       showFiltersDialog: false,
-      filters: {
-      },
+      filters: {},
       // 搜索加载状态
       filtersLoading: false,
       resetLoading: false
@@ -169,7 +168,7 @@ export default {
     async findTreeData () {
       try {
         this.loading = true
-        const res = await this.$api.sys.dept.findDeptTree({filters: this.filters})
+        const res = await this.$api.sys.dept.findDeptTree()
         this.tableData = res.data
       } catch (e) {
         this.$message({
@@ -224,6 +223,7 @@ export default {
     handleEdit: function (row) {
       this.dialogTitle = '编辑'
       this.dialogVisible = true
+      this.readOnly = false
       this.dataForm = Object.assign({}, row)
     },
     // 显示查看界面
@@ -237,18 +237,20 @@ export default {
     handleDelete (row) {
       this.$confirm('确认删除选中记录吗？', '提示', {
         type: 'warning'
-      }).then(async () => {
-        try {
-          this.loading = true
-          await this.$api.sys.dept.del(row.id)
-          await this.$api.sys.dept.findDeptTree({filters: this.filters})
-          this.$message({ message: '删除成功', type: 'success' })
-        } catch (e) {
-          this.$message({ message: e, type: 'error', center: true })
-        } finally {
-          this.loading = false
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          try {
+            this.loading = true
+            await this.$api.sys.dept.del(row.id)
+            await this.$api.sys.dept.findDeptTree({ filters: this.filters })
+            this.$message({ message: '删除成功', type: 'success' })
+          } catch (e) {
+            this.$message({ message: e, type: 'error', center: true })
+          } finally {
+            this.loading = false
+          }
+        })
+        .catch(() => {})
     }
   },
   mounted () {
