@@ -51,3 +51,12 @@ export async function findPermissions (params) {
     params
   })
 }
+
+// 修改用户角色
+export async function saveUserRoles (data) {
+  return axios({
+    url: `${baseUrl}/user/saveUserRoles`,
+    method: 'post',
+    data
+  })
+}

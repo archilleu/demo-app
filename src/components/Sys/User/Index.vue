@@ -2,6 +2,7 @@
   <div class="hy-height-100">
     <!-- 表格栏目 -->
     <HyListTemplate
+      ref="roleTable"
       :api="$api.sys.user"
       :columns="columns"
       :columnsExpand="columnsExpand"
@@ -37,16 +38,15 @@
     </HyListTemplate>
 
     <!-- 角色栏 -->
-    <HyDialogTemplate :title="title" width="50%" :visible.sync="roleVisibleDlg">
-      <Role :user="selectedUser"></Role>
-    </HyDialogTemplate>
+    <el-dialog :title="title" width="40%" :visible.sync="roleVisibleDlg">
+      <Role :user="selectedUser" @save-ok="roleSave"></Role>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import HyButton from '@/components/ZCore/HyButton'
 import HyListTemplate from '@/components/ZCore/HyListTemplate'
-import HyDialogTemplate from '@/components/ZCore/HyDialogTemplate'
 import { formatDateTime, formatDate } from '@/utils/datetime'
 
 import Detail from './Detail'
@@ -56,7 +56,6 @@ export default {
   components: {
     HyButton,
     HyListTemplate,
-    HyDialogTemplate,
 
     Detail,
     Role
@@ -121,6 +120,9 @@ export default {
     handleCurrentChange (row) {
       if (!row) { return }
       this.selectedUser = row.val
+    },
+    roleSave () {
+      this.$refs.roleTable.findPage()
     }
   }
 }

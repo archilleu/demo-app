@@ -1,16 +1,17 @@
 <template>
-  <div class="page-container" style="width:99%;margin-top:15px;">
-   <iframe src="https://plan.foreflight.com/tripassistant/upgrade" frameborder="0"></iframe> 
+  <div class="page-container" style="height:100%">
+   <iframe src="https://bing.com" frameborder="0" auto width="100%" height="100%" scrolling="auto"></iframe>
   </div>
 </template>
 
 <script>
-  export default {
-    components:{
-    },
-    methods :{
-    }
+export default {
+  components: {
+  },
+  methods: {
+
   }
+}
 </script>
 
 <style>

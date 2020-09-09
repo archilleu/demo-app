@@ -5,12 +5,12 @@
 </template>
 
 <script>
-  export default {
-    components:{
-    },
-    methods :{
-    }
+export default {
+  components: {
+  },
+  methods: {
   }
+}
 </script>
 
 <style>

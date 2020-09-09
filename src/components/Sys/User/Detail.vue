@@ -27,11 +27,6 @@
     <el-form-item label="手机" prop="mobile">
       <el-input v-model="dataForm.mobile" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="角色" prop="userRoles">
-      <el-select v-model="dataForm.userRoles" multiple placeholder="请选择" style="width: 100%;">
-        <el-option v-for="item in roles" :key="item.id" :label="item.remark" :value="item.id"></el-option>
-      </el-select>
-    </el-form-item>
   </HyFormTemplate>
 </template>
 

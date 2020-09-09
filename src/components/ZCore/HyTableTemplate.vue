@@ -260,7 +260,6 @@ export default {
         }
         const res = await this.api.findPage(data)
         this.data = res.data
-
       } catch (e) {
         this.$message({ message: e, type: 'error', center: true })
       } finally {
@@ -277,21 +276,6 @@ export default {
     handleCurrentChange (val) {
       this.currentRow = val
       this.$emit('handleCurrentChange', { val: val })
-    },
-    // 设置选中行
-    async toggleRowSelection (rows) {
-      this.$refs.hyTable.clearSelection()
-
-      let selected = []
-      rows.forEach(row => {
-        this.data.content.forEach(item => {
-          if (item.id === row.roleId) { selected.push(item) }
-        })
-      })
-
-      selected.forEach(row => {
-        this.$refs.hyTable.toggleRowSelection(row)
-      })
     },
     // 换页刷新
     refreshPageRequest (page) {
