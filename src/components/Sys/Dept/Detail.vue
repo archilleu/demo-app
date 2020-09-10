@@ -84,10 +84,11 @@ export default {
           .then(async () => {
             try {
               this.loading = true
-              await this.$api.sys.dept.save(this.dataForm)
+              const dept = await this.$api.sys.dept.save(this.dataForm)
+
+              this.emitSubmit(dept)
 
               this.$message({message: '成功', type: 'success', center: true})
-              this.emitSubmit()
             } catch (e) {
               this.$message({message: '失败' + e, type: 'error', center: true})
             } finally {
@@ -101,8 +102,8 @@ export default {
     emitClose () {
       this.$parent.$emit('update:visible', false)
     },
-    async emitSubmit () {
-      this.$emit('submit:ok', { visible: false })
+    async emitSubmit (data) {
+      this.$emit('submit:ok', { visible: false, data })
       this.emitClose()
       await this.getTreeData()
     },

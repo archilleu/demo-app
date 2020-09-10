@@ -11,6 +11,7 @@
     <!--表格树内容栏-->
     <div class="tree-table">
       <el-table
+        ref="deptTable"
         lazy
         stripe
         rowKey="id"
@@ -69,12 +70,15 @@
       :visible.sync="dlg.visible"
       :close-on-click-modal="false"
     >
-      <Detail :dataForm="dlg.dataForm" :readOnly="dlg.readOnly" @submit:ok="refreshTable"></Detail>
+      <Detail :dataForm="dlg.dataForm" :readOnly="dlg.readOnly" @submit:ok="updateDateTreeTableData"></Detail>
     </el-dialog>
   </div>
 </template>
 
 <script>
+/**
+ * 参考https://blog.csdn.net/qq_39364032/article/details/103680916
+ */
 import HyButton from '@/components/ZCore/HyButton'
 import HyDialogTemplate from '@/components/ZCore/HyDialogTemplate'
 import { formatDateTime } from '@/utils/datetime'
@@ -124,7 +128,17 @@ export default {
         title: '',
         dataForm: {},
         readOnly: false
-      }
+      },
+
+      // 编辑行
+      editRow: null,
+      // 编辑还是增加状态
+      isAdd: false
+    }
+  },
+  computed: {
+    store () {
+      return this.$refs.deptTable.store
     }
   },
   methods: {
@@ -135,11 +149,7 @@ export default {
         const res = await this.$api.sys.dept.findDeptTree(params)
         this.deptTreeData = res.data
       } catch (e) {
-        this.$message({
-          message: e,
-          type: 'error',
-          center: true
-        })
+        this.$message({message: e, type: 'error', center: true})
       } finally {
         this.loading = false
       }
@@ -150,15 +160,13 @@ export default {
         const res = await this.$api.sys.dept.findDeptTree({parentId: tree.id})
         resolve(res.data)
       } catch (e) {
-        this.$message({
-          message: e,
-          type: 'error',
-          center: true
-        })
+        this.$message({message: e, type: 'error', center: true})
       }
     },
     // 显示新增界面
     handleAdd: function () {
+      this.isAdd = true
+
       this.dlg.dialogTitle = '添加'
       this.dlg.visible = true
       this.dlg.readOnly = false
@@ -171,6 +179,9 @@ export default {
     },
     // 显示编辑界面
     handleEdit: function (row) {
+      this.editRow = row
+      this.isAdd = false
+
       this.dlg.dialogTitle = '编辑'
       this.dlg.visible = true
       this.dlg.readOnly = false
@@ -178,7 +189,7 @@ export default {
     },
     // 显示查看界面
     handleInfo: function (row) {
-      this.dlg.dialogTitle = '擦看'
+      this.dlg.dialogTitle = '查看'
       this.dlg.visible = true
       this.dlg.readOnly = true
       this.dlg.dataForm = Object.assign({}, row)
@@ -192,9 +203,9 @@ export default {
           try {
             this.loading = true
             await this.$api.sys.dept.del(row)
-            const res = await this.$api.sys.dept.findDeptTree()
-            this.deptTreeData = res.data
-            this.$message({ message: '删除成功', type: 'success' })
+            this.refreshDelete(row)
+
+            this.$message({ message: '删除成功', type: 'success', center: true })
           } catch (e) {
             this.$message({ message: e, type: 'error', center: true })
           } finally {
@@ -203,9 +214,56 @@ export default {
         })
         .catch(() => {})
     },
-    async refreshTable () {
-      this.deptTreeData = []
-      await this.findTreeData()
+
+    /**
+     * 懒加载相关更新
+     */
+    updateDateTreeTableData ({ data }) {
+      if (this.isAdd === true) {
+        this.refreshAdd(data.data)
+      } else {
+        this.refreshEdit(data.data)
+      }
+    },
+    refreshAdd (data) {
+      if (data.parentId == null) {
+        // 顶级机构,直接插入数据
+        const parent = this.store.states.data
+        parent.push(data)
+      } else {
+        // 懒加载机构
+        const parentTreeNode = this.store.states.treeData[data.parentId]
+        if (parentTreeNode) {
+          // 如果该节点已加载
+          if (parentTreeNode.loaded) {
+            this.store.states.lazyTreeNodeMap[data.parentId].push(data)
+          }
+        }
+      }
+    },
+    refreshDelete (data) {
+      if (data.parentId == null) {
+        // 顶级机构,直接删除数据
+        const parent = this.store.states.data
+        const idx = parent.findIndex(item => item.id === data.id)
+        parent.splice(idx, 1)
+      } else {
+        const parent = this.store.states.lazyTreeNodeMap[data.parentId]
+        const idx = parent.findIndex(item => item.id === data.id)
+        parent.splice(idx, 1)
+      }
+    },
+    refreshEdit (data) {
+      // parent未改变
+      if (this.editRow.parentId === data.parentId) {
+        Object.assign(this.editRow, data, {hasChildren: true})
+      } else {
+        // parent改变，先删除后添加
+        this.refreshDelete(this.editRow)
+        this.refreshAdd(data)
+
+        this.editRow = null
+      }
     }
   },
   mounted () {
