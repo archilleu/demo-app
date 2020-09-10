@@ -15,7 +15,6 @@
     <el-form-item label="机构" prop="deptName">
       <popup-tree-input
         :data="popupTreeData"
-        :props="popupTreeProps"
         :prop="dataForm.deptName"
         nodeKey="id"
         :currentChangeHandle="handleTreeSelectChange"
@@ -52,11 +51,7 @@ export default {
       // 角色
       roles: [],
 
-      popupTreeData: [],
-      popupTreeProps: {
-        label: 'name',
-        children: 'children'
-      }
+      popupTreeData: []
     }
   },
   props: {
@@ -78,7 +73,7 @@ export default {
   methods: {
     // 菜单树选中
     handleTreeSelectChange (data, node) {
-      this.dataForm.id = data.id
+      this.dataForm.deptId = data.id
       this.dataForm.deptName = data.name
     }
   },
@@ -89,7 +84,7 @@ export default {
       if (!this.dataForm.deptName) {
         this.$set(this.dataForm, 'deptName', '')
       }
-      const res = await this.$api.sys.dept.findDeptTree()
+      const res = await this.$api.sys.dept.findDeptTreeAll()
       this.popupTreeData = res.data
     } catch (e) {
       this.$message({ message: e, type: 'success', center: true })

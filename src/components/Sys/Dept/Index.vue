@@ -7,38 +7,6 @@
           <hy-button icon="fa fa-plus" label="新增" size="mini" type="success" @click="handleAdd" />
         </el-form-item>
       </el-form>
-
-      <el-tooltip v-if="false" effect="dark" content="打开查询选项" placement="bottom-end">
-        <span class="search-btn" @click="showFiltersDialog = true">
-          <i class="el-icon-search"></i>
-        </span>
-      </el-tooltip>
-      <el-drawer
-        title="查询条件"
-        size="30%"
-        :wrapperClosable="false"
-        :visible.sync="showFiltersDialog"
-        direction="rtl"
-        custom-class="search-drawer"
-        ref="searchDrawer"
-      >
-        <!-- 自定义搜索栏 -->
-        <el-form
-          class="filtersForm"
-          :model="filters"
-          label-position="left"
-          ref="filtersForm"
-          size="mini"
-        >
-          <el-form-item label="名称" label-width="50px" prop="name">
-            <el-input v-model="filters.name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item class="footer">
-            <hy-button label="重置" :loading="resetLoading" @click="findReset" />
-            <hy-button label="搜索" type="success" :loading="filtersLoading" @click="findTreeData" />
-          </el-form-item>
-        </el-form>
-      </el-drawer>
     </div>
     <!--表格树内容栏-->
     <div class="tree-table">
@@ -48,7 +16,7 @@
         rowKey="id"
         size="mini"
         :load="load"
-        :data="tableData"
+        :data="deptTreeData"
         style="width: 100%"
         v-loading="loading"
         highlight-current-row
@@ -95,14 +63,14 @@
     </div>
 
     <!--自定义新增\编辑\查看-->
-    <hy-dialog-template
-      :title="dialogTitle"
+    <el-dialog
       width="30%"
-      :visible.sync="dialogVisible"
-      @hy-dialog-tpl:ok="findTreeData"
+      :title="dlg.title"
+      :visible.sync="dlg.visible"
+      :close-on-click-modal="false"
     >
-      <Detail :dataForm="dataForm" :readOnly="readOnly"></Detail>
-    </hy-dialog-template>
+      <Detail :dataForm="dlg.dataForm" :readOnly="dlg.readOnly" @submit:ok="refreshTable"></Detail>
+    </el-dialog>
   </div>
 </template>
 
@@ -124,8 +92,7 @@ export default {
     return {
       loading: false,
       columns: [
-        { prop: 'id', label: 'ID', minWidth: 100 },
-        { prop: 'name', label: '名称', minWidth: 100 },
+        { prop: 'name', label: '名称', minWidth: 200 },
         {
           prop: 'parentName',
           label: '上级机构',
@@ -147,29 +114,26 @@ export default {
           formatter: formatDateTime
         }
       ],
-      tableData: [],
+
+      // 表格数据
+      deptTreeData: [],
 
       // 编辑修改对话框
-      dialogVisible: false,
-      dialogTitle: '',
-      dataForm: {},
-      readOnly: false,
-
-      // 搜索对话框
-      showFiltersDialog: false,
-      filters: {},
-      // 搜索加载状态
-      filtersLoading: false,
-      resetLoading: false
+      dlg: {
+        visible: false,
+        title: '',
+        dataForm: {},
+        readOnly: false
+      }
     }
   },
   methods: {
     // 获取数据
-    async findTreeData () {
+    async findTreeData (params) {
       try {
         this.loading = true
-        const res = await this.$api.sys.dept.findDeptTree()
-        this.tableData = res.data
+        const res = await this.$api.sys.dept.findDeptTree(params)
+        this.deptTreeData = res.data
       } catch (e) {
         this.$message({
           message: e,
@@ -183,12 +147,7 @@ export default {
     // 懒加载机构
     async load (tree, treeNode, resolve) {
       try {
-        const res = await this.$api.sys.dept.findDeptTree({
-          filters: {
-            ...this.filters,
-            parentId: tree.id
-          }
-        })
+        const res = await this.$api.sys.dept.findDeptTree({parentId: tree.id})
         resolve(res.data)
       } catch (e) {
         this.$message({
@@ -198,51 +157,43 @@ export default {
         })
       }
     },
-    // 重置
-    async findReset () {
-      try {
-        this.$refs.filtersForm.resetFields()
-        this.resetLoading = true
-        await this.findTreeData()
-      } finally {
-        this.resetLoading = false
-      }
-    },
     // 显示新增界面
     handleAdd: function () {
-      this.dialogTitle = '添加'
-      this.dialogVisible = true
-      this.dataForm = {
+      this.dlg.dialogTitle = '添加'
+      this.dlg.visible = true
+      this.dlg.readOnly = false
+      this.dlg.dataForm = {
         name: '',
-        parentId: 0,
+        parentId: null,
         parentName: '',
         orderNum: 0
       }
     },
     // 显示编辑界面
     handleEdit: function (row) {
-      this.dialogTitle = '编辑'
-      this.dialogVisible = true
-      this.readOnly = false
-      this.dataForm = Object.assign({}, row)
+      this.dlg.dialogTitle = '编辑'
+      this.dlg.visible = true
+      this.dlg.readOnly = false
+      this.dlg.dataForm = Object.assign({}, row)
     },
     // 显示查看界面
     handleInfo: function (row) {
-      this.dialogTitle = '擦看'
-      this.dialogVisible = true
-      this.readOnly = true
-      this.dataForm = Object.assign({}, row)
+      this.dlg.dialogTitle = '擦看'
+      this.dlg.visible = true
+      this.dlg.readOnly = true
+      this.dlg.dataForm = Object.assign({}, row)
     },
     // 删除
     handleDelete (row) {
-      this.$confirm('确认删除选中记录吗？', '提示', {
+      this.$confirm('确认删除选中机构吗？', '提示', {
         type: 'warning'
       })
         .then(async () => {
           try {
             this.loading = true
-            await this.$api.sys.dept.del(row.id)
-            await this.$api.sys.dept.findDeptTree({ filters: this.filters })
+            await this.$api.sys.dept.del(row)
+            const res = await this.$api.sys.dept.findDeptTree()
+            this.deptTreeData = res.data
             this.$message({ message: '删除成功', type: 'success' })
           } catch (e) {
             this.$message({ message: e, type: 'error', center: true })
@@ -251,6 +202,10 @@ export default {
           }
         })
         .catch(() => {})
+    },
+    async refreshTable () {
+      this.deptTreeData = []
+      await this.findTreeData()
     }
   },
   mounted () {
@@ -259,7 +214,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .lazyTable {
   height: 100%;
   display: flex;
@@ -267,6 +222,17 @@ export default {
   .tree-table {
     flex-grow: 1;
     overflow: auto;
+  }
+  .el-dialog__body {
+    margin: 10px 20px;
+    padding: 20px 30px;
+    border-top: 1px solid #8080808a;
+  }
+  .el-dialog {
+    border-radius: 1%;
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+      0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+      0px 9px 46px 8px rgba(0, 0, 0, 0.12);
   }
 }
 </style>

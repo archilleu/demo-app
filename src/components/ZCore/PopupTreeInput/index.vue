@@ -35,7 +35,10 @@ export default {
     props: {
       type: Object,
       default () {
-        return []
+        return {
+          label: 'name',
+          children: 'children'
+        }
       }
     },
     prop: {
