@@ -15,8 +15,8 @@
 
         <!-- 过滤栏 -->
         <template v-slot:filters="props">
-          <el-form-item label="名称" label-width="50px" prop="label">
-            <el-input v-model="props.filters.label" autocomplete="off"></el-input>
+          <el-form-item label="名称" label-width="50px" prop="name">
+            <el-input v-model="props.filters.name" autocomplete="off"></el-input>
           </el-form-item>
         </template>
 
@@ -191,7 +191,7 @@ export default {
         return
       }
       this.authLoading = true
-      let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, true)
+      let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, false)
       let roleMenus = []
       for (let i = 0, len = checkedNodes.length; i < len; i++) {
         let roleMenu = { roleId: roleId, menuId: checkedNodes[i].id }

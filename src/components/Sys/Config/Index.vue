@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       columns: [
-        {prop: 'id', label: 'ID', minWidth: 50},
+        {prop: 'id', label: 'ID', minWidth: 100},
         {prop: 'label', label: '名称', minWidth: 100},
         {prop: 'value', label: '值', minWidth: 100},
         {prop: 'type', label: '类型', minWidth: 80},

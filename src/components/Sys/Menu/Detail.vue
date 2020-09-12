@@ -1,5 +1,13 @@
 <template>
-  <HyFormTemplate :dataForm="dataForm" :rules="dataFormRules" :readOnly="readOnly" :api="api">
+  <el-form
+    ref="menuForm"
+    :rules="dataFormRules"
+    :model="dataForm"
+    :disabled="readOnly"
+    label-width="70px"
+    label-position="right"
+    size="mini"
+  >
     <el-form-item label="菜单类型" prop="type">
       <el-radio-group v-model="dataForm.type">
         <el-radio v-for="(type, index) in menuTypeList" :label="index" :key="index">{{ type }}</el-radio>
@@ -67,17 +75,19 @@
         </el-col>
       </el-row>
     </el-form-item>
-  </HyFormTemplate>
+    <el-form-item v-if="!readOnly" class="footer">
+      <el-button @click="emitClose">取消</el-button>
+      <el-button type="primary" @click="onSubmit" :loading="loading">提交</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
-import HyFormTemplate from '@/components/ZCore/HyFormTemplate'
 import PopupTreeInput from '@/components/ZCore/PopupTreeInput'
 
 export default {
   name: 'menu-detail',
   components: {
-    HyFormTemplate,
     PopupTreeInput
   },
 
@@ -86,8 +96,11 @@ export default {
       dataFormRules: {
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }]
       },
+
+      loading: false,
+
       menuTypeList: ['目录', '菜单', '按钮'],
-      options: [],
+
       popupTreeData: [],
       popupTreeProps: {
         label: 'name',
@@ -124,6 +137,40 @@ export default {
     handleTreeSelectChange (data, node) {
       this.dataForm.parentId = data.id
       this.dataForm.parentName = data.name
+    },
+    onSubmit () {
+      this.$refs.menuForm.validate((valid) => {
+        if (!valid) {
+          return
+        }
+
+        this.$confirm('确定', '保存菜单', {})
+          .then(async () => {
+            try {
+              this.loading = true
+              const dept = await this.$api.sys.menu.save(this.dataForm)
+
+              this.emitSubmit(dept)
+
+              this.$message({message: '成功', type: 'success', center: true})
+            } catch (e) {
+              this.$message({message: '失败' + e, type: 'error', center: true})
+            } finally {
+              this.loading = false
+            }
+          })
+          .catch((e) => {})
+      })
+    },
+
+    emitClose () {
+      this.$parent.$emit('update:visible', false)
+    },
+    async emitSubmit (data) {
+      this.$emit('submit:ok', { visible: false, data })
+      this.emitClose()
+      const res = await this.$api.sys.menu.findMenuTree()
+      this.popupTreeData = res.data
     }
   }
 }

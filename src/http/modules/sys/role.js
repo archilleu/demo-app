@@ -34,7 +34,12 @@ export async function findPage (data) {
   return axios({
     url: `${baseUrl}/role/findPage`,
     method: 'post',
-    data
+    data: {
+      ...data.pageRequest,
+      params: {
+        ..._.pickBy(data.filters, _.identity)
+      }
+    }
   })
 }
 
@@ -60,11 +65,6 @@ export async function saveRoleMenus (data) {
   return axios({
     url: `${baseUrl}/role/saveRoleMenus`,
     method: 'post',
-    data: {
-      ...data.pageRequest,
-      params: {
-        ..._.pickBy(data.filters, _.identity)
-      }
-    }
+    data
   })
 }

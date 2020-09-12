@@ -4,8 +4,8 @@
     :rules="dataFormRules"
     :model="dataForm"
     :disabled="readOnly"
-    label-width="100px"
-    label-position="left"
+    label-width="70px"
+    label-position="right"
     size="mini"
   >
     <el-form-item label="ID" prop="id" v-if="false">

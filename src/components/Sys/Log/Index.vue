@@ -10,8 +10,8 @@
     >
       <!-- 过滤栏 -->
       <template v-slot:filters="props">
-        <el-form-item label="名称" label-width="50px" prop="label">
-          <el-input v-model="props.filters.label" autocomplete="off"></el-input>
+        <el-form-item label="名称" label-width="50px" prop="userName">
+          <el-input v-model="props.filters.userName" autocomplete="off"></el-input>
         </el-form-item>
       </template>
     </HyListTemplate>

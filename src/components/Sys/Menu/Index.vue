@@ -5,11 +5,12 @@
         <!-- 自定义工具栏 -->
         <el-form-item>
           <hy-button icon="fa fa-plus" label="新增" size="mini" type="success" @click="handleAdd" />
+          <hy-button icon="fa fa-refresh" label="刷新" size="mini" type="primary" @click="handleRefresh" />
         </el-form-item>
       </el-form>
 
       <el-tooltip effect="dark" content="打开查询选项" placement="bottom-end">
-        <span class="search-btn" @click="showFiltersDialog = true">
+        <span v-if="false" class="search-btn" @click="showFiltersDialog = true">
           <i class="el-icon-search"></i>
         </span>
       </el-tooltip>
@@ -101,20 +102,19 @@
     </div>
 
     <!--自定义新增\编辑\查看-->
-    <hy-dialog-template
-      :title="dialogTitle"
+    <el-dialog
       width="40%"
-      :visible.sync="dialogVisible"
-      @hy-dialog-tpl:ok="findTreeData"
+      :title="dlg.title"
+      :visible.sync="dlg.visible"
+      :close-on-click-modal="false"
     >
-      <Detail :dataForm="dataForm" :readOnly="readOnly"></Detail>
-    </hy-dialog-template>
+      <Detail :dataForm="dlg.dataForm" :readOnly="dlg.readOnly" @submit:ok="updateTreeTableData"></Detail>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import HyButton from '@/components/ZCore/HyButton'
-import HyDialogTemplate from '@/components/ZCore/HyDialogTemplate'
 import { formatDateTime } from '@/utils/datetime'
 
 import Detail from './Detail'
@@ -122,7 +122,6 @@ import Detail from './Detail'
 export default {
   components: {
     HyButton,
-    HyDialogTemplate,
 
     Detail
   },
@@ -156,7 +155,6 @@ export default {
             }
           }
         },
-        {prop: 'parentName', label: '上级菜单', minWidth: 120},
         {prop: 'url', label: '菜单URL', minWidth: 150},
         {prop: 'perms', label: '授权标识L', minWidth: 150},
         {prop: 'orderNum', label: '排序', minWidth: 80},
@@ -171,14 +169,11 @@ export default {
       tableData: [],
 
       // 编辑修改对话框
-      dialogVisible: false,
-      dialogTitle: '',
-      dataForm: {},
-      readOnly: false,
-      dataRule: {
-        name: [
-          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
-        ]
+      dlg: {
+        visible: false,
+        title: '',
+        dataForm: {},
+        readOnly: false
       },
 
       // 搜索对话框
@@ -219,26 +214,29 @@ export default {
     },
     // 显示新增界面
     handleAdd: function () {
-      this.dialogTitle = '添加'
-      this.dialogVisible = true
-      this.dataForm = {
+      this.dlg.title = '添加'
+      this.dlg.visible = true
+      this.dlg.readOnly = false
+      this.dlg.dataForm = {
         type: 1,
         orderNum: 0,
+        parentId: 0,
         parentName: '' // 注意需要提前赋值，否则后面添加的话vue不能感知不存在的对象
       }
     },
     // 显示编辑界面
     handleEdit: function (row) {
-      this.dialogTitle = '编辑'
-      this.dialogVisible = true
-      this.dataForm = Object.assign({}, row)
+      this.dlg.title = '编辑'
+      this.dlg.visible = true
+      this.dlg.readOnly = false
+      this.dlg.dataForm = Object.assign({}, row)
     },
     // 显示查看界面
     handleInfo: function (row) {
-      this.dialogTitle = '擦看'
-      this.dialogVisible = true
-      this.readOnly = true
-      this.dataForm = Object.assign({}, row)
+      this.dlg.title = '查看'
+      this.dlg.visible = true
+      this.dlg.readOnly = true
+      this.dlg.dataForm = Object.assign({}, row)
     },
     // 删除
     handleDelete (row) {
@@ -247,15 +245,23 @@ export default {
       }).then(async () => {
         try {
           this.loading = true
-          await this.$api.sys.dept.del(row.id)
-          await this.$api.sys.dept.findDeptTree({filters: this.filters})
+          await this.$api.sys.menu.del(row)
           this.$message({ message: '删除成功', type: 'success', center: true })
+
+          this.handleRefresh()
         } catch (e) {
           this.$message({ message: e, type: 'error', center: true })
         } finally {
           this.loading = false
         }
       }).catch(() => {})
+    },
+    updateTreeTableData () {
+      this.handleRefresh()
+    },
+    handleRefresh () {
+      this.tableData = []
+      this.findTreeData()
     }
   },
   mounted () {

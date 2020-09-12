@@ -5,7 +5,7 @@
         <!-- 自定义工具栏 -->
         <el-form-item>
           <hy-button icon="fa fa-plus" label="新增" size="mini" type="success" @click="handleAdd" />
-          <hy-button icon="fa fa-refresh" label="刷新" size="mini" type="primary" @click="handRefresh" />
+          <hy-button icon="fa fa-refresh" label="刷新" size="mini" type="primary" @click="handleRefresh" />
         </el-form-item>
       </el-form>
     </div>
@@ -212,7 +212,7 @@ export default {
       this.currentRow = row
     },
     // 刷新
-    handRefresh () {
+    handleRefresh () {
       this.deptTreeData = []
       this.findTreeData()
     },

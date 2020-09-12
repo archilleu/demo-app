@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     api () {
-      return this.$api.sys.dict.save
+      return this.$api.sys.config.save
     }
   },
   methods: {}
