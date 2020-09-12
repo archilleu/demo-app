@@ -5,6 +5,7 @@
         <!-- 自定义工具栏 -->
         <el-form-item>
           <hy-button icon="fa fa-plus" label="新增" size="mini" type="success" @click="handleAdd" />
+          <hy-button icon="fa fa-refresh" label="刷新" size="mini" type="primary" @click="handRefresh" />
         </el-form-item>
       </el-form>
     </div>
@@ -18,9 +19,9 @@
         size="mini"
         :load="load"
         :data="deptTreeData"
-        style="width: 100%"
         v-loading="loading"
         highlight-current-row
+      @selection-change="selectionChange"
         element-loading-text="加载中..."
       >
         <!-- 自定义列 -->
@@ -78,6 +79,7 @@
 <script>
 /**
  * 参考https://blog.csdn.net/qq_39364032/article/details/103680916
+ * 使用tree 来实现比较好？
  */
 import HyButton from '@/components/ZCore/HyButton'
 import HyDialogTemplate from '@/components/ZCore/HyDialogTemplate'
@@ -97,18 +99,6 @@ export default {
       loading: false,
       columns: [
         { prop: 'name', label: '名称', minWidth: 200 },
-        {
-          prop: 'parentName',
-          label: '上级机构',
-          minWidth: 150,
-          formatter: function (data) {
-            if (data.parentName == null) {
-              return '空'
-            } else {
-              return data.parentName
-            }
-          }
-        },
         { prop: 'orderNum', label: '排序', minWidth: 80 },
         { prop: 'createBy', label: '创建人', minWidth: 100 },
         {
@@ -118,6 +108,9 @@ export default {
           formatter: formatDateTime
         }
       ],
+
+      // 当前选择行
+      currentRow: null,
 
       // 表格数据
       deptTreeData: [],
@@ -172,8 +165,8 @@ export default {
       this.dlg.readOnly = false
       this.dlg.dataForm = {
         name: '',
-        parentId: null,
-        parentName: '',
+        parentId: this.currentRow ? this.currentRow.id : null,
+        parentName: this.currentRow ? this.currentRow.name : '',
         orderNum: 0
       }
     },
@@ -215,6 +208,15 @@ export default {
         .catch(() => {})
     },
 
+    selectionChange (row) {
+      this.currentRow = row
+    },
+    // 刷新
+    handRefresh () {
+      this.deptTreeData = []
+      this.findTreeData()
+    },
+
     /**
      * 懒加载相关更新
      */
@@ -231,12 +233,31 @@ export default {
         const parent = this.store.states.data
         parent.push(data)
       } else {
-        // 懒加载机构
-        const parentTreeNode = this.store.states.treeData[data.parentId]
-        if (parentTreeNode) {
-          // 如果该节点已加载
-          if (parentTreeNode.loaded) {
-            this.store.states.lazyTreeNodeMap[data.parentId].push(data)
+        // 非顶级机构
+        // 查找是否添加到顶级机构子机构
+        const topParent = this.store.states.data.find(item => item.id === data.parentId)
+        if (topParent) {
+          topParent.hasChildren++
+        } else {
+          const parentTreeNode = this.store.states.treeData[data.parentId]
+          if (parentTreeNode) {
+            // 如果该节点已加载
+            if (parentTreeNode.loaded) {
+              this.store.states.lazyTreeNodeMap[data.parentId].push(data)
+            }
+          } else {
+            // 该节点尚未懒加载
+            this.$set(this.store.states.treeData, data.parentId,
+              {
+                display: true,
+                loading: false,
+                loaded: false,
+                expanded: false,
+                children: [],
+                lazy: true,
+                level: 0
+              }
+            )
           }
         }
       }
@@ -260,7 +281,9 @@ export default {
       } else {
         // parent改变，先删除后添加
         this.refreshDelete(this.editRow)
-        this.refreshAdd(data)
+        this.$nextTick(() => {
+          this.refreshAdd(data)
+        })
 
         this.editRow = null
       }
