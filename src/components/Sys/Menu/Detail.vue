@@ -126,7 +126,7 @@ export default {
   },
   async mounted () {
     try {
-      const res = await this.$api.sys.menu.findMenuTree()
+      const res = await this.$api.sys.menu.getMenuTree()
       this.popupTreeData = res.data
     } catch (e) {
       this.$message({ message: e, type: 'success', center: true })
@@ -169,7 +169,7 @@ export default {
     async emitSubmit (data) {
       this.$emit('submit:ok', { visible: false, data })
       this.emitClose()
-      const res = await this.$api.sys.menu.findMenuTree()
+      const res = await this.$api.sys.menu.getMenuTree()
       this.popupTreeData = res.data
     }
   }

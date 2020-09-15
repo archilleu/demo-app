@@ -30,18 +30,18 @@ export async function batchDelete (data) {
 }
 
 // 查询机构树
-export async function findDeptTree (params) {
+export async function findByParentId (params) {
   return axios({
-    url: `${baseUrl}/dept/findTree`,
+    url: `${baseUrl}/dept/findByParentId`,
     method: 'get',
     params
   })
 }
 
 // 查询整颗机构树
-export async function findDeptTreeAll () {
+export async function getTree () {
   return axios({
-    url: `${baseUrl}/dept/findTreeAll`,
+    url: `${baseUrl}/dept/getTree`,
     method: 'get'
   })
 }

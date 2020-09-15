@@ -26,7 +26,7 @@ export function batchDelete () {
     }
   }
 }
-export function findDeptTree (params) {
+export function findByParentId (params) {
   // 查询机构树
   const findTreeData = {
     code: 200,

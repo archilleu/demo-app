@@ -4,11 +4,19 @@
       <el-form :inline="true" :size="size">
         <!-- 自定义工具栏 -->
         <el-form-item v-if="showOperation & showAdd">
-          <hy-button icon="fa fa-plus" label="新增" :size="size" type="success" @click="handleAdd" />
+          <hy-button
+            :perms="permsAdd"
+            icon="fa fa-plus"
+            label="新增"
+            :size="size"
+            type="success"
+            @click="handleAdd"
+          />
         </el-form-item>
 
         <el-form-item v-if="showBatchDelete">
           <hy-button
+            :perms="permsDelete"
             label="批量删除"
             icon="fa fa-edit"
             :size="size"
@@ -47,8 +55,8 @@
             <div class="warning">请添加查询条件</div>
           </slot>
           <el-form-item class="footer">
-            <hy-button label="重置" :loading="resetLoading" @click="findReset" />
-            <hy-button label="搜索" type="success" :loading="filtersLoading" @click="filtersPage" />
+            <hy-button label="重置" :perms="true" :loading="resetLoading" @click="findReset" />
+            <hy-button label="搜索" :perms="permsView" type="success" :loading="filtersLoading" @click="filtersPage" />
           </el-form-item>
         </el-form>
       </el-drawer>
@@ -62,6 +70,9 @@
       :showDelete="showDelete"
       :showCheckbox="showCheckbox"
       :showOperation="showOperation"
+      :permsEdit="permsEdit"
+      :permsDelete="permsDelete"
+      :permsInfo="permsInfo"
       :hightlightCurrentRow="true"
       :showOverflowTooltip="true"
       :size="size"
@@ -204,6 +215,31 @@ export default {
     showOperation: {
       type: Boolean,
       default: true
+    },
+    permsAdd: {
+      // 操作权限(添加)
+      type: String,
+      required: false
+    },
+    permsDelete: {
+      // 操作权限(删除)
+      type: String,
+      required: false
+    },
+    permsEdit: {
+      // 操作权限(编辑)
+      type: String,
+      required: false
+    },
+    permsInfo: {
+      // 操作权限(查看)
+      type: String,
+      required: false
+    },
+    permsView: {
+      // 操作权限(查看列表)
+      type: String,
+      required: false
     }
   },
 

@@ -2,6 +2,9 @@
   <div class="hy-height-100">
     <!-- 表格栏目 -->
     <HyListTemplate
+      permsInfo="sys:log:view"
+      permsView="sys:log:view"
+      permsDelete="sys:log:delete"
       :api="$api.sys.log"
       :columns="columns"
       :showAdd="false"

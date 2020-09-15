@@ -63,7 +63,6 @@ export default {
     },
     perms: {
       // 按钮权限标识，外部使用者传入
-      type: String,
       default: null
     }
   },
@@ -76,8 +75,11 @@ export default {
       this.$emit('click', {})
     },
     hasPerms: function (perms) {
+      if (this.disabled) return false
+      if (perms === true) return true
+
       // 根据权限标识和外部指示状态进行权限判断
-      return hasPermission(perms) & !this.disabled
+      return hasPermission(perms)
     }
   },
   mounted () {}

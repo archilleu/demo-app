@@ -77,6 +77,7 @@
       >
         <template slot-scope="scope">
           <hy-button
+            :perms="permsEdit"
             icon="fa fa-edit"
             :circle="true"
             :size="size"
@@ -85,6 +86,7 @@
             v-if="showEdit"
           />
           <hy-button
+            :perms="permsInfo"
             icon="fa fa-envelope-o"
             :circle="true"
             :size="size"
@@ -93,6 +95,7 @@
             v-if="showInfo"
           />
           <hy-button
+            :perms="permsDelete"
             icon="fa fa-trash"
             :circle="true"
             :size="size"
@@ -190,6 +193,21 @@ export default {
       // 是否显示操作组件(查看)
       type: Boolean,
       default: true
+    },
+    permsDelete: {
+      // 操作权限(删除)
+      type: String,
+      required: false
+    },
+    permsEdit: {
+      // 操作权限(编辑)
+      type: String,
+      required: false
+    },
+    permsInfo: {
+      // 操作权限(查看)
+      type: String,
+      required: false
     },
     showCheckbox: {
       // 是否显示操作组件(批量删除)

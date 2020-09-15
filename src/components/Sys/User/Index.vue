@@ -3,6 +3,11 @@
     <!-- 表格栏目 -->
     <HyListTemplate
       ref="roleTable"
+      permsAdd="sys:user:add"
+      permsEdit="sys:user:edit"
+      permsInfo="sys:user:view"
+      permsDelete="sys:user:delete"
+      permsView="sys:user:view"
       :api="$api.sys.user"
       :columns="columns"
       :columnsExpand="columnsExpand"
@@ -12,6 +17,7 @@
       <!-- 工具条栏 -->
       <template v-slot:toolbar>
         <hy-button
+          :perms="true"
           icon="fa fa-check"
           label="选择角色"
           size="mini"

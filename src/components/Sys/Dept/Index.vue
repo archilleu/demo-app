@@ -4,8 +4,22 @@
       <el-form :inline="true" size="mini">
         <!-- 自定义工具栏 -->
         <el-form-item>
-          <hy-button icon="fa fa-plus" label="新增" size="mini" type="success" @click="handleAdd" />
-          <hy-button icon="fa fa-refresh" label="刷新" size="mini" type="primary" @click="handleRefresh" />
+          <hy-button
+            icon="fa fa-plus"
+            perms="sys:dept:add"
+            label="新增"
+            size="mini"
+            type="success"
+            @click="handleAdd"
+          />
+          <hy-button
+            icon="fa fa-refresh"
+            perms="sys:dept:view"
+            label="刷新"
+            size="mini"
+            type="primary"
+            @click="handleRefresh"
+          />
         </el-form-item>
       </el-form>
     </div>
@@ -21,7 +35,7 @@
         :data="deptTreeData"
         v-loading="loading"
         highlight-current-row
-      @selection-change="selectionChange"
+        @selection-change="selectionChange"
         element-loading-text="加载中..."
       >
         <!-- 自定义列 -->
@@ -39,6 +53,7 @@
         <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
           <template slot-scope="scope">
             <hy-button
+              perms="sys:dept:edit"
               icon="fa fa-edit"
               :circle="true"
               size="mini"
@@ -46,6 +61,7 @@
               @click="handleEdit(scope.row)"
             />
             <hy-button
+              perms="sys:dept:view"
               icon="fa fa-envelope-o"
               :circle="true"
               size="mini"
@@ -53,6 +69,7 @@
               @click="handleInfo(scope.row)"
             />
             <hy-button
+              perms="sys:dept:delete"
               icon="fa fa-trash"
               :circle="true"
               size="mini"
@@ -71,7 +88,11 @@
       :visible.sync="dlg.visible"
       :close-on-click-modal="false"
     >
-      <Detail :dataForm="dlg.dataForm" :readOnly="dlg.readOnly" @submit:ok="updateDateTreeTableData"></Detail>
+      <Detail
+        :dataForm="dlg.dataForm"
+        :readOnly="dlg.readOnly"
+        @submit:ok="updateDateTreeTableData"
+      ></Detail>
     </el-dialog>
   </div>
 </template>
@@ -139,7 +160,7 @@ export default {
     async findTreeData (params) {
       try {
         this.loading = true
-        const res = await this.$api.sys.dept.findDeptTree(params)
+        const res = await this.$api.sys.dept.findByParentId(params)
         this.deptTreeData = res.data
       } catch (e) {
         this.$message({message: e, type: 'error', center: true})
@@ -150,7 +171,7 @@ export default {
     // 懒加载机构
     async load (tree, treeNode, resolve) {
       try {
-        const res = await this.$api.sys.dept.findDeptTree({parentId: tree.id})
+        const res = await this.$api.sys.dept.findByParentId({parentId: tree.id})
         resolve(res.data)
       } catch (e) {
         this.$message({message: e, type: 'error', center: true})

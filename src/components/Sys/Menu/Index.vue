@@ -4,8 +4,22 @@
       <el-form :inline="true" size="mini">
         <!-- 自定义工具栏 -->
         <el-form-item>
-          <hy-button icon="fa fa-plus" label="新增" size="mini" type="success" @click="handleAdd" />
-          <hy-button icon="fa fa-refresh" label="刷新" size="mini" type="primary" @click="handleRefresh" />
+          <hy-button
+            icon="fa fa-plus"
+            perms="sys:menu:add"
+            label="新增"
+            size="mini"
+            type="success"
+            @click="handleAdd"
+          />
+          <hy-button
+            icon="fa fa-refresh"
+            perms="sys:menu:view"
+            label="刷新"
+            size="mini"
+            type="primary"
+            @click="handleRefresh"
+          />
         </el-form-item>
       </el-form>
 
@@ -76,6 +90,7 @@
         <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
           <template slot-scope="scope">
             <hy-button
+              perms="sys:menu:add"
               icon="fa fa-edit"
               :circle="true"
               size="mini"
@@ -83,6 +98,7 @@
               @click="handleEdit(scope.row)"
             />
             <hy-button
+              perms="sys:menu:view"
               icon="fa fa-envelope-o"
               :circle="true"
               size="mini"
@@ -90,6 +106,7 @@
               @click="handleInfo(scope.row)"
             />
             <hy-button
+              perms="sys:menu:delete"
               icon="fa fa-trash"
               :circle="true"
               size="mini"
@@ -190,7 +207,7 @@ export default {
     async findTreeData () {
       try {
         this.loading = true
-        const res = await this.$api.sys.menu.findMenuTree({filters: this.filters})
+        const res = await this.$api.sys.menu.getMenuTree({filters: this.filters})
         this.tableData = res.data
       } catch (e) {
         this.$message({

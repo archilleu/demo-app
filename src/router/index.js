@@ -91,6 +91,10 @@ async function addDynamicMenuAndRoutes () {
     router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
     router.addRoutes(router.options.routes)
 
+    // 加载权限
+    const permission = await api.user.permission.list()
+    store.commit('setPerms', permission.data)
+
     // 提交加载动态路由完毕状态
     store.commit('menuRouteLoaded', true)
     store.commit('setNavTree', res.data)

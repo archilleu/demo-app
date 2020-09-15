@@ -16,7 +16,7 @@
       ref="roleTable"
       class="role-table"
       max-height="300px"
-      :data="data.content"
+      :data="data"
       highlight-current-row
       @selection-change="selectionChange"
       row-key="id"
@@ -54,8 +54,8 @@
       </el-table-column>
     </el-table>
     <div class="footer">
-      <hy-button label="取消" @click="cancle" />
-      <hy-button label="保存" type="success" :loading="saveLoading" @click="submit" />
+      <hy-button label="取消" :perms="true" @click="cancle" />
+      <hy-button label="保存" perms="sys:user:edit" type="success" :loading="saveLoading" @click="submit" />
     </div>
   </div>
 </template>
@@ -79,7 +79,7 @@ export default {
         {prop: 'remark', label: '备注', minWidth: 120}
       ],
 
-      data: {},
+      data: [],
 
       filters: {
         name: null
@@ -109,10 +109,10 @@ export default {
           filters: this.filters,
           pageRequest: {
             page: 1,
-            rows: Number.MAX_SAFE_INTEGER
+            rows: 10000
           }
         }
-        const res = await this.$api.sys.role.findPage(data)
+        const res = await this.$api.sys.role.findAll(data)
         this.data = res.data
         this.$nextTick(() => {
           this.toggleRowSelection(this.user.userRoles)
@@ -164,7 +164,7 @@ export default {
 
       let selected = []
       rows.forEach(row => {
-        this.data.content.forEach(item => {
+        this.data.forEach(item => {
           if (item.id === row.roleId) { selected.push(item) }
         })
       })

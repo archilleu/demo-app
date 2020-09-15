@@ -28,18 +28,10 @@ export async function batchDelete (data) {
     data
   })
 }
-// 查找导航菜单树
-export async function findNavTree (params) {
+// 获取菜单树
+export async function getMenuTree (data = {}) {
   return axios({
-    url: `${baseUrl}/menu/findNavTree`,
-    method: 'get',
-    params
-  })
-}
-// 查找导航菜单树
-export async function findMenuTree (data = {}) {
-  return axios({
-    url: `${baseUrl}/menu/findMenuTree`,
+    url: `${baseUrl}/menu/getMenuTree`,
     method: 'post',
     data: {
       params: {

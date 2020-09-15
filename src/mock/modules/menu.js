@@ -443,7 +443,7 @@ export function findNavTree () {
 }
 
 // 获取菜单树
-export function findMenuTree () {
+export function getMenuTree () {
   const menuTreeData = {
     code: 200,
     msg: null,
@@ -1479,7 +1479,7 @@ export function findMenuTree () {
     ]
   }
   return {
-    url: 'sys/menu/findMenuTree',
+    url: 'sys/menu/getMenuTree',
     type: 'post',
     data: menuTreeData
   }

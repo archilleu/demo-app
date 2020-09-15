@@ -2,6 +2,11 @@
   <div class="hy-height-100">
     <!-- 表格栏目 -->
     <HyListTemplate
+      permsAdd="sys:dict:add"
+      permsEdit="sys:dict:edit"
+      permsInfo="sys:dict:view"
+      permsDelete="sys:dict:delete"
+      permsView="sys:dict:view"
       :api="$api.sys.dict"
       :columns="columns"
       :columnsExpand="columnsExpand"

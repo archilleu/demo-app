@@ -3,6 +3,11 @@
     <!-- 表格栏目 -->
     <div class="table-role">
       <HyListTemplate
+        permsAdd="sys:role:add"
+        permsEdit="sys:role:edit"
+        permsInfo="sys:role:view"
+        permsDelete="sys:role:delete"
+        permsView="sys:role:view"
         :api="$api.sys.role"
         :columns="columns"
         :showBatchDelete="false"
@@ -59,12 +64,14 @@
         </div>
         <div>
           <hy-button
+            :perms="true"
             label="重置"
             type="primary"
             @click="resetSelection"
             :disabled="this.selectRole == null"
           />
           <hy-button
+            perms="sys:role:edit"
             label="提交"
             type="primary"
             @click="submitAuthForm"
@@ -143,9 +150,9 @@ export default {
 
   methods: {
     // 获取菜单树数据
-    async findMenuTree () {
+    async getMenuTree () {
       this.menuLoading = true
-      const res = await this.$api.sys.menu.findMenuTree()
+      const res = await this.$api.sys.menu.getMenuTree()
       this.menuData = res.data
       this.menuLoading = false
     },
@@ -233,7 +240,7 @@ export default {
     }
   },
   async mounted () {
-    await this.findMenuTree()
+    await this.getMenuTree()
   }
 }
 </script>

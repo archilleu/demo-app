@@ -3,11 +3,13 @@
  */
 import * as login from '../user/login'
 import * as menu from './menu'
+import * as permission from './permission'
 
 export default {
 
   login,
-  menu
+  menu,
+  permission
 }
 
 export const baseUrl = 'user'

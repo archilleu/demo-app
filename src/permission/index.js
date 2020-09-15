@@ -13,5 +13,5 @@ export function hasPermission (perms) {
       break
     }
   }
-  return hasPermission || true
+  return hasPermission
 }

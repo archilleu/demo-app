@@ -84,7 +84,7 @@ export default {
       if (!this.dataForm.deptName) {
         this.$set(this.dataForm, 'deptName', '')
       }
-      const res = await this.$api.sys.dept.findDeptTreeAll()
+      const res = await this.$api.sys.dept.getTree()
       this.popupTreeData = res.data
     } catch (e) {
       this.$message({ message: e, type: 'success', center: true })
