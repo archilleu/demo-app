@@ -112,3 +112,15 @@ export function findPage (params) {
     data: findPageData
   }
 }
+
+export function batchDelete () {
+  return {
+    url: 'sys/log/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
+}

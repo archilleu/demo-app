@@ -324,11 +324,22 @@ export function findPermissions () {
       'sys:menu:view',
       'sys:menu:edit',
       'sys:dict:add',
-      'sys:role:add'
+      'sys:role:add',
+      'sys:config:add',
+      'sys:config:edit',
+      'sys:config:view',
+      'sys:config:delete',
+      'sys:config:view',
+      'sys:log:view',
+      'sys:log:view',
+      'sys:log:delete',
+      'sys:loginlog:view',
+      'sys:loginlog:view',
+      'sys:loginlog:delete'
     ]
   }
   return {
-    url: 'sys/user/findPermissions',
+    url: 'user/findPermission',
     type: 'get',
     data: permsData
   }

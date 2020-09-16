@@ -4,13 +4,22 @@
 
 // 保存
 export function save () {
+  let idx = 100
   return {
     url: 'sys/dept/save',
     type: 'post',
     data: {
-      code: 200,
-      msg: null,
-      data: 1
+      data: {
+        id: idx++,
+        createBy: 'admin',
+        createTime: '2018-09-23T11:35:22.000+0000',
+        lastUpdateBy: null,
+        lastUpdateTime: null,
+        name: '谁便啦',
+        parentId: null,
+        orderNum: 0,
+        delFlag: 0
+      }
     }
   }
 }
@@ -237,8 +246,210 @@ export function findByParentId (params) {
     ]
   }
   return {
-    url: 'sys/dept/findTree',
-    type: 'post',
+    url: 'sys/dept/findByParentId',
+    type: 'get',
+    params,
     data: findTreeData
+  }
+}
+
+export function getTree () {
+  const data = {
+    message: 'success',
+    data: [
+      {
+        id: 1,
+        createBy: 'admin',
+        createTime: '2018-09-23T19:35:22.000+0000',
+        lastUpdateBy: null,
+        lastUpdateTime: null,
+        name: '轻尘集团',
+        parentId: null,
+        orderNum: 0,
+        delFlag: 0,
+        children: [
+          {
+            id: 5,
+            createBy: 'admin',
+            createTime: '2018-09-23T19:37:17.000+0000',
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            name: '北京分公司',
+            parentId: 1,
+            orderNum: 1,
+            delFlag: 0,
+            children: [
+              {
+                id: 7,
+                createBy: 'admin',
+                createTime: '2018-09-23T19:38:00.000+0000',
+                lastUpdateBy: null,
+                lastUpdateTime: null,
+                name: '技术部',
+                parentId: 5,
+                orderNum: 0,
+                delFlag: 0,
+                children: [],
+                hasChildren: null
+              },
+              {
+                id: 10,
+                createBy: 'admin',
+                createTime: '2018-09-23T19:38:45.000+0000',
+                lastUpdateBy: null,
+                lastUpdateTime: null,
+                name: '市场部',
+                parentId: 5,
+                orderNum: 0,
+                delFlag: 0,
+                children: [],
+                hasChildren: null
+              }
+            ],
+            hasChildren: null
+          }
+        ],
+        hasChildren: null
+      },
+      {
+        id: 2,
+        createBy: 'admin',
+        createTime: '2018-09-23T19:35:55.000+0000',
+        lastUpdateBy: null,
+        lastUpdateTime: null,
+        name: '牧尘集团',
+        parentId: null,
+        orderNum: 1,
+        delFlag: 0,
+        children: [
+          {
+            id: 4,
+            createBy: 'admin',
+            createTime: '2018-09-23T19:37:03.000+0000',
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            name: '上海分公司',
+            parentId: 2,
+            orderNum: 0,
+            delFlag: 0,
+            children: [
+              {
+                id: 8,
+                createBy: 'admin',
+                createTime: '2018-09-23T19:38:10.000+0000',
+                lastUpdateBy: null,
+                lastUpdateTime: null,
+                name: '技术部',
+                parentId: 4,
+                orderNum: 0,
+                delFlag: 0,
+                children: [],
+                hasChildren: null
+              }
+            ],
+            hasChildren: null
+          },
+          {
+            id: 6,
+            createBy: 'admin',
+            createTime: '2018-09-23T19:37:28.000+0000',
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            name: '北京分公司',
+            parentId: 2,
+            orderNum: 1,
+            delFlag: 0,
+            children: [
+              {
+                id: 9,
+                createBy: 'admin',
+                createTime: '2018-09-23T19:38:17.000+0000',
+                lastUpdateBy: null,
+                lastUpdateTime: null,
+                name: '技术部',
+                parentId: 6,
+                orderNum: 0,
+                delFlag: 0,
+                children: [],
+                hasChildren: null
+              },
+              {
+                id: 11,
+                createBy: 'admin',
+                createTime: '2018-09-23T19:39:01.000+0000',
+                lastUpdateBy: null,
+                lastUpdateTime: null,
+                name: '市场部',
+                parentId: 6,
+                orderNum: 0,
+                delFlag: 0,
+                children: [],
+                hasChildren: null
+              }
+            ],
+            hasChildren: null
+          }
+        ],
+        hasChildren: null
+      },
+      {
+        id: 3,
+        createBy: 'admin',
+        createTime: '2018-09-23T19:36:24.000+0000',
+        lastUpdateBy: null,
+        lastUpdateTime: null,
+        name: '三国集团',
+        parentId: null,
+        orderNum: 2,
+        delFlag: 0,
+        children: [
+          {
+            id: 12,
+            createBy: 'admin',
+            createTime: '2018-09-23T19:40:42.000+0000',
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            name: '魏国',
+            parentId: 3,
+            orderNum: 0,
+            delFlag: 0,
+            children: [],
+            hasChildren: null
+          },
+          {
+            id: 13,
+            createBy: 'admin',
+            createTime: '2018-09-23T19:40:54.000+0000',
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            name: '蜀国',
+            parentId: 3,
+            orderNum: 1,
+            delFlag: 0,
+            children: [],
+            hasChildren: null
+          },
+          {
+            id: 14,
+            createBy: 'admin',
+            createTime: '2018-09-23T19:41:04.000+0000',
+            lastUpdateBy: null,
+            lastUpdateTime: null,
+            name: '吴国',
+            parentId: 3,
+            orderNum: 2,
+            delFlag: 0,
+            children: [],
+            hasChildren: null
+          }
+        ],
+        hasChildren: null
+      }
+    ]
+  }
+  return {
+    url: 'sys/dept/getTree',
+    type: 'get',
+    data
   }
 }

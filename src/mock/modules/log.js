@@ -36,7 +36,7 @@ export function getContent (pageNum, pageSize) {
     obj.id = index
     obj.userName = 'admin' + index
     obj.operation = 'operation'
-    obj.method = 'com.louis.controller.SysUserController.findPage'
+    obj.method = 'com.hoya.controller.SysUserController.findPage'
     obj.params = '{"pageNum":"1","pageSize":"8"}'
     obj.time = 12
     obj.ip = '127.0.0.1'
@@ -51,4 +51,16 @@ export function getContent (pageNum, pageSize) {
     content.push(obj)
   }
   return content
+}
+
+export function batchDelete () {
+  return {
+    url: 'sys/login-log/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
 }
