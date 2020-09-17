@@ -12,5 +12,5 @@ export function getToken () {
 }
 
 export function clearToken () {
-  window.sessionStorage.setItem('auth', null)
+  window.sessionStorage.removeItem('auth')
 }
