@@ -11,6 +11,7 @@ export function login () {
     }
   }
   return {
+    isOpen: true,
     url: 'user/login',
     type: 'post',
     data: loginData
@@ -25,6 +26,7 @@ export function logout () {
     }
   }
   return {
+    isOpen: true,
     url: 'logout',
     type: 'get',
     data: logoutData

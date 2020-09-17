@@ -1,53 +1,46 @@
 import Mock from 'mockjs'
 import { baseURL } from '@/utils/global'
-import * as login from './modules/login'
-import * as user from './modules/user'
-import * as role from './modules/role'
-import * as dept from './modules/dept'
-import * as menu from './modules/menu'
-import * as dict from './modules/dict'
-import * as config from './modules/config'
-import * as log from './modules/log'
-import * as loginLog from './modules/login-log'
+import user from './modules/user/api'
+import sys from './modules/sys/api'
 
 // 1. 开启/关闭[所有模块]拦截, 通过调[openMock参数]设置.
 // 2. 开启/关闭[业务模块]拦截, 通过调用fnCreate方法[isOpen参数]设置.
 // 3. 开启/关闭[业务模块中某个请求]拦截, 通过函数返回对象中的[isOpen属性]设置.
 // const openMock = false
 const openMock = true
+
 fnCreate(user, openMock)
-fnCreate(role, openMock)
-fnCreate(dept, openMock)
-fnCreate(menu, openMock)
-fnCreate(dict, openMock)
-fnCreate(config, openMock)
-fnCreate(log, openMock)
-fnCreate(loginLog, openMock)
-fnCreate(login, openMock)
+fnCreate(sys, openMock)
 
 /**
  * 创建mock模拟数据
  * @param {*} mod 模块
  * @param {*} isOpen 是否开启?
  */
+
 function fnCreate (mod, isOpen = true) {
-  if (isOpen) {
-    for (var key in mod) {
+  if (!isOpen) { return }
+
+  console.log(mod)
+  for (const item in mod) {
+    const api = mod[item]
+    for (const key in api) {
       ((res) => {
-        if (res.isOpen !== false) {
-          let url = baseURL
-          if (!url.endsWith('/')) {
-            url = url + '/'
-          }
-          url = url + res.url
-          Mock.mock(new RegExp(url), res.type, (opts) => {
-            opts.data = opts.body ? JSON.parse(opts.body) : null
-            console.log('%c mock:req: ', 'color:blue', opts)
-            console.log('%c mock:rep: ', 'color:blue', res.data)
-            return res.data
-          })
+        if (res.isOpen === false) { return }
+
+        let url = baseURL
+        if (!url.endsWith('/')) {
+          url = url + '/'
         }
-      })(mod[key]() || {})
+
+        url = url + res.url
+        Mock.mock(new RegExp(url), res.type, (opts) => {
+          opts.body = opts.body ? JSON.parse(opts.body) : {}
+          console.log('%c mock:req: ', 'color:blue', opts)
+          console.log('%c mock:rep: ', 'color:blue', res.data)
+          return (res.callback && res.callback(opts)) || res.data
+        })
+      })(api[key]() || {})
     }
   }
 }
