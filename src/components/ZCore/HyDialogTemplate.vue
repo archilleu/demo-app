@@ -46,8 +46,8 @@ export default {
   },
 
   methods: {
-    handleSubmit () {
-      this.$emit('hy-dialog-tpl:ok')
+    handleSubmit (data) {
+      this.$emit('hy-dialog-tpl:ok', data)
     },
 
     handleClose (val) {

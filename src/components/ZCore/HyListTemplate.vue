@@ -90,7 +90,7 @@
       :title="dialogTitle"
       width="50%"
       :visible.sync="dialogVisible"
-      @hy-dialog-tpl:ok="findPage"
+      @hy-dialog-tpl:ok="refreshTable"
     >
       <slot name="detail" :dataForm="dataForm" :readOnly="readOnly"></slot>
     </hy-dialog-template>
@@ -268,6 +268,11 @@ export default {
       } finally {
         this.resetLoading = false
       }
+    },
+
+    // 添加修改后更新数据行
+    refreshTable ({ data }) {
+      this.$refs.hyTableTemplate.save(data.data)
     },
 
     // 选中行改变

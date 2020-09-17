@@ -285,6 +285,24 @@ export default {
       }
     },
 
+    // 保存数据
+    save (data) {
+      let idx = this.data.content.findIndex(item => item.id === data.id)
+      if (idx !== -1) {
+        // update
+        this.$set(this.data.content, idx, data)
+      } else {
+        // add
+        if (this.data.content.length < this.pageRequest.rows) {
+          this.data.content.unshift(data)
+        } else {
+          this.data.content.splice(this.pageRequest.rows - 1, 1)
+          this.data.content.unshift(data)
+        }
+        this.data.totalSize++
+      }
+    },
+
     // 选择切换(多选)
     selectionChange (selections) {
       this.$emit('selection-change', selections)
@@ -326,7 +344,10 @@ export default {
           try {
             this.loading = true
             await this.api.del(row)
-            await this.findPage(this.filters)
+            let idx = this.data.content.findIndex(item => item.id === row.id)
+            if (idx !== -1) {
+              this.data.content.splice(idx, 1)
+            }
             this.$message({ message: '删除成功', type: 'success', center: true })
           } catch (e) {
             this.$message({ message: e, type: 'error', center: true })

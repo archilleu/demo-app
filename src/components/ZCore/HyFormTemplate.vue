@@ -93,22 +93,14 @@ export default {
           .then(async () => {
             try {
               this.loading = true
-              await this.api(this.dataForm)
+              const res = await this.api(this.dataForm)
 
-              this.$message({
-                message: this.info.success,
-                type: 'success',
-                center: true
-              })
+              this.$message({message: this.info.success, type: 'success', center: true})
 
               this.emitClose()
-              this.emitSubmit()
+              this.emitSubmit(res)
             } catch (e) {
-              this.$message({
-                message: this.info.error + e,
-                type: 'error',
-                center: true
-              })
+              this.$message({message: this.info.error + e, type: 'error', center: true})
             } finally {
               this.loading = false
             }
@@ -120,8 +112,8 @@ export default {
     emitClose () {
       this.$parent.$parent.$emit('hy-detail-tpl:cancle', false)
     },
-    emitSubmit () {
-      this.$parent.$parent.$emit('hy-detail-tpl:ok', { visible: false })
+    emitSubmit (data) {
+      this.$parent.$parent.$emit('hy-detail-tpl:ok', { visible: false, data })
     }
   }
 }
