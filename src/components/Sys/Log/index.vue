@@ -7,7 +7,9 @@
       permsDelete="sys:log:delete"
       :api="$api.sys.log"
       :columns="columns"
+      :columnsExpand="columnsExpand"
       :showAdd="false"
+      :showInfo="false"
       :showEdit="false"
       :showBatchDelete="false"
     >
@@ -49,7 +51,26 @@ export default {
           minWidth: 120,
           formatter: formatDateTime
         }
-      ]
+      ],
+      columnsExpand: {
+        labelWidth: '80px',
+        data: [
+          {prop: 'id', label: 'ID'},
+          {prop: 'userName', label: '用户名'},
+          {prop: 'operation', label: '操作'},
+          {prop: 'method', label: '方法'},
+          {prop: 'params', label: '参数'},
+          {prop: 'ip', label: 'IP'},
+          {prop: 'time', label: '耗时'},
+          {prop: 'createBy', label: '创建人'},
+          {
+            prop: 'createTime',
+            label: '创建时间',
+            minWidth: 120,
+            formatter: formatDateTime
+          }
+        ]
+      }
     }
   }
 }

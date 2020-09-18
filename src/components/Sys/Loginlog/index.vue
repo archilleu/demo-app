@@ -7,8 +7,10 @@
       permsDelete="sys:loginlog:delete"
       :api="$api.sys.loginLog"
       :columns="columns"
+      :columnsExpand="columnsExpand"
       :showAdd="false"
       :showEdit="false"
+      :showInfo="false"
       :showBatchDelete="false"
     >
       <!-- 过滤栏 -->
@@ -50,7 +52,24 @@ export default {
           minWidth: 120,
           formatter: formatDateTime
         }
-      ]
+      ],
+      columnsExpand: {
+        labelWidth: '80px',
+        data: [
+          {prop: 'id', label: 'ID'},
+          {prop: 'userName', label: '用户名'},
+          {prop: 'status', label: '状态'},
+          {prop: 'ip', label: 'IP'},
+          {prop: 'time', label: '耗时'},
+          {prop: 'createBy', label: '创建人'},
+          {
+            prop: 'createTime',
+            label: '创建时间',
+            minWidth: 120,
+            formatter: formatDateTime
+          }
+        ]
+      }
     }
   }
 }
