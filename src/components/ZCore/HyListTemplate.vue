@@ -67,6 +67,7 @@
       :columns="columns"
       :columnsExpand="columnsExpand"
       :showEdit="showEdit"
+      :showInfo="showInfo"
       :showDelete="showDelete"
       :showCheckbox="showCheckbox"
       :showOperation="showOperation"
@@ -188,6 +189,11 @@ export default {
     },
     // 是否显示编辑
     showEdit: {
+      type: Boolean,
+      default: true
+    },
+    showInfo: {
+      // 是否显示操作组件(查看)
       type: Boolean,
       default: true
     },
