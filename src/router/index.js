@@ -91,9 +91,11 @@ async function addDynamicMenuAndRoutes () {
     router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
     router.addRoutes(router.options.routes)
 
-    // 加载权限
-    const permission = await api.user.permission.list()
-    store.commit('setPerms', permission.data)
+    // 加载权限(可以从token还原，不需要向后台获取)
+    const token = getToken()
+    const jwt = JSON.parse(decodeURIComponent(escape(window.atob(token.split('.')[1]))))
+    const authorities = jwt.authorities.map(item => item.authority)
+    store.commit('setPerms', authorities)
 
     // 提交加载动态路由完毕状态
     store.commit('menuRouteLoaded', true)
