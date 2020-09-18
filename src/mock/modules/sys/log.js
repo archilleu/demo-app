@@ -2,57 +2,6 @@
  * 操作日志模块
  */
 
-// 分页查询
-export function findPage (params) {
-  const findPageData = {
-    code: 200,
-    msg: null,
-    data: {}
-  }
-  const pageNum = 1
-  const pageSize = 8
-  if (params !== null) {
-    // pageNum = params.pageNum
-  }
-  if (params !== null) {
-    // pageSize = params.pageSize
-  }
-  const content = this.getContent(pageNum, pageSize)
-  findPageData.data.pageNum = pageNum
-  findPageData.data.pageSize = pageSize
-  findPageData.data.totalSize = 50
-  findPageData.data.content = content
-  return {
-    url: 'sys/log/findPage',
-    type: 'post',
-    data: findPageData
-  }
-}
-export function getContent (pageNum, pageSize) {
-  const content = []
-  for (let i = 0; i < pageSize; i++) {
-    const obj = {}
-    const index = ((pageNum - 1) * pageSize) + i + 1
-    obj.id = index
-    obj.userName = 'admin' + index
-    obj.operation = 'operation'
-    obj.method = 'com.hoya.controller.SysUserController.findPage'
-    obj.params = '{"pageNum":"1","pageSize":"8"}'
-    obj.time = 12
-    obj.ip = '127.0.0.1'
-    obj.remark = 'remark log' + index
-    if (i % 2 === 0) {
-
-    }
-    obj.createBy = 'admin'
-    obj.createTime = '2018-08-14 11:11:11'
-    obj.createBy = 'admin'
-    obj.createTime = '2018-09-14 12:12:12'
-    content.push(obj)
-  }
-  return content
-}
-
 export function batchDelete () {
   return {
     url: 'sys/login-log/delete',
@@ -61,6 +10,58 @@ export function batchDelete () {
       code: 200,
       msg: null,
       data: 1
+    }
+  }
+}
+
+let id = 0
+const initData = {
+  id: 1,
+  userName: 'admin',
+  operation: 'operation',
+  method: 'com.hoya.controller.SysUserController.findPage',
+  params: '{"pageNum":"1","pageSize":"8"}',
+  time: 12,
+  ip: '127.0.0.1',
+  remark: 'remark log',
+  createBy: 'admin',
+  createTime: new Date()
+}
+
+// 分页查询
+export function findPage (params) {
+  return {
+    url: 'sys/log/findPage',
+    type: 'post',
+    callback (opts) {
+      const ret = {
+        page: 1,
+        rows: 20,
+        totalSize: 25,
+        totalPages: 2,
+        content: []
+      }
+
+      if (opts.body.params.userName || opts.body.params.status) {
+        ret.content = Array.from({ length: ret.rows }).map(item => {
+          return Object.assign({}, initData, {
+            id: id++,
+            userName: opts.body.params.userName + Math.ceil(Math.random() * 20)
+          })
+        })
+      } else {
+        ret.content = Array.from({ length: ret.rows }).map(item => {
+          return Object.assign({}, initData, {
+            id: id++,
+            userName: 'admin' + id
+          })
+        })
+      }
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
     }
   }
 }

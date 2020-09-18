@@ -37,8 +37,9 @@ function fnCreate (mod, isOpen = true) {
         Mock.mock(new RegExp(url), res.type, (opts) => {
           opts.body = opts.body ? JSON.parse(opts.body) : {}
           console.log('%c mock:req: ', 'color:blue', opts)
-          console.log('%c mock:rep: ', 'color:blue', res.data)
-          return (res.callback && res.callback(opts)) || res.data
+          const rep = (res.callback && res.callback(opts)) || res.data
+          console.log('%c mock:rep: ', 'color:blue', rep)
+          return rep
         })
       })(api[key]() || {})
     }

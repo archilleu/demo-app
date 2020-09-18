@@ -2,6 +2,18 @@
  * 角色管理模块
  */
 
+let id = 1
+const initData = {
+  id: 1,
+  createBy: 'admin',
+  createTime: new Date(),
+  lastUpdateBy: 'admin',
+  lastUpdateTime: new Date(),
+  name: 'admin',
+  remark: '超级管理员',
+  delFlag: 0
+}
+
 // 保存
 export function save () {
   return {
@@ -11,6 +23,16 @@ export function save () {
       code: 200,
       msg: null,
       data: 1
+    },
+    callback (opts) {
+      const data = opts.body
+      const ret = Object.assign({}, initData, { ...data })
+      ret.id = data.id ? data.id : id++
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
     }
   }
 }
@@ -35,9 +57,9 @@ export function findAll () {
       {
         id: 1,
         createBy: 'admin',
-        createTime: '2018-08-14T03:11:11.000+0000',
+        createTime: new Date(),
         lastUpdateBy: 'admin',
-        lastUpdateTime: '2018-08-14T03:11:11.000+0000',
+        lastUpdateTime: new Date(),
         name: 'admin',
         remark: '超级管理员',
         delFlag: 0
@@ -45,9 +67,9 @@ export function findAll () {
       {
         id: 2,
         createBy: 'admin',
-        createTime: '2018-08-14T03:11:11.000+0000',
+        createTime: new Date(),
         lastUpdateBy: 'admin',
-        lastUpdateTime: '2018-08-14T03:11:11.000+0000',
+        lastUpdateTime: new Date(),
         name: 'dev',
         remark: '开发人员',
         delFlag: 0
@@ -55,9 +77,9 @@ export function findAll () {
       {
         id: 3,
         createBy: 'admin',
-        createTime: '2018-08-14T03:11:11.000+0000',
+        createTime: new Date(),
         lastUpdateBy: 'admin',
-        lastUpdateTime: '2018-08-14T03:11:11.000+0000',
+        lastUpdateTime: new Date(),
         name: 'test',
         remark: '测试人员',
         delFlag: 0
@@ -72,62 +94,38 @@ export function findAll () {
 }
 // 分页查询
 export function findPage (params) {
-  const findPageData = {
-    code: 200,
-    msg: null,
-    data: {
-      pageNum: 0,
-      pageSize: 0,
-      totalSize: 4,
-      totalPages: 0,
-      content: [
-        {
-          id: 1,
-          createBy: 'admin',
-          createTime: '2019-01-19T03:11:11.000+0000',
-          lastUpdateBy: 'admin',
-          lastUpdateTime: '2019-01-19T11:07:18.000+0000',
-          name: 'admin',
-          remark: '超级管理员',
-          delFlag: 0
-        },
-        {
-          id: 2,
-          createBy: 'admin',
-          createTime: '2019-01-19T03:11:11.000+0000',
-          lastUpdateBy: 'admin',
-          lastUpdateTime: '2019-01-19T03:39:28.000+0000',
-          name: 'mng',
-          remark: '项目经理',
-          delFlag: 0
-        },
-        {
-          id: 3,
-          createBy: 'admin',
-          createTime: '2019-01-19T03:11:11.000+0000',
-          lastUpdateBy: 'admin',
-          lastUpdateTime: '2019-01-19T03:39:28.000+0000',
-          name: 'dev',
-          remark: '开发人员',
-          delFlag: 0
-        },
-        {
-          id: 4,
-          createBy: 'admin',
-          createTime: '2019-01-19T03:11:11.000+0000',
-          lastUpdateBy: 'admin',
-          lastUpdateTime: '2019-01-19T03:11:11.000+0000',
-          name: 'test',
-          remark: '测试人员',
-          delFlag: 0
-        }
-      ]
-    }
-  }
   return {
     url: 'sys/role/findPage',
     type: 'post',
-    data: findPageData
+    callback (opts) {
+      const ret = {
+        page: 1,
+        rows: 20,
+        totalSize: 25,
+        totalPages: 2,
+        content: []
+      }
+      if (opts.body.params.name) {
+        ret.content = Array.from({ length: ret.rows }).map(item => {
+          return Object.assign({}, initData, {
+            id: id++,
+            name: opts.body.params.name + Math.ceil(Math.random() * 20)
+          })
+        })
+      } else {
+        ret.content = Array.from({ length: ret.rows }).map(item => {
+          return Object.assign({}, initData, {
+            id: id++,
+            name: initData.name + Math.ceil(Math.random() * 20)
+          })
+        })
+      }
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
+    }
   }
 }
 // 查询角色菜单集合
