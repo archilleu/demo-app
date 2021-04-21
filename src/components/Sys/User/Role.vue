@@ -115,7 +115,7 @@ export default {
         const res = await this.$api.sys.role.findAll(data)
         this.data = res.data
         this.$nextTick(() => {
-          this.toggleRowSelection(this.user.userRoles)
+          this.toggleRowSelection(this.user.roles)
         })
       } catch (e) {
         this.$message({ message: e, type: 'error', center: true })
@@ -165,7 +165,7 @@ export default {
       let selected = []
       rows.forEach(row => {
         this.data.forEach(item => {
-          if (item.id === row.roleId) { selected.push(item) }
+          if (item.id === row.id) { selected.push(item) }
         })
       })
 
@@ -176,7 +176,7 @@ export default {
   },
   watch: {
     user () {
-      this.toggleRowSelection(this.user.userRoles)
+      this.toggleRowSelection(this.user.roles)
     }
   },
   async mounted () {

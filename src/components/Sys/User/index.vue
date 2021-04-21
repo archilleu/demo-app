@@ -74,7 +74,14 @@ export default {
         {prop: 'name', label: '用户名', minWidth: 120},
         {prop: 'nickName', label: '昵称', minWidth: 120},
         {prop: 'deptName', label: '机构', minWidth: 120},
-        {prop: 'roleNames', label: '角色', minWidth: 100},
+        {
+          prop: 'roles',
+          label: '角色',
+          minWidth: 100, 
+          formatter:(data)=>{
+            return data.roles.map((item)=>item.name);
+          }
+        },
         {prop: 'email', label: '邮箱', minWidth: 120},
         {prop: 'mobile', label: '手机', minWidth: 100},
         {prop: 'status', label: '状态', minWidth: 70},
@@ -92,7 +99,13 @@ export default {
           {prop: 'name', label: '用户名'},
           {prop: 'nickName', label: '昵称'},
           {prop: 'deptName', label: '机构'},
-          {prop: 'roleNames', label: '角色'},
+          {
+            prop: 'roles',
+            label: '角色',
+            formatter:(data)=>{
+              return data.map((item)=>item.name);
+            }
+          },
           {prop: 'email', label: '邮箱'},
           {prop: 'mobile', label: '手机'},
           {prop: 'status', label: '状态'},

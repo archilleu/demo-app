@@ -10,7 +10,7 @@
       <el-input v-model="dataForm.nickName" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item label="密码" prop="password">
-      <el-input v-model="dataForm.password" type="password" auto-complete="off"></el-input>
+      <el-input v-model="dataForm.password" type="password" auto-complete="new-password"></el-input>
     </el-form-item>
     <el-form-item label="机构" prop="deptName">
       <popup-tree-input
