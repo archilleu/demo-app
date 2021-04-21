@@ -63,7 +63,7 @@ export default function $axios (options) {
           err.response.message = '未知错误'
         } else {
           if (err.response) {
-            if (err.response.status === 401 || err.response.status === 403) {
+            if (err.response.status === 401) {
               clearToken()
               if (router.currentRoute.path === '/login') {
                 return
