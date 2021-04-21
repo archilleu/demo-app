@@ -83,7 +83,7 @@ export function findPage (params) {
             id: id++,
             name: opts.body.params.name + Math.ceil(Math.random() * 20),
             email: opts.body.params.email + Math.ceil(Math.random() * 20),
-            userRoles: [{ id: id, userId: id, roleId: Math.ceil(Math.random() * 3) }]
+            roles: [{ id: id, name: 'name'+Math.random(), remark:'remark'+Math.random(), roleId: Math.ceil(Math.random() * 3) }]
           })
         })
       } else {
@@ -93,7 +93,7 @@ export function findPage (params) {
             name: initData.name + id,
             email: id + initData.email,
             nickName: initData.nickName + id,
-            userRoles: [{ id: id, userId: id, roleId: Math.ceil(Math.random() * 3) }]
+            roles: [{ id: id, name: 'name'+Math.random(), remark:'remark'+Math.random(), roleId: Math.ceil(Math.random() * 3) }]
           })
         })
       }
