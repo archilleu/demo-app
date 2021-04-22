@@ -1,33 +1,33 @@
 <template>
-  <div class="table-pagination" ref="tablePagination">
+  <div class="table-pagination"
+       ref="tablePagination">
     <!--表格栏-->
-    <el-table
-      ref="hyTable"
-      class="hy-table"
-      height="100%"
-      :data="data.content"
-      :highlight-current-row="hightlightCurrentRow"
-      @selection-change="selectionChange"
-      @current-change="handleCurrentChange"
-      row-key="id"
-      v-loading="loading"
-      element-loading-text="加载中..."
-      :border="border"
-      :stripe="stripe"
-      :show-overflow-tooltip="showOverflowTooltip"
-      :size="size"
-      :align="align"
-    >
+    <el-table ref="hyTable"
+              class="hy-table"
+              height="100%"
+              :data="data.content"
+              :highlight-current-row="hightlightCurrentRow"
+              @selection-change="selectionChange"
+              @current-change="handleCurrentChange"
+              row-key="id"
+              v-loading="loading"
+              element-loading-text="加载中..."
+              :border="border"
+              :stripe="stripe"
+              :show-overflow-tooltip="showOverflowTooltip"
+              :size="size"
+              :align="align">
       <!-- 详情列 -->
-      <el-table-column v-if="columnsExpand && columnsExpand.data.length!=0" type="expand">
+      <el-table-column v-if="columnsExpand && columnsExpand.data.length!=0"
+                       type="expand">
         <template slot-scope="props">
-          <el-form
-            label-position="left"
-            class="table-expand"
-            size="mini"
-            :label-width="columnsExpand.labelWidth"
-          >
-            <el-form-item v-for="item in columnsExpand.data" :key="item.prop" :label="item.label">
+          <el-form label-position="left"
+                   class="table-expand"
+                   size="mini"
+                   :label-width="columnsExpand.labelWidth">
+            <el-form-item v-for="item in columnsExpand.data"
+                          :key="item.prop"
+                          :label="item.label">
               <span v-if="!item.formatter">{{ props.row[item.prop] }}</span>
               <span v-else>{{ item.formatter(props.row[item.prop], props.row) }}</span>
             </el-form-item>
@@ -36,92 +36,81 @@
       </el-table-column>
 
       <!-- 多选列 -->
-      <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50"
-        v-if="showCheckbox"
-      ></el-table-column>
+      <el-table-column type="selection"
+                       header-align="center"
+                       align="center"
+                       width="50"
+                       v-if="showCheckbox"></el-table-column>
 
       <!-- 自定义列 -->
-      <el-table-column
-        v-for="column in columns"
-        :prop="column.prop"
-        :label="column.label"
-        :width="column.width"
-        :min-width="column.minWidth"
-        :fixed="column.fixed"
-        :key="column.prop"
-        :type="column.type"
-        :reserve-selection="true"
-        :formatter="column.formatter"
-        :sortable="column.sortable==null?true:column.sortable"
-        show-overflow-tooltip
-      >
+      <el-table-column v-for="column in columns"
+                       :prop="column.prop"
+                       :label="column.label"
+                       :width="column.width"
+                       :min-width="column.minWidth"
+                       :fixed="column.fixed"
+                       :key="column.prop"
+                       :type="column.type"
+                       :reserve-selection="true"
+                       :formatter="column.formatter"
+                       :sortable="column.sortable==null?true:column.sortable"
+                       show-overflow-tooltip>
         <template slot-scope="scope">
           <div v-if="column.formatter">{{ column.formatter(scope.row, scope.column) }}</div>
-          <div v-else-if="column.template" v-html="column.template(scope.row)"></div>
+          <div v-else-if="column.template"
+               v-html="column.template(scope.row)"></div>
           <div v-else>{{ scope.row[scope.column.property] }}</div>
         </template>
       </el-table-column>
 
       <!-- 左边固定操作列 -->
-      <el-table-column
-        label="操作"
-        width="140"
-        fixed="right"
-        v-if="showOperation"
-        header-align="center"
-        align="center"
-      >
+      <el-table-column label="操作"
+                       width="140"
+                       fixed="right"
+                       v-if="showOperation"
+                       header-align="center"
+                       align="center">
         <template slot-scope="scope">
-          <hy-button
-            :perms="permsEdit"
-            icon="fa fa-edit"
-            :circle="true"
-            :size="size"
-            type="primary"
-            @click="handleEdit(scope.$index, scope.row)"
-            v-if="showEdit"
-          />
-          <hy-button
-            :perms="permsInfo"
-            icon="fa fa-envelope-o"
-            :circle="true"
-            :size="size"
-            type="info"
-            @click="handleInfo(scope.$index, scope.row)"
-            v-if="showInfo"
-          />
-          <hy-button
-            :perms="permsDelete"
-            icon="fa fa-trash"
-            :circle="true"
-            :size="size"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            v-if="showDelete"
-          />
+          <hy-button :perms="permsEdit"
+                     icon="fa fa-edit"
+                     :circle="true"
+                     :size="size"
+                     type="primary"
+                     @click="handleEdit(scope.$index, scope.row)"
+                     v-if="showEdit" />
+          <hy-button :perms="permsInfo"
+                     icon="fa fa-envelope-o"
+                     :circle="true"
+                     :size="size"
+                     type="info"
+                     @click="handleInfo(scope.$index, scope.row)"
+                     v-if="showInfo" />
+          <hy-button :perms="permsDelete"
+                     icon="fa fa-trash"
+                     :circle="true"
+                     :size="size"
+                     type="danger"
+                     @click="handleDelete(scope.$index, scope.row)"
+                     v-if="showDelete" />
         </template>
       </el-table-column>
     </el-table>
 
     <!--分页栏-->
-    <div class="pagination" ref="pagination">
-      <el-pagination
-        :small="paginationSmall"
-        :current-page="pageRequest.page"
-        :page-sizes="[10, 20, 30, 40, 50]"
-        :page-size="pageRequest.rows"
-        :layout="layout"
-        :total="data.totalSize"
-        :pager-count="5"
-        background
-        @current-change="refreshPageRequest"
-        @size-change="handleSizeChange"
-      ></el-pagination>
-      <i class="el-icon-refresh" @click="findPage(filters)"></i>
+    <div class="pagination"
+         ref="pagination">
+      <el-pagination :small="paginationSmall"
+                     :current-page="pageRequest.page"
+                     :page-sizes="[10, 20, 30, 40, 50]"
+                     :page-size="pageRequest.rows"
+                     :layout="layout"
+                     :total="data.totalSize"
+                     :pager-count="5"
+                     background
+                     @current-change="refreshPageRequest"
+                     @size-change="handleSizeChange"></el-pagination>
+      <i class="el-icon-refresh"
+         @click="findPage(filters)"></i>
     </div>
   </div>
 </template>
@@ -136,7 +125,7 @@ export default {
   props: {
     // 表格获取列表数据的api
     api: {
-      type: Object,
+      // type: Object,
       required: true
     },
     // 表格列配置
@@ -272,11 +261,7 @@ export default {
       this.filters = filters
       try {
         this.loading = true
-        const data = {
-          filters,
-          pageRequest: this.pageRequest
-        }
-        const res = await this.api.findPage(data)
+        const res = await this.api.findPage({ filters, pageRequest: this.pageRequest })
         this.data = res.data
       } catch (e) {
         this.$message({ message: e, type: 'error', center: true })
@@ -311,8 +296,9 @@ export default {
     // 选择切换
     handleCurrentChange (val) {
       this.currentRow = val
-      this.$emit('handleCurrentChange', { val: val })
+      this.$emit('current-change', { val: val })
     },
+
     // 换页刷新
     refreshPageRequest (page) {
       this.pageRequest.page = page
@@ -327,12 +313,12 @@ export default {
 
     // 编辑
     handleEdit (index, row) {
-      this.$emit('handleEdit', { index: index, row: row })
+      this.$emit('data-edit', { index: index, row: row })
     },
 
     // 查看
     handleInfo (index, row) {
-      this.$emit('handleInfo', { index: index, row: row })
+      this.$emit('data-info', { index: index, row: row })
     },
 
     // 删除
@@ -346,6 +332,9 @@ export default {
             await this.api.del(row)
             let idx = this.data.content.findIndex(item => item.id === row.id)
             if (idx !== -1) {
+              if (row.id === this.currentRow.id) {
+                this.handleCurrentChange(null)
+              }
               this.data.content.splice(idx, 1)
             }
             this.$message({ message: '删除成功', type: 'success', center: true })
@@ -355,7 +344,9 @@ export default {
             this.loading = false
           }
         })
-        .catch(() => {})
+        .catch(() => {
+          this.$message({ message: e, type: 'error', center: true })
+        })
     }
 
   },

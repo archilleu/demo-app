@@ -1,61 +1,55 @@
 <template>
   <div>
-    <!-- 搜索栏 -->
-    <div ref="hyListTemplateContainer" class="hy-list-template-container">
-      <el-form :inline="true" size="mini" v-if="false">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="filters.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <hy-button label="搜索" type="success" :loading="filtersLoading" @click="filtersPage" />
-        </el-form-item>
-      </el-form>
-    </div>
-    <!-- 表格栏目 -->
-    <el-table
-      ref="roleTable"
-      class="role-table"
-      max-height="300px"
-      :data="data"
-      highlight-current-row
-      @selection-change="selectionChange"
-      row-key="id"
-      v-loading="loading"
-      element-loading-text="加载中..."
-      :border="true"
-      :stripe="true"
-      :show-overflow-tooltip="true"
-      size="mini"
-      align="center"
-    >
+    <el-table ref="roleTable"
+              class="role-table"
+              max-height="300px"
+              :data="data"
+              highlight-current-row
+              @selection-change="selectionChange"
+              row-key="id"
+              v-loading="loading"
+              element-loading-text="加载中..."
+              :border="true"
+              :stripe="true"
+              :show-overflow-tooltip="true"
+              size="mini"
+              align="center">
       <!-- 多选列 -->
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+      <el-table-column type="selection"
+                       header-align="center"
+                       align="center"
+                       width="50"></el-table-column>
 
       <!-- 自定义列 -->
-      <el-table-column
-        v-for="column in columns"
-        :prop="column.prop"
-        :label="column.label"
-        :width="column.width"
-        :min-width="column.minWidth"
-        :fixed="column.fixed"
-        :key="column.prop"
-        :type="column.type"
-        :reserve-selection="true"
-        :formatter="column.formatter"
-        :sortable="column.sortable==null?true:column.sortable"
-        show-overflow-tooltip
-      >
+      <el-table-column v-for="column in columns"
+                       :prop="column.prop"
+                       :label="column.label"
+                       :width="column.width"
+                       :min-width="column.minWidth"
+                       :fixed="column.fixed"
+                       :key="column.prop"
+                       :type="column.type"
+                       :reserve-selection="true"
+                       :formatter="column.formatter"
+                       :sortable="column.sortable==null?true:column.sortable"
+                       show-overflow-tooltip>
         <template slot-scope="scope">
           <div v-if="column.formatter">{{ column.formatter(scope.row, scope.column) }}</div>
-          <div v-else-if="column.template" v-html="column.template(scope.row)"></div>
+          <div v-else-if="column.template"
+               v-html="column.template(scope.row)"></div>
           <div v-else>{{ scope.row[scope.column.property] }}</div>
         </template>
       </el-table-column>
     </el-table>
     <div class="footer">
-      <hy-button label="取消" :perms="true" @click="cancle" />
-      <hy-button label="保存" perms="sys:user:edit" type="success" :loading="saveLoading" @click="submit" />
+      <hy-button label="取消"
+                 :perms="true"
+                 @click="cancle" />
+      <hy-button label="保存"
+                 perms="sys:user:edit"
+                 type="success"
+                 :loading="saveLoading"
+                 @click="submit" />
     </div>
   </div>
 </template>
@@ -63,20 +57,16 @@
 <script>
 import HyButton from '@/components/ZCore/HyButton'
 
-import Detail from './Detail'
-
 export default {
   components: {
     HyButton,
-
-    Detail
   },
 
   data () {
     return {
       columns: [
-        {prop: 'name', label: '名称', minWidth: 100},
-        {prop: 'remark', label: '备注', minWidth: 120}
+        { prop: 'name', label: '名称', minWidth: 100 },
+        { prop: 'remark', label: '备注', minWidth: 120 }
       ],
 
       data: [],

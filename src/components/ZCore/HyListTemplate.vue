@@ -1,99 +1,105 @@
 <template>
-  <div ref="hyListTemplateContainer" class="hy-list-template-container">
-    <div ref="hy-toolbar" class="hy-toolbar">
-      <el-form :inline="true" :size="size">
+  <div ref="hyListTemplateContainer"
+       class="hy-list-template-container">
+    <div ref="hy-toolbar"
+         class="hy-toolbar">
+      <el-form :inline="true"
+               :size="size">
+
         <!-- 自定义工具栏 -->
         <el-form-item v-if="showOperation & showAdd">
-          <hy-button
-            :perms="permsAdd"
-            icon="fa fa-plus"
-            label="新增"
-            :size="size"
-            type="success"
-            @click="handleAdd"
-          />
+          <hy-button :perms="permsAdd"
+                     icon="fa fa-plus"
+                     label="新增"
+                     :size="size"
+                     type="success"
+                     @click="handleAdd" />
         </el-form-item>
 
         <el-form-item v-if="showBatchDelete">
-          <hy-button
-            :perms="permsDelete"
-            label="批量删除"
-            icon="fa fa-edit"
-            :size="size"
-            type="danger"
-            @click="handleBatchDelete()"
-            :disabled="this.selections.length===0"
-          ></hy-button>
+          <hy-button :perms="permsDelete"
+                     label="批量删除"
+                     icon="fa fa-edit"
+                     :size="size"
+                     type="danger"
+                     @click="handleBatchDelete()"
+                     :disabled="this.selections.length===0"></hy-button>
         </el-form-item>
 
         <slot name="toolbar"></slot>
       </el-form>
 
-      <el-tooltip v-if="showFilter" effect="dark" content="打开查询选项" placement="bottom-end">
-        <span class="search-btn" @click="showFiltersDialog = true">
+      <!-- 查询按钮 -->
+      <el-tooltip v-if="showFilter"
+                  effect="dark"
+                  content="打开查询选项"
+                  placement="bottom-end">
+        <span class="search-btn"
+              @click="showFiltersDialog = true">
           <i class="el-icon-search"></i>
         </span>
       </el-tooltip>
-      <el-drawer
-        title="查询条件"
-        size="30%"
-        :wrapperClosable="false"
-        :visible.sync="showFiltersDialog"
-        direction="rtl"
-        custom-class="search-drawer"
-        ref="searchDrawer"
-      >
+      <el-drawer title="查询条件"
+                 size="30%"
+                 :wrapperClosable="false"
+                 :visible.sync="showFiltersDialog"
+                 direction="rtl"
+                 custom-class="search-drawer"
+                 ref="searchDrawer">
         <!-- 自定义搜索栏 -->
-        <el-form
-          class="filtersForm"
-          :model="filters"
-          label-position="left"
-          ref="filtersForm"
-          :size="size"
-        >
-          <slot name="filters" :filters="filters">
+        <el-form class="filtersForm"
+                 :model="filters"
+                 label-position="left"
+                 ref="filtersForm"
+                 :size="size">
+          <slot name="filters"
+                :filters="filters">
             <div class="warning">请添加查询条件</div>
           </slot>
           <el-form-item class="footer">
-            <hy-button label="重置" :perms="true" :loading="resetLoading" @click="findReset" />
-            <hy-button label="搜索" :perms="permsView" type="success" :loading="filtersLoading" @click="filtersPage" />
+            <hy-button label="重置"
+                       :perms="true"
+                       :loading="resetLoading"
+                       @click="findReset" />
+            <hy-button label="搜索"
+                       :perms="permsView"
+                       type="success"
+                       :loading="filtersLoading"
+                       @click="filtersPage" />
           </el-form-item>
         </el-form>
       </el-drawer>
     </div>
-    <HyTableTemplate
-      ref="hyTableTemplate"
-      :api="api"
-      :columns="columns"
-      :columnsExpand="columnsExpand"
-      :showEdit="showEdit"
-      :showInfo="showInfo"
-      :showDelete="showDelete"
-      :showCheckbox="showCheckbox"
-      :showOperation="showOperation"
-      :permsEdit="permsEdit"
-      :permsDelete="permsDelete"
-      :permsInfo="permsInfo"
-      :hightlightCurrentRow="true"
-      :showOverflowTooltip="true"
-      :size="size"
-      :pageRequest="pageRequest"
-      :paginationSmall="paginationSmall"
-      @handleCurrentChange="handleCurrentChange"
-      @selection-change="selectionChange"
-      @handleEdit="handleEdit"
-      @handleInfo="handleInfo"
-      @handleBatchDelete="handleBatchDelete"
-    ></HyTableTemplate>
+    <HyTableTemplate ref="hyTableTemplate"
+                     :api="api"
+                     :columns="columns"
+                     :columnsExpand="columnsExpand"
+                     :showEdit="showEdit"
+                     :showInfo="showInfo"
+                     :showDelete="showDelete"
+                     :showCheckbox="showCheckbox || showBatchDelete"
+                     :showOperation="showOperation"
+                     :permsEdit="permsEdit"
+                     :permsDelete="permsDelete"
+                     :permsInfo="permsInfo"
+                     :hightlightCurrentRow="true"
+                     :showOverflowTooltip="true"
+                     :size="size"
+                     :pageRequest="pageRequest"
+                     :paginationSmall="paginationSmall"
+                     @current-change="handleCurrentChange"
+                     @selection-change="selectionChange"
+                     @data-edit="handleEdit"
+                     @data-info="handleInfo"></HyTableTemplate>
 
     <!--自定义新增\编辑\查看-->
-    <hy-dialog-template
-      :title="dialogTitle"
-      width="50%"
-      :visible.sync="dialogVisible"
-      @hy-dialog-tpl:ok="refreshTable"
-    >
-      <slot name="detail" :dataForm="dataForm" :readOnly="readOnly"></slot>
+    <hy-dialog-template :title="dialogTitle"
+                        :width="dialogWidth"
+                        :visible.sync="dialogVisible"
+                        @hy-dialog-template:submit="refreshTable">
+      <slot name="detail"
+            :dataForm="dataForm"
+            :readOnly="readOnly"></slot>
     </hy-dialog-template>
   </div>
 </template>
@@ -162,7 +168,7 @@ export default {
     },
     // 操作表格api对象
     api: {
-      type: Object,
+      // type: Object,
       required: true
     },
     // 表格分页
@@ -246,7 +252,14 @@ export default {
       // 操作权限(查看列表)
       type: String,
       required: false
-    }
+    },
+    // 模态框宽度
+    dialogWidth: {
+      // 操作权限(查看列表)
+      type: String,
+      default: '50%'
+    },
+
   },
 
   methods: {
@@ -278,7 +291,7 @@ export default {
 
     // 添加修改后更新数据行
     refreshTable ({ data }) {
-      this.$refs.hyTableTemplate.save(data.data)
+      this.$refs.hyTableTemplate.save(data)
     },
 
     // 选中行改变
@@ -310,12 +323,12 @@ export default {
         } finally {
           this.loading = false
         }
-      }).catch(() => {})
+      }).catch(() => { })
     },
 
     // 当前选中行改变
     handleCurrentChange (data) {
-      this.$emit('handleCurrentChange', data)
+      this.$emit('current-change', data)
     },
     // 设置选中行
     toggleRowSelection (rows) {

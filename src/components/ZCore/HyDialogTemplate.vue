@@ -1,15 +1,13 @@
 <template>
   <!-- 通过el-dialog的update:visible消息更新本组件prop的visible值（直接用.sync 会导致vue警告，因为修改了prop visible值 -->
-  <el-dialog
-    class="hy-dialog-template"
-    :title="title"
-    :width="width"
-    :visible="visible"
-    @update:visible="handleClose"
-    :close-on-click-modal="closeOnClickModal"
-    @hy-detail-tpl:cancle="handleClose"
-    @hy-detail-tpl:ok="handleSubmit"
-  >
+  <el-dialog class="hy-dialog-template"
+             :title="title"
+             :width="width"
+             :visible="visible"
+             @update:visible="handleClose"
+             :close-on-click-modal="closeOnClickModal"
+             @hy-form-template:submit="handleSubmit"
+             @hy-form-template:close="handleClose">
     <!-- 因为表单不只有数据，而且又有验证规则,这里不能直接使用HyFormTemplate -->
     <slot>缺少HyFormTemplate组件</slot>
   </el-dialog>
@@ -47,7 +45,7 @@ export default {
 
   methods: {
     handleSubmit (data) {
-      this.$emit('hy-dialog-tpl:ok', data)
+      this.$emit('hy-dialog-template:submit', data)
     },
 
     handleClose (val) {

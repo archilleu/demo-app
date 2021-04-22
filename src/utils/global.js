@@ -4,10 +4,8 @@
  * 通过 this.Global 调用
  */
 
-// 后台管理系统服务器地址
-export const baseURL = 'http://localhost:8081'
-// 系统数据备份还原服务器地址
-export const backupBaseURL = 'http://localhost:8002'
+export const baseURL = process.env.VUE_APP_BASE_URL
+export const backupBaseURL = process.env.VUE_APP_BACKUP_BASE_URL
 
 export default {
   baseURL,
