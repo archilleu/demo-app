@@ -82,10 +82,6 @@ async function addDynamicMenuAndRoutes () {
   try {
     // 获取导航树
     const res = await api.user.menu.findNavTree()
-    // 因为加载过程有等待，防止等待过程中二次调用
-    if (store.state.app.menuRouteLoaded) {
-      return
-    }
 
     const dynamicRoutes = buildDynamicRoutes(res.data)
     router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)

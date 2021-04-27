@@ -1,6 +1,9 @@
 <template>
   <div class="hy-height-100">
-    <iframe :src="src" scrolling="auto" frameborder="0" class="frame"></iframe>
+    <iframe :src="src"
+            scrolling="auto"
+            frameborder="0"
+            class="frame"></iframe>
   </div>
 </template>
 

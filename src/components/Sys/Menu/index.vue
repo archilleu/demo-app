@@ -64,6 +64,7 @@
     <!--表格树内容栏-->
     <div class="tree-table">
       <el-table stripe
+                default-expand-all
                 rowKey="id"
                 size="mini"
                 :data="tableData"
@@ -71,11 +72,11 @@
                 v-loading="loading"
                 highlight-current-row
                 element-loading-text="加载中...">
-        <el-table-column prop="id"
+        <el-table-column prop="name"
                          header-align="center"
                          align="left"
-                         width="100"
-                         label="ID"></el-table-column>
+                         min-width="300"
+                         label="名称"></el-table-column>
         <!-- 自定义列 -->
         <el-table-column v-for="column in columns"
                          align="center"
@@ -151,7 +152,6 @@ export default {
     return {
       loading: false,
       columns: [
-        { prop: 'name', label: '名称', minWidth: 100 },
         {
           prop: 'icon',
           label: '图标',

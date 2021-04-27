@@ -12,7 +12,7 @@
                       :showBatchDelete="false"
                       :pageRequest="pageRequest"
                       :paginationSmall="true"
-                      @handleCurrentChange="handleRoleSelectChange">
+                      @current-change="handleRoleSelectChange">
         <!-- 工具条栏 -->
         <template v-slot:toolbar></template>
 
