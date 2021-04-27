@@ -96,17 +96,17 @@ export default {
               this.loading = true
               const res = await this.api(this.dataForm)
 
-              this.$message({ message: this.info.success, type: 'success', center: true })
+              this.$msg.success(this.info.success)
 
               this.emitClose()
               this.emitSubmit(res)
             } catch (e) {
-              this.$message({ message: this.info.error + e, type: 'error', center: true })
+              this.$msg.error(this.info.error + e)
             } finally {
               this.loading = false
             }
           })
-          .catch((e) => { console.error(e) })
+          .catch(() => { })
       })
     },
 

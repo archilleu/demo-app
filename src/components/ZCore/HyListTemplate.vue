@@ -317,9 +317,9 @@ export default {
           this.loading = true
           await this.api.batchDelete(ids)
           await this.findPage({ pageRequest: this.pageRequest })
-          this.$message({ message: '删除成功', type: 'success', center: true })
+          this.$msg.success('删除成功')
         } catch (e) {
-          this.$message({ message: e, type: 'error', center: true })
+          this.$msg.error(e)
         } finally {
           this.loading = false
         }

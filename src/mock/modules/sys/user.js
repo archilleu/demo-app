@@ -2,6 +2,8 @@
  * 用户管理模块
  */
 
+import { random } from "core-js/core/number"
+
 // 保存
 export function save () {
   return {
@@ -55,11 +57,10 @@ const initData = {
   deptId: 7,
   delFlag: 0,
   deptName: 'deptName',
-  roleNames: 'roleNames',
-  userRoles: [{
-    id: 80,
-    userId: 1,
-    roleId: Math.ceil(Math.random() * 4)
+  roles: [{
+    id: 10,
+    name: 'name',
+    remark: Math.ceil(Math.random() * 4)
   }]
 }
 

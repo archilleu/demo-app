@@ -9,6 +9,7 @@ import { sync } from 'vuex-router-sync'
 
 import api from './http'
 import global from '@/utils/global'
+import message from '@/utils/message'
 
 /* eslint-disable no-unused-vars */
 import mock from '@/mock/index.js'
@@ -29,6 +30,8 @@ Vue.use(ElementUI)
 
 // 启用api插件
 Vue.use(api)
+
+Vue.use(message)
 
 // 在store中关联router
 sync(store, router)

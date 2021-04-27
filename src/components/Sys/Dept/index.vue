@@ -1,98 +1,86 @@
 <template>
   <div class="hy-height-100 lazyTable">
-    <div ref="hy-toolbar" class="hy-toolbar">
-      <el-form :inline="true" size="mini">
+    <div ref="hy-toolbar"
+         class="hy-toolbar">
+      <el-form :inline="true"
+               size="mini">
         <!-- 自定义工具栏 -->
         <el-form-item>
-          <hy-button
-            icon="fa fa-plus"
-            perms="sys:dept:add"
-            label="新增"
-            size="mini"
-            type="success"
-            @click="handleAdd"
-          />
-          <hy-button
-            icon="fa fa-refresh"
-            perms="sys:dept:view"
-            label="刷新"
-            size="mini"
-            type="primary"
-            @click="handleRefresh"
-          />
+          <hy-button icon="fa fa-plus"
+                     perms="sys:dept:add"
+                     label="新增"
+                     size="mini"
+                     type="success"
+                     @click="handleAdd" />
+          <hy-button icon="fa fa-refresh"
+                     perms="sys:dept:view"
+                     label="刷新"
+                     size="mini"
+                     type="primary"
+                     @click="handleRefresh" />
         </el-form-item>
       </el-form>
     </div>
     <!--表格树内容栏-->
     <div class="tree-table">
-      <el-table
-        ref="deptTable"
-        lazy
-        stripe
-        rowKey="id"
-        size="mini"
-        :load="load"
-        :data="deptTreeData"
-        v-loading="loading"
-        highlight-current-row
-        @selection-change="selectionChange"
-        element-loading-text="加载中..."
-      >
+      <el-table ref="deptTable"
+                lazy
+                stripe
+                rowKey="id"
+                size="mini"
+                :load="load"
+                :data="deptTreeData"
+                v-loading="loading"
+                highlight-current-row
+                @selection-change="selectionChange"
+                element-loading-text="加载中...">
         <!-- 自定义列 -->
-        <el-table-column
-          v-for="column in columns"
-          :prop="column.prop"
-          :label="column.label"
-          :min-width="column.minWidth"
-          :key="column.prop"
-          :formatter="column.formatter"
-          show-overflow-tooltip
-        ></el-table-column>
+        <el-table-column v-for="column in columns"
+                         :prop="column.prop"
+                         :label="column.label"
+                         :min-width="column.minWidth"
+                         :key="column.prop"
+                         :formatter="column.formatter"
+                         show-overflow-tooltip></el-table-column>
 
         <!-- 左边固定操作列 -->
-        <el-table-column label="操作" width="140" fixed="right" header-align="center" align="center">
+        <el-table-column label="操作"
+                         width="140"
+                         fixed="right"
+                         header-align="center"
+                         align="center">
           <template slot-scope="scope">
-            <hy-button
-              perms="sys:dept:edit"
-              icon="fa fa-edit"
-              :circle="true"
-              size="mini"
-              type="primary"
-              @click="handleEdit(scope.row)"
-            />
-            <hy-button
-              perms="sys:dept:view"
-              icon="fa fa-envelope-o"
-              :circle="true"
-              size="mini"
-              type="info"
-              @click="handleInfo(scope.row)"
-            />
-            <hy-button
-              perms="sys:dept:delete"
-              icon="fa fa-trash"
-              :circle="true"
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row)"
-            />
+            <hy-button perms="sys:dept:edit"
+                       icon="fa fa-edit"
+                       :circle="true"
+                       size="mini"
+                       type="primary"
+                       @click="handleEdit(scope.row)" />
+            <hy-button perms="sys:dept:view"
+                       icon="fa fa-envelope-o"
+                       :circle="true"
+                       size="mini"
+                       type="info"
+                       @click="handleInfo(scope.row)" />
+            <hy-button perms="sys:dept:delete"
+                       icon="fa fa-trash"
+                       :circle="true"
+                       size="mini"
+                       type="danger"
+                       @click="handleDelete(scope.row)" />
           </template>
         </el-table-column>
       </el-table>
     </div>
 
     <!--自定义新增\编辑\查看-->
-    <el-dialog
-      width="30%"
-      :title="dlg.title"
-      :visible.sync="dlg.visible"
-      :close-on-click-modal="false"
-    >
-      <Detail
-        :dataForm="dlg.dataForm"
-        :readOnly="dlg.readOnly"
-        @submit:ok="updateDateTreeTableData"
-      ></Detail>
+    <el-dialog width="30%"
+               :title="dlg.title"
+               :visible.sync="dlg.visible"
+               :close-on-click-modal="false">
+      <Detail :dataForm="dlg.dataForm"
+              :readOnly="dlg.readOnly"
+              @submit:ok="updateDateTreeTableData"></Detail>
     </el-dialog>
   </div>
 </template>
@@ -163,7 +151,7 @@ export default {
         const res = await this.$api.sys.dept.findByParentId(params)
         this.deptTreeData = res.data
       } catch (e) {
-        this.$message({message: e, type: 'error', center: true})
+        this.$msg.error(e)
       } finally {
         this.loading = false
       }
@@ -171,10 +159,10 @@ export default {
     // 懒加载机构
     async load (tree, treeNode, resolve) {
       try {
-        const res = await this.$api.sys.dept.findByParentId({parentId: tree.id})
+        const res = await this.$api.sys.dept.findByParentId({ parentId: tree.id })
         resolve(res.data)
       } catch (e) {
-        this.$message({message: e, type: 'error', center: true})
+        this.$msg.error(e)
       }
     },
     // 显示新增界面
@@ -219,14 +207,14 @@ export default {
             await this.$api.sys.dept.del(row)
             this.refreshDelete(row)
 
-            this.$message({ message: '删除成功', type: 'success', center: true })
+            this.$msg.success('删除成功')
           } catch (e) {
-            this.$message({ message: e, type: 'error', center: true })
+            this.$msg.error(e)
           } finally {
             this.loading = false
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     },
 
     selectionChange (row) {
@@ -298,7 +286,7 @@ export default {
     refreshEdit (data) {
       // parent未改变
       if (this.editRow.parentId === data.parentId) {
-        Object.assign(this.editRow, data, {hasChildren: true})
+        Object.assign(this.editRow, data, { hasChildren: true })
       } else {
         // parent改变，先删除后添加
         this.refreshDelete(this.editRow)

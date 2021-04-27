@@ -2,32 +2,34 @@
   <div class="hy-height-100">
     <!-- 表格栏目 -->
     <div class="table-role">
-      <HyListTemplate
-        permsAdd="sys:role:add"
-        permsEdit="sys:role:edit"
-        permsInfo="sys:role:view"
-        permsDelete="sys:role:delete"
-        permsView="sys:role:view"
-        :api="$api.sys.role"
-        :columns="columns"
-        :showBatchDelete="false"
-        :pageRequest="pageRequest"
-        :paginationSmall="true"
-        @handleCurrentChange="handleRoleSelectChange"
-      >
+      <HyListTemplate permsAdd="sys:role:add"
+                      permsEdit="sys:role:edit"
+                      permsInfo="sys:role:view"
+                      permsDelete="sys:role:delete"
+                      permsView="sys:role:view"
+                      :api="$api.sys.role"
+                      :columns="columns"
+                      :showBatchDelete="false"
+                      :pageRequest="pageRequest"
+                      :paginationSmall="true"
+                      @handleCurrentChange="handleRoleSelectChange">
         <!-- 工具条栏 -->
         <template v-slot:toolbar></template>
 
         <!-- 过滤栏 -->
         <template v-slot:filters="props">
-          <el-form-item label="名称" label-width="50px" prop="name">
-            <el-input v-model="props.filters.name" autocomplete="off"></el-input>
+          <el-form-item label="名称"
+                        label-width="50px"
+                        prop="name">
+            <el-input v-model="props.filters.name"
+                      autocomplete="off"></el-input>
           </el-form-item>
         </template>
 
         <!-- CURD详情栏 -->
         <template v-slot:detail="props">
-          <Detail :dataForm="props.dataForm" :readOnly="props.readOnly"></Detail>
+          <Detail :dataForm="props.dataForm"
+                  :readOnly="props.readOnly"></Detail>
         </template>
       </HyListTemplate>
     </div>
@@ -39,45 +41,37 @@
           <B>角色菜单授权</B>
         </span>
       </div>
-      <el-tree
-        :data="menuData"
-        size="mini"
-        show-checkbox
-        highlight-current
-        node-key="id"
-        :props="defaultProps"
-        class="menu-tree"
-        ref="menuTree"
-        :render-content="renderContent"
-        v-loading="menuLoading"
-        element-loading-text="加载中..."
-      ></el-tree>
+      <el-tree :data="menuData"
+               size="mini"
+               show-checkbox
+               highlight-current
+               node-key="id"
+               :props="defaultProps"
+               class="menu-tree"
+               ref="menuTree"
+               :render-content="renderContent"
+               v-loading="menuLoading"
+               element-loading-text="加载中..."></el-tree>
       <div class="menu-footer">
         <div>
-          <el-checkbox
-            v-model="checkAll"
-            @change="handleCheckAll"
-            :disabled="this.selectRole == null"
-          >
+          <el-checkbox v-model="checkAll"
+                       @change="handleCheckAll"
+                       :disabled="this.selectRole == null">
             <b>全选</b>
           </el-checkbox>
         </div>
         <div>
-          <hy-button
-            :perms="true"
-            label="重置"
-            type="primary"
-            @click="resetSelection"
-            :disabled="this.selectRole == null"
-          />
-          <hy-button
-            perms="sys:role:edit"
-            label="提交"
-            type="primary"
-            @click="submitAuthForm"
-            :disabled="this.selectRole == null"
-            :loading="authLoading"
-          />
+          <hy-button :perms="true"
+                     label="重置"
+                     type="primary"
+                     @click="resetSelection"
+                     :disabled="this.selectRole == null" />
+          <hy-button perms="sys:role:edit"
+                     label="提交"
+                     type="primary"
+                     @click="submitAuthForm"
+                     :disabled="this.selectRole == null"
+                     :loading="authLoading" />
         </div>
       </div>
     </div>
@@ -102,10 +96,10 @@ export default {
   data () {
     return {
       columns: [
-        {prop: 'id', label: 'ID', minWidth: 80},
-        {prop: 'name', label: '名称', minWidth: 100},
-        {prop: 'remark', label: '备注', minWidth: 120},
-        {prop: 'createBy', label: '创建人', minWidth: 100},
+        { prop: 'id', label: 'ID', minWidth: 80 },
+        { prop: 'name', label: '名称', minWidth: 100 },
+        { prop: 'remark', label: '备注', minWidth: 120 },
+        { prop: 'createBy', label: '创建人', minWidth: 100 },
         {
           prop: 'createTime',
           label: '创建时间',
@@ -139,7 +133,7 @@ export default {
       let list = this._.clone(this.menuData)
       while (list.length > 0) {
         const menu = list.pop()
-        menuList.push({id: menu.id})
+        menuList.push({ id: menu.id })
         if (menu.children && menu.children.length > 0) {
           list = list.concat(menu.children)
         }
@@ -157,7 +151,7 @@ export default {
       this.menuLoading = false
     },
     // 角色选择改变监听
-    async handleRoleSelectChange ({val}) {
+    async handleRoleSelectChange ({ val }) {
       if (val == null) {
         return
       }
@@ -168,7 +162,7 @@ export default {
         this.currentRoleMenus = res.data
         this.$refs.menuTree.setCheckedNodes(res.data)
       } catch (e) {
-        this.$message({ message: e, type: 'error', center: true })
+        this.$msg.error(e)
       } finally {
         this.menuLoading = false
       }
@@ -190,11 +184,7 @@ export default {
     async submitAuthForm () {
       let roleId = this.selectRole.id
       if (this.selectRole.name === 'admin') {
-        this.$message({
-          message: '超级管理员拥有所有菜单权限，不允许修改！',
-          type: 'error',
-          center: true
-        })
+        this.$msg.error('超级管理员拥有所有菜单权限，不允许修改！')
         return
       }
       this.authLoading = true
@@ -207,9 +197,9 @@ export default {
 
       try {
         this.$api.sys.role.saveRoleMenus(roleMenus)
-        this.$message({ message: '操作成功', type: 'success', center: true })
+        this.$msg.success('操作成功')
       } catch (e) {
-        this.$message({ message: e, type: 'error', center: true })
+        this.$msg.error(e)
       } finally {
         this.authLoading = false
       }

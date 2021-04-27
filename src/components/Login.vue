@@ -1,28 +1,33 @@
 <template>
-  <el-form
-    :model="loginForm"
-    :rules="fieldRules"
-    ref="loginForm"
-    label-position="left"
-    label-width="0px"
-    class="demo-ruleForm login-container"
-  >
+  <el-form :model="loginForm"
+           :rules="fieldRules"
+           ref="loginForm"
+           label-position="left"
+           label-width="0px"
+           class="demo-ruleForm login-container">
     <span class="tool-bar"></span>
-    <h2 class="title" style="padding-left:22px;">系统登录</h2>
+    <h2 class="title"
+        style="padding-left:22px;">系统登录</h2>
     <el-form-item prop="account">
-      <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
+      <el-input type="text"
+                v-model="loginForm.account"
+                auto-complete="off"
+                placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="password">
-      <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
+      <el-input type="password"
+                v-model="loginForm.password"
+                auto-complete="off"
+                placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:45%;" @click.native.prevent="reset">重 置</el-button>
-      <el-button
-        type="primary"
-        style="width:45%;"
-        @click.native.prevent="login"
-        :loading="loading"
-      >登 录</el-button>
+      <el-button type="primary"
+                 style="width:45%;"
+                 @click.native.prevent="reset">重 置</el-button>
+      <el-button type="primary"
+                 style="width:45%;"
+                 @click.native.prevent="login"
+                 :loading="loading">登 录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -61,7 +66,7 @@ export default {
         this.$store.commit('menuRouteLoaded', false)
         router.push('/')
       } catch (e) {
-        this.$message({ message: e, type: 'error', center: true })
+        this.$msg.error(e)
         this.loading = false
       }
     },

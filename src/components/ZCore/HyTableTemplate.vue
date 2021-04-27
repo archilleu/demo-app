@@ -264,7 +264,7 @@ export default {
         const res = await this.api.findPage({ filters, pageRequest: this.pageRequest })
         this.data = res.data
       } catch (e) {
-        this.$message({ message: e, type: 'error', center: true })
+        this.$msg.error(e)
       } finally {
         this.loading = false
       }
@@ -337,16 +337,14 @@ export default {
               }
               this.data.content.splice(idx, 1)
             }
-            this.$message({ message: '删除成功', type: 'success', center: true })
+            this.$msg.success('删除成功')
           } catch (e) {
-            this.$message({ message: e, type: 'error', center: true })
+            this.$msg.error(e)
           } finally {
             this.loading = false
           }
         })
-        .catch(() => {
-          this.$message({ message: e, type: 'error', center: true })
-        })
+        .catch(() => { })
     }
 
   },

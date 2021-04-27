@@ -104,7 +104,7 @@ export default {
       const res = await this.$api.sys.dept.getTree()
       this.popupTreeData = res.data
     } catch (e) {
-      this.$message({ message: e, type: 'success', center: true })
+      this.$msg.error(e)
     }
   }
 }

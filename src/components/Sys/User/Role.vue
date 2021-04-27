@@ -86,7 +86,7 @@ export default {
   props: {
     user: {
       type: Object,
-      required: true
+      required: false
     }
   },
 
@@ -108,7 +108,7 @@ export default {
           this.toggleRowSelection(this.user.roles)
         })
       } catch (e) {
-        this.$message({ message: e, type: 'error', center: true })
+        this.$msg.error(e)
       } finally {
         this.loading = false
       }
@@ -138,7 +138,7 @@ export default {
         this.saveLoading = true
         await this.$api.sys.user.saveUserRoles(data)
       } catch (e) {
-        this.$message({ message: e, type: 'error', center: true })
+        this.$msg.error(e)
       } finally {
         this.saveLoading = false
         this.$emit('save-ok', true)
@@ -166,6 +166,7 @@ export default {
   },
   watch: {
     user () {
+      if (!this.user) return;
       this.toggleRowSelection(this.user.roles)
     }
   },

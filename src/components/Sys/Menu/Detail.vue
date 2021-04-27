@@ -1,43 +1,50 @@
 <template>
-  <el-form
-    ref="menuForm"
-    :rules="dataFormRules"
-    :model="dataForm"
-    :disabled="readOnly"
-    label-width="70px"
-    label-position="right"
-    size="mini"
-  >
-    <el-form-item label="菜单类型" prop="type">
+  <el-form ref="menuForm"
+           :rules="dataFormRules"
+           :model="dataForm"
+           :disabled="readOnly"
+           label-width="70px"
+           label-position="right"
+           size="mini">
+    <el-form-item label="菜单类型"
+                  prop="type">
       <el-radio-group v-model="dataForm.type">
-        <el-radio v-for="(type, index) in menuTypeList" :label="index" :key="index">{{ type }}</el-radio>
+        <el-radio v-for="(type, index) in menuTypeList"
+                  :label="index"
+                  :key="index">{{ type }}</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item :label="menuTypeList[dataForm.type] + '名称'" prop="name">
-      <el-input v-model="dataForm.name" :placeholder="menuTypeList[dataForm.type] + '名称'"></el-input>
+    <el-form-item :label="menuTypeList[dataForm.type] + '名称'"
+                  prop="name">
+      <el-input v-model="dataForm.name"
+                :placeholder="menuTypeList[dataForm.type] + '名称'"></el-input>
     </el-form-item>
-    <el-form-item label="上级菜单" prop="parentName">
-      <popup-tree-input
-        :data="popupTreeData"
-        :props="popupTreeProps"
-        :prop="dataForm.parentName==null||dataForm.parentName==''?'顶级菜单':dataForm.parentName"
-        nodeKey="id"
-        :currentChangeHandle="handleTreeSelectChange"
-      ></popup-tree-input>
+    <el-form-item label="上级菜单"
+                  prop="parentName">
+      <popup-tree-input :data="popupTreeData"
+                        :props="popupTreeProps"
+                        :prop="dataForm.parentName==null||dataForm.parentName==''?'顶级菜单':dataForm.parentName"
+                        nodeKey="id"
+                        :currentChangeHandle="handleTreeSelectChange"></popup-tree-input>
     </el-form-item>
-    <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
-      <el-input
-        v-model="dataForm.perms"
-        placeholder="如: sys:user:add, sys:user:edit, sys:user:delete"
-      ></el-input>
+    <el-form-item v-if="dataForm.type !== 0"
+                  label="授权标识"
+                  prop="perms">
+      <el-input v-model="dataForm.perms"
+                placeholder="如: sys:user:add, sys:user:edit, sys:user:delete"></el-input>
     </el-form-item>
-    <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
+    <el-form-item v-if="dataForm.type === 1"
+                  label="菜单路由"
+                  prop="url">
       <el-row>
         <el-col :span="22">
-          <el-input v-model="dataForm.url" placeholder="菜单路由"></el-input>
+          <el-input v-model="dataForm.url"
+                    placeholder="菜单路由"></el-input>
         </el-col>
         <el-col :span="2">
-          <el-tooltip placement="top" effect="light" style="padding: 10px;">
+          <el-tooltip placement="top"
+                      effect="light"
+                      style="padding: 10px;">
             <div slot="content">
               <p>URL格式：</p>
               <p>1.常规业务开发的功能URL，如用户管理，components目录下页面路径为 /Sys/User/Index, 此处填写 /sys/user/index。</p>
@@ -49,22 +56,33 @@
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-if="dataForm.type !== 2" label="排序编号" prop="orderNum">
-      <el-input-number v-model="dataForm.orderNum" controls-position="right" :min="0" label="排序编号"></el-input-number>
+    <el-form-item v-if="dataForm.type !== 2"
+                  label="排序编号"
+                  prop="orderNum">
+      <el-input-number v-model="dataForm.orderNum"
+                       controls-position="right"
+                       :min="0"
+                       label="排序编号"></el-input-number>
     </el-form-item>
-    <el-form-item v-if="dataForm.type !== 2" label="菜单图标" prop="icon">
+    <el-form-item v-if="dataForm.type !== 2"
+                  label="菜单图标"
+                  prop="icon">
       <el-row>
         <el-col :span="22">
-          <el-input v-model="dataForm.icon" placeholder="菜单图标名称（如：fa fa-home fa-lg）"></el-input>
+          <el-input v-model="dataForm.icon"
+                    placeholder="菜单图标名称（如：fa fa-home fa-lg）"></el-input>
         </el-col>
         <el-col :span="2">
-          <el-tooltip placement="top" effect="light" style="padding: 10px;">
+          <el-tooltip placement="top"
+                      effect="light"
+                      style="padding: 10px;">
             <div slot="content">
               <p>推荐使用 Font Aweson 图标</p>
               <p>使用步骤：</p>
               <p>
                 1.进入
-                <a href="http://www.fontawesome.com.cn/faicons/" target="_blank">Font Aweson</a> 页面
+                <a href="http://www.fontawesome.com.cn/faicons/"
+                   target="_blank">Font Aweson</a> 页面
               </p>
               <p>2.查找到需要的图标,点击查看。</p>
               <p>3.复制图片样式到此处。</p>
@@ -75,9 +93,12 @@
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-if="!readOnly" class="footer">
+    <el-form-item v-if="!readOnly"
+                  class="footer">
       <el-button @click="emitClose">取消</el-button>
-      <el-button type="primary" @click="onSubmit" :loading="loading">提交</el-button>
+      <el-button type="primary"
+                 @click="onSubmit"
+                 :loading="loading">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -129,7 +150,7 @@ export default {
       const res = await this.$api.sys.menu.getMenuTree()
       this.popupTreeData = res.data
     } catch (e) {
-      this.$message({ message: e, type: 'success', center: true })
+      this.$msg.error(e)
     }
   },
   methods: {
@@ -152,14 +173,14 @@ export default {
 
               this.emitSubmit(dept)
 
-              this.$message({message: '成功', type: 'success', center: true})
+              this.$msg.success('成功')
             } catch (e) {
-              this.$message({message: '失败' + e, type: 'error', center: true})
+              this.$msg.error(e)
             } finally {
               this.loading = false
             }
           })
-          .catch((e) => {})
+          .catch((e) => { })
       })
     },
 
