@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from './config'
-import { getToken, clearToken } from '@/utils/token'
 import router from '@/router'
+import LocalUser from '@/utils/user'
 
 export default function $axios (options) {
   return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ export default function $axios (options) {
     // request 请求拦截器
     instance.interceptors.request.use(
       config => {
-        const token = getToken()
+        const token = LocalUser.token()
         // 发送请求时携带token
         if (token) {
           config.headers.token = token

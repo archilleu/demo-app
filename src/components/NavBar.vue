@@ -1,60 +1,74 @@
 <template>
-  <div class="menu-bar-container" :class="collapse?'title-collapse':'title-notcollapse'">
+  <div class="menu-bar-container"
+       :class="collapse?'title-collapse':'title-notcollapse'">
     <!-- logo 标题 -->
     <div class="title">
       <div v-if="!collapse">
-        <el-tooltip class="item" effect="dark" content="主页" placement="bottom">
-          <el-image
-            style="height:40px;cursor:pointer;"
-            :src="url"
-            fit="contain"
-            @click.native="goHome"
-          ></el-image>
+        <el-tooltip class="item"
+                    effect="dark"
+                    content="主页"
+                    placement="bottom">
+          <el-image style="height:40px;cursor:pointer;"
+                    :src="url"
+                    fit="contain"
+                    @click.native="goHome"></el-image>
         </el-tooltip>
       </div>
       <div v-else>
-        <el-tooltip class="item" effect="dark" content="主页" placement="right">
-          <el-avatar
-            style="cursor:pointer"
-            :size="40"
-            :src="url"
-            fit="contain"
-            @click.native="goHome"
-          ></el-avatar>
+        <el-tooltip class="item"
+                    effect="dark"
+                    content="主页"
+                    placement="right">
+          <el-avatar style="cursor:pointer"
+                     :size="40"
+                     :src="url"
+                     fit="contain"
+                     @click.native="goHome"></el-avatar>
         </el-tooltip>
       </div>
     </div>
     <!-- 导航菜单 -->
     <div class="nav-menu">
-      <el-menu
-        ref="navmenu"
-        unique-opened
-        default-active="1"
-        :collapse="collapse"
-        :collapse-transition="false"
-        background-color="#1e374f"
-        text-color="#fff"
-        active-text-color="#409eff"
-      >
+      <el-menu ref="navmenu"
+               unique-opened
+               default-active="1"
+               :collapse="collapse"
+               :collapse-transition="false"
+               background-color="#1e374f"
+               text-color="#fff"
+               active-text-color="#409eff">
         <!-- 导航菜单树组件，动态加载菜单 -->
-        <menu-tree v-for="item in navTree" :key="item.id" :menu="item"></menu-tree>
+        <menu-tree v-for="item in navTree"
+                   :key="item.id"
+                   :menu="item"></menu-tree>
       </el-menu>
     </div>
 
-    <div id="footer" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'">
+    <div id="footer"
+         :class="collapse?'menu-bar-collapse-width':'menu-bar-width'">
       <!-- 系统用户 -->
-      <menu-tree-item label="系统用户" icon="el-icon-user" url="account" :collapse="collapse"></menu-tree-item>
-      <menu-tree-item label="退出" icon="el-icon-switch-button" @click="logout" :collapse="collapse"></menu-tree-item>
+      <menu-tree-item label="系统用户"
+                      icon="el-icon-user"
+                      url="account"
+                      :collapse="collapse"></menu-tree-item>
+      <menu-tree-item label="退出"
+                      icon="el-icon-switch-button"
+                      @click="logout"
+                      :collapse="collapse"></menu-tree-item>
     </div>
-    <div id="collapse" :class="collapse?'collapse':'no-collapse'" @click="onCollapse">
-      <i v-if="!collapse" class="el-icon-back"></i>
-      <i v-else class="el-icon-right"></i>
+    <div id="collapse"
+         :class="collapse?'collapse':'no-collapse'"
+         @click="onCollapse">
+      <i v-if="!collapse"
+         class="el-icon-back"></i>
+      <i v-else
+         class="el-icon-right"></i>
     </div>
   </div>
 </template>
 
 <script>
-import { clearToken } from '@/utils/token'
+import LocalUser from "@/utils/user.js";
 import { mapState } from 'vuex'
 import MenuTree from '@/components/ZCore/MenuTree'
 import MenuTreeItem from '@/components/ZCore/MenuTree/MenuTreeItem'
@@ -128,8 +142,7 @@ export default {
     },
     logout () {
       this.$confirm('确认退出吗？', '提示', {}).then(() => {
-        clearToken()
-        window.sessionStorage.clear()
+        LocalUser.clear();
 
         // 刷新页面，清除vuex状态
         window.location.replace('/#/login')
@@ -140,7 +153,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../assets/base.scss";
+@import '../assets/base.scss';
 
 .title-notcollapse {
   width: $navBarWeight;

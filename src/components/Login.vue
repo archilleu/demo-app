@@ -1,4 +1,5 @@
 <template>
+  <!-- <login-page></login-page> -->
   <el-form :model="loginForm"
            :rules="fieldRules"
            ref="loginForm"
@@ -34,10 +35,23 @@
 
 <script>
 import router from '@/router'
-import { saveToken } from '@/utils/token'
+import LocalUser from "@/utils/user.js";
 
 export default {
   name: 'Login',
+  components: {
+    // "login-page": async () => {
+    //   let page = "default";
+    //   try {
+    //     const res = await getParam();
+    //     page = res.data.jspLogin;
+    //     store.commit('sysParam', res.data)
+    //     return import(`./LoginPage/${page}`)
+    //   } catch (e) {
+    //     return import('./LoginPage/default')
+    //   }
+    // }
+  },
   data () {
     return {
       loading: false,
@@ -59,9 +73,7 @@ export default {
 
         // 登录
         const res = await this.$api.user.login.login(this.loginForm)
-
-        // 保存token
-        saveToken(res.data)
+        LocalUser.init(res.data.token);
 
         this.$store.commit('menuRouteLoaded', false)
         router.push('/')

@@ -7,7 +7,7 @@ import Intro from '@/components/Intro/Intro'
 import Account from '@/components/Intro/Account'
 import api from '@/http/api'
 import store from '@/store'
-import { getToken } from '@/utils/token'
+import LocalUser from '@/utils/user'
 
 Vue.use(Router)
 
@@ -55,19 +55,19 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const token = getToken()
+  const user = LocalUser.user()
   if (to.path === '/login') {
-    if (token) {
+    if (user) {
       next({ path: '/' })
     } else {
       next()
     }
   } else {
-    if (!token) {
+    if (!user) {
       next({ path: '/login' })
     } else {
       next()
-      await addDynamicMenuAndRoutes()
+      await addDynamicMenuAndRoutes(user)
     }
   }
 })
@@ -75,7 +75,7 @@ router.beforeEach(async (to, from, next) => {
 /**
 * 加载动态菜单和路由
 */
-async function addDynamicMenuAndRoutes () {
+async function addDynamicMenuAndRoutes (user) {
   if (store.state.app.menuRouteLoaded) {
     return
   }
@@ -88,9 +88,7 @@ async function addDynamicMenuAndRoutes () {
     router.addRoutes(router.options.routes)
 
     // 加载权限(可以从token还原，不需要向后台获取)
-    const token = getToken()
-    const jwt = JSON.parse(decodeURIComponent(escape(window.atob(token.split('.')[1]))))
-    const authorities = jwt.authorities.map(item => item.authority)
+    const authorities = user.authorities.map(item => item.authority)
     store.commit('setPerms', authorities)
 
     // 提交加载动态路由完毕状态
