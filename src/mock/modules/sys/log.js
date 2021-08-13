@@ -2,14 +2,27 @@
  * 操作日志模块
  */
 
-export function batchDelete () {
+export function del () {
   return {
-    url: 'sys/login-log/delete',
-    type: 'post',
+    url: `sys/log/*`,
+    type: 'delete',
     data: {
       code: 200,
       msg: null,
       data: 1
+    }
+  }
+}
+
+// 批量删除
+export function batchDelete (data) {
+  return {
+    url: 'sys/log/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data
     }
   }
 }
@@ -31,7 +44,7 @@ const initData = {
 // 分页查询
 export function findPage (params) {
   return {
-    url: 'sys/log/findPage',
+    url: 'sys/log/list',
     type: 'post',
     callback (opts) {
       const ret = {

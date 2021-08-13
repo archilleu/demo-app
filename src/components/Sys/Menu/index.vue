@@ -263,7 +263,7 @@ export default {
       }).then(async () => {
         try {
           this.loading = true
-          await this.$api.sys.menu.del(row)
+          await this.$api.sys.menu.del(row.id)
           this.$msg.success('删除成功')
 
           this.handleRefresh()

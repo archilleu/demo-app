@@ -262,6 +262,7 @@ export default {
       try {
         this.loading = true
         const res = await this.api.findPage({ filters, pageRequest: this.pageRequest })
+        res.data.totalSize = parseInt(res.data.totalSize)
         this.data = res.data
       } catch (e) {
         this.$msg.error(e)
@@ -329,7 +330,7 @@ export default {
         .then(async () => {
           try {
             this.loading = true
-            await this.api.del(row)
+            await this.api.del(row.id)
             let idx = this.data.content.findIndex(item => item.id === row.id)
             if (idx !== -1) {
               if (row.id === this.currentRow.id) {

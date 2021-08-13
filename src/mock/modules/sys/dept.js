@@ -246,9 +246,8 @@ export function findByParentId (params) {
     ]
   }
   return {
-    url: 'sys/dept/findByParentId',
+    url: 'sys/dept/*/*',
     type: 'get',
-    params,
     data: findTreeData
   }
 }
@@ -448,7 +447,7 @@ export function getTree () {
     ]
   }
   return {
-    url: 'sys/dept/getTree',
+    url: 'sys/dept/tree',
     type: 'get',
     data
   }

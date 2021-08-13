@@ -64,9 +64,9 @@ export default function $axios (options) {
         } else {
           if (err.response) {
             if (err.response.status === 401) {
-              clearToken()
+              LocalUser.clear();
               if (router.currentRoute.path === '/login') {
-                return
+                return Promise.reject(JSON.stringify(err.response.data))
               }
 
               router.push('/login')

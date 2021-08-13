@@ -6,25 +6,38 @@ import axios from '../../axios'
  * 角色管理模块
  */
 
-// 保存
-export async function save (data) {
+// 添加
+export async function add (data) {
   return axios({
-    url: `${baseUrl}/role/save`,
+    url: `${baseUrl}/role/add`,
     method: 'post',
     data
   })
 }
 
-// 删除
-export async function del (data) {
-  return batchDelete([data])
+// 修改
+export async function edit (data) {
+  let url = `${baseUrl}/role/${data.id}`
+  return axios({
+    url,
+    method: 'put',
+    data
+  })
 }
 
-// 批量删除
+// 删除
+export async function del (id) {
+  return axios({
+    url: `${baseUrl}/role/${id}`,
+    method: 'delete',
+  })
+}
+
+// 删除
 export async function batchDelete (data) {
   return axios({
-    url: `${baseUrl}/role/delete`,
-    method: 'post',
+    url: `${baseUrl}/user/delete`,
+    method: 'delete',
     data
   })
 }
@@ -32,7 +45,7 @@ export async function batchDelete (data) {
 // 分页查询
 export async function findPage (data) {
   return axios({
-    url: `${baseUrl}/role/findPage`,
+    url: `${baseUrl}/role/list`,
     method: 'post',
     data: {
       ...data.pageRequest,
@@ -46,24 +59,23 @@ export async function findPage (data) {
 // 查询全部
 export async function findAll (data) {
   return axios({
-    url: `${baseUrl}/role/findAll`,
+    url: `${baseUrl}/role/list-all`,
     method: 'get'
   })
 }
 
 // 查询角色菜单集合
-export async function findRoleMenus (params) {
+export async function findRoleMenus (id) {
   return axios({
-    url: `${baseUrl}/role/findRoleMenus`,
+    url: `${baseUrl}/role/${id}/menus`,
     method: 'get',
-    params
   })
 }
 
 // 保存角色菜单集合
 export async function saveRoleMenus (data) {
   return axios({
-    url: `${baseUrl}/role/saveRoleMenus`,
+    url: `${baseUrl}/role/save-menus`,
     method: 'post',
     data
   })

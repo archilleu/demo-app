@@ -88,8 +88,7 @@ async function addDynamicMenuAndRoutes (user) {
     router.addRoutes(router.options.routes)
 
     // 加载权限(可以从token还原，不需要向后台获取)
-    const authorities = user.authorities.map(item => item.authority)
-    store.commit('setPerms', authorities)
+    store.commit('setPerms', user.permissions)
 
     // 提交加载动态路由完毕状态
     store.commit('menuRouteLoaded', true)

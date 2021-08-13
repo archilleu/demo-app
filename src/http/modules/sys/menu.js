@@ -6,33 +6,47 @@ import axios from '../../axios'
  * 菜单管理模块
  */
 
-// 保存
-export async function save (data) {
+// 添加
+export async function add (data) {
   return axios({
-    url: `${baseUrl}/menu/save`,
+    url: `${baseUrl}/menu/add`,
     method: 'post',
+    data
+  })
+}
+
+// 修改
+export async function edit (data) {
+  let url = `${baseUrl}/menu/${data.id}`
+  return axios({
+    url,
+    method: 'put',
     data
   })
 }
 
 // 删除
-export async function del (data) {
-  return batchDelete([data])
+export async function del (id) {
+  return axios({
+    url: `${baseUrl}/menu/${id}`,
+    method: 'delete',
+  })
 }
 
-// 批量删除
+// 删除
 export async function batchDelete (data) {
   return axios({
     url: `${baseUrl}/menu/delete`,
-    method: 'post',
+    method: 'delete',
     data
   })
 }
+
 // 获取菜单树
 export async function getMenuTree (data = {}) {
   return axios({
-    url: `${baseUrl}/menu/getMenuTree`,
-    method: 'post',
+    url: `${baseUrl}/menu/tree`,
+    method: 'get',
     data: {
       params: {
         ..._.pickBy(data.filters, _.identity)

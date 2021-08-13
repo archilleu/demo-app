@@ -7,15 +7,18 @@ import axios from '../../axios'
  */
 
 // 删除
-export async function del (data) {
-  return batchDelete([data])
+export async function del (id) {
+  return axios({
+    url: `${baseUrl}/login-log/${id}`,
+    method: 'delete',
+  })
 }
 
 // 删除
 export async function batchDelete (data) {
   return axios({
     url: `${baseUrl}/login-log/delete`,
-    method: 'post',
+    method: 'delete',
     data
   })
 }
@@ -23,7 +26,7 @@ export async function batchDelete (data) {
 // 分页查询
 export async function findPage (data) {
   return axios({
-    url: `${baseUrl}/login-log/findPage`,
+    url: `${baseUrl}/login-log/list`,
     method: 'post',
     data: {
       ...data.pageRequest,

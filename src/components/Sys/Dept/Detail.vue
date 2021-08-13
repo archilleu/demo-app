@@ -82,9 +82,6 @@ export default {
     }
   },
   computed: {
-    api () {
-      return this.$api.sys.dept.save
-    }
   },
   methods: {
     onSubmit () {
@@ -97,7 +94,13 @@ export default {
           .then(async () => {
             try {
               this.loading = true
-              const dept = await this.$api.sys.dept.save(this.dataForm)
+              let api;
+              if (!this.dataForm.id) {
+                api = this.$api.sys.dept.add
+              } else {
+                api = this.$api.sys.dept.edit
+              }
+              const dept = await api(this.dataForm)
 
               this.emitSubmit(dept)
               this.$msg.success('成功')

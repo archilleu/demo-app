@@ -84,7 +84,11 @@ export default {
   },
   computed: {
     api () {
-      return this.$api.sys.user.save
+      if (!this.dataForm.id) {
+        return this.$api.sys.user.add
+      } else {
+        return this.$api.sys.user.edit
+      }
     }
   },
   methods: {

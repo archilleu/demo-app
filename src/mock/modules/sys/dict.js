@@ -17,14 +17,13 @@ const initData = {
   delFlag: 0
 }
 
-// 保存
-export function save () {
+export function add () {
   return {
-    url: 'sys/dict/save',
+    url: 'sys/dict/add',
     type: 'post',
     data: {
       code: 200,
-      msg: null
+      msg: null,
     },
     callback (opts) {
       const data = opts.body
@@ -38,11 +37,33 @@ export function save () {
     }
   }
 }
-// 批量删除
-export function batchDelete () {
+
+export function edit () {
   return {
-    url: 'sys/dict/delete',
-    type: 'post',
+    url: `sys/dict/*`,
+    type: 'put',
+    data: {
+      code: 200,
+      msg: null,
+    },
+    callback (opts) {
+      const data = opts.body
+      const ret = Object.assign({}, initData, { ...data })
+      ret.id = data.id ? data.id : id++
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
+    }
+  }
+}
+
+// 删除
+export function del () {
+  return {
+    url: `sys/dict/*`,
+    type: 'delete',
     data: {
       code: 200,
       msg: null,
@@ -50,10 +71,24 @@ export function batchDelete () {
     }
   }
 }
+
+// 批量删除
+export function batchDelete (data) {
+  return {
+    url: 'sys/dict/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data
+    }
+  }
+}
+
 // 分页查询
 export function findPage (params) {
   return {
-    url: 'sys/dict/findPage',
+    url: 'sys/dict/list',
     type: 'post',
     callback (opts) {
       const ret = {

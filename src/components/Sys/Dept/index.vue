@@ -159,7 +159,7 @@ export default {
     // 懒加载机构
     async load (tree, treeNode, resolve) {
       try {
-        const res = await this.$api.sys.dept.findByParentId({ parentId: tree.id })
+        const res = await this.$api.sys.dept.findByParentId(tree.id)
         resolve(res.data)
       } catch (e) {
         this.$msg.error(e)
@@ -204,7 +204,7 @@ export default {
         .then(async () => {
           try {
             this.loading = true
-            await this.$api.sys.dept.del(row)
+            await this.$api.sys.dept.del(row.id)
             this.refreshDelete(row)
 
             this.$msg.success('删除成功')
@@ -223,7 +223,7 @@ export default {
     // 刷新
     handleRefresh () {
       this.deptTreeData = []
-      this.findTreeData()
+      this.findTreeData(0)
     },
 
     /**
@@ -237,7 +237,7 @@ export default {
       }
     },
     refreshAdd (data) {
-      if (data.parentId == null) {
+      if (data.parentId == 0 || data.parentId == null) {
         // 顶级机构,直接插入数据
         const parent = this.store.states.data
         parent.push(data)
@@ -272,7 +272,7 @@ export default {
       }
     },
     refreshDelete (data) {
-      if (data.parentId == null) {
+      if (data.parentId == null || data.parentId == 0) {
         // 顶级机构,直接删除数据
         const parent = this.store.states.data
         const idx = parent.findIndex(item => item.id === data.id)
@@ -299,7 +299,7 @@ export default {
     }
   },
   mounted () {
-    this.findTreeData()
+    this.findTreeData(0)
   }
 }
 </script>

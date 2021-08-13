@@ -6,25 +6,38 @@ import axios from '../../axios'
  * 字典管理模块
  */
 
-// 保存
-export async function save (data) {
+// 添加
+export async function add (data) {
   return axios({
-    url: `${baseUrl}/dict/save`,
+    url: `${baseUrl}/dict/add`,
     method: 'post',
     data
   })
 }
 
-// 删除
-export async function del (data) {
-  return batchDelete([data])
+// 修改
+export async function edit (data) {
+  let url = `${baseUrl}/dict/${data.id}`
+  return axios({
+    url,
+    method: 'put',
+    data
+  })
 }
 
-// 批量删除
+// 删除
+export async function del (id) {
+  return axios({
+    url: `${baseUrl}/dict/${id}`,
+    method: 'delete',
+  })
+}
+
+// 删除
 export async function batchDelete (data) {
   return axios({
     url: `${baseUrl}/dict/delete`,
-    method: 'post',
+    method: 'delete',
     data
   })
 }
@@ -32,7 +45,7 @@ export async function batchDelete (data) {
 // 分页查询
 export async function findPage (data) {
   return axios({
-    url: `${baseUrl}/dict/findPage`,
+    url: `${baseUrl}/dict/list`,
     method: 'post',
     data: {
       ...data.pageRequest,

@@ -4,15 +4,13 @@
 
 import { random } from "core-js/core/number"
 
-// 保存
-export function save () {
+export function add () {
   return {
-    url: 'sys/user/save',
+    url: 'sys/user/add',
     type: 'post',
     data: {
       code: 200,
       msg: null,
-      data: 1
     },
     callback (opts) {
       const data = opts.body
@@ -26,15 +24,50 @@ export function save () {
     }
   }
 }
+
+export function edit () {
+  return {
+    url: `sys/user/*`,
+    type: 'put',
+    data: {
+      code: 200,
+      msg: null,
+    },
+    callback (opts) {
+      const data = opts.body
+      const ret = Object.assign({}, initData, { ...data })
+      ret.id = data.id ? data.id : id++
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
+    }
+  }
+}
+
+// 删除
+export function del () {
+  return {
+    url: `sys/user/*`,
+    type: 'delete',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
+}
+
 // 批量删除
-export function batchDelete () {
+export function batchDelete (data) {
   return {
     url: 'sys/user/delete',
     type: 'post',
     data: {
       code: 200,
       msg: null,
-      data: 1
+      data
     }
   }
 }
@@ -67,7 +100,7 @@ const initData = {
 // 分页查询
 export function findPage (params) {
   return {
-    url: 'sys/user/findPage',
+    url: 'sys/user/list',
     type: 'post',
     callback (opts) {
       const ret = {

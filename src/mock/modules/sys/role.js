@@ -14,11 +14,32 @@ const initData = {
   delFlag: 0
 }
 
-// 保存
-export function save () {
+export function add () {
   return {
-    url: 'sys/role/save',
+    url: 'sys/role/add',
     type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+    },
+    callback (opts) {
+      const data = opts.body
+      const ret = Object.assign({}, initData, { ...data })
+      ret.id = data.id ? data.id : id++
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
+    }
+  }
+}
+
+// 保存
+export function edit() {
+  return {
+    url: 'sys/role/*',
+    type: 'put',
     data: {
       code: 200,
       msg: null,
@@ -36,11 +57,12 @@ export function save () {
     }
   }
 }
-// 批量删除
-export function batchDelete () {
+
+// 删除
+export function del () {
   return {
-    url: 'sys/role/delete',
-    type: 'post',
+    url: `sys/role/*`,
+    type: 'delete',
     data: {
       code: 200,
       msg: null,
@@ -48,6 +70,20 @@ export function batchDelete () {
     }
   }
 }
+
+// 批量删除
+export function batchDelete (data) {
+  return {
+    url: 'sys/role/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data
+    }
+  }
+}
+
 // 查询全部
 export function findAll () {
   const findAllData = {
@@ -87,7 +123,7 @@ export function findAll () {
     ]
   }
   return {
-    url: 'sys/role/findAll',
+    url: 'sys/role/list-all',
     type: 'get',
     data: findAllData
   }
@@ -95,7 +131,7 @@ export function findAll () {
 // 分页查询
 export function findPage (params) {
   return {
-    url: 'sys/role/findPage',
+    url: 'sys/role/list',
     type: 'post',
     callback (opts) {
       const ret = {
@@ -1145,8 +1181,19 @@ export function findRoleMenus (params) {
     ]
   }
   return {
-    url: 'sys/role/findRoleMenus',
+    url: 'sys/role/*',
     type: 'get',
     data: findRoleMenuData
+  }
+}
+
+export function saveRoleMenus () {
+  return {
+    url: 'sys/role/save-menus',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+    },
   }
 }

@@ -141,9 +141,6 @@ export default {
     }
   },
   computed: {
-    api () {
-      return this.$api.sys.menu.save
-    }
   },
   async mounted () {
     try {
@@ -169,7 +166,14 @@ export default {
           .then(async () => {
             try {
               this.loading = true
-              const dept = await this.$api.sys.menu.save(this.dataForm)
+
+              let api;
+              if (!this.dataForm.id) {
+                api = this.$api.sys.menu.add
+              } else {
+                api = this.$api.sys.menu.edit
+              }
+              const dept = await api(this.dataForm)
 
               this.emitSubmit(dept)
 

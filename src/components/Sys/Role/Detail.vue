@@ -1,13 +1,25 @@
 <template>
-  <HyFormTemplate :dataForm="dataForm" :rules="dataFormRules" :readOnly="readOnly" :api="api">
-    <el-form-item label="ID" prop="id" v-if="false">
-      <el-input v-model="dataForm.id" :disabled="true" auto-complete="off"></el-input>
+  <HyFormTemplate :dataForm="dataForm"
+                  :rules="dataFormRules"
+                  :readOnly="readOnly"
+                  :api="api">
+    <el-form-item label="ID"
+                  prop="id"
+                  v-if="false">
+      <el-input v-model="dataForm.id"
+                :disabled="true"
+                auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="角色名" prop="name">
-      <el-input v-model="dataForm.name" auto-complete="off"></el-input>
+    <el-form-item label="角色名"
+                  prop="name">
+      <el-input v-model="dataForm.name"
+                auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="备注 " prop="remark">
-      <el-input v-model="dataForm.remark" auto-complete="off" type="textarea"></el-input>
+    <el-form-item label="备注 "
+                  prop="remark">
+      <el-input v-model="dataForm.remark"
+                auto-complete="off"
+                type="textarea"></el-input>
     </el-form-item>
   </HyFormTemplate>
 </template>
@@ -41,7 +53,11 @@ export default {
   },
   computed: {
     api () {
-      return this.$api.sys.role.save
+      if (!this.dataForm.id) {
+        return this.$api.sys.role.add
+      } else {
+        return this.$api.sys.role.edit
+      }
     }
   },
   methods: {}

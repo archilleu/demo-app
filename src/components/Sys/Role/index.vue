@@ -158,7 +158,7 @@ export default {
       try {
         this.menuLoading = true
         this.selectRole = val
-        const res = await this.$api.sys.role.findRoleMenus({ roleId: val.id })
+        const res = await this.$api.sys.role.findRoleMenus(val.id)
         this.currentRoleMenus = res.data
         this.$refs.menuTree.setCheckedNodes(res.data)
       } catch (e) {
@@ -188,7 +188,7 @@ export default {
         return
       }
       this.authLoading = true
-      let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, false)
+      let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, true)
       let roleMenus = []
       for (let i = 0, len = checkedNodes.length; i < len; i++) {
         let roleMenu = { roleId: roleId, menuId: checkedNodes[i].id }

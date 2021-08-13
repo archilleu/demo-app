@@ -6,25 +6,38 @@ import axios from '../../axios'
  * 系统配置模块
  */
 
-// 保存
-export async function save (data) {
+// 添加
+export async function add (data) {
   return axios({
-    url: `${baseUrl}/config/save`,
+    url: `${baseUrl}/config/add`,
     method: 'post',
     data
   })
 }
 
+// 修改
+export async function edit (data) {
+  let url = `${baseUrl}/config/${data.id}`
+  return axios({
+    url,
+    method: 'put',
+    data
+  })
+}
+
 // 删除
-export async function del (data) {
-  return batchDelete([data])
+export async function del (id) {
+  return axios({
+    url: `${baseUrl}/config/${id}`,
+    method: 'delete',
+  })
 }
 
 // 批量删除
 export async function batchDelete (data) {
   return axios({
     url: `${baseUrl}/config/delete`,
-    method: 'post',
+    method: 'delete',
     data
   })
 }
@@ -32,7 +45,7 @@ export async function batchDelete (data) {
 // 分页查询
 export async function findPage (data) {
   return axios({
-    url: `${baseUrl}/config/findPage`,
+    url: `${baseUrl}/config/list`,
     method: 'post',
     data: {
       ...data.pageRequest,

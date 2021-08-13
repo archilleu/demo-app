@@ -18,15 +18,13 @@ const initData = {
   delFlag: 0
 }
 
-// 保存
-export function save () {
+export function add () {
   return {
-    url: 'sys/config/save',
+    url: 'sys/config/add',
     type: 'post',
     data: {
       code: 200,
       msg: null,
-      data: 1
     },
     callback (opts) {
       const data = opts.body
@@ -40,11 +38,33 @@ export function save () {
     }
   }
 }
-// 批量删除
-export function batchDelete () {
+
+export function edit () {
   return {
-    url: 'sys/config/delete',
-    type: 'post',
+    url: `sys/config/*`,
+    type: 'put',
+    data: {
+      code: 200,
+      msg: null,
+    },
+    callback (opts) {
+      const data = opts.body
+      const ret = Object.assign({}, initData, { ...data })
+      ret.id = data.id ? data.id : id++
+      return {
+        code: 200,
+        msg: null,
+        data: ret
+      }
+    }
+  }
+}
+
+// 删除
+export function del () {
+  return {
+    url: `sys/config/*`,
+    type: 'delete',
     data: {
       code: 200,
       msg: null,
@@ -52,10 +72,24 @@ export function batchDelete () {
     }
   }
 }
+
+// 批量删除
+export function batchDelete (data) {
+  return {
+    url: 'sys/config/delete',
+    type: 'post',
+    data: {
+      code: 200,
+      msg: null,
+      data
+    }
+  }
+}
+
 // 分页查询
 export function findPage (params) {
   return {
-    url: 'sys/config/findPage',
+    url: 'sys/config/list',
     type: 'post',
     callback (opts) {
       const ret = {

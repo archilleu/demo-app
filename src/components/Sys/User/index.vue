@@ -22,6 +22,13 @@
                    type="primary"
                    @click="handleSelectRole"
                    :disabled="!selectedUser" />
+        <hy-button :perms="true"
+                   icon="fa fa-check"
+                   label="修改密码"
+                   size="mini"
+                   type="primary"
+                   @click="handleModifyPassword"
+                   :disabled="!selectedUser" />
       </template>
 
       <!-- 过滤栏 -->
@@ -54,6 +61,15 @@
       <Role :user="selectedUser"
             @save-ok="roleSave"></Role>
     </el-dialog>
+
+    <!-- 密码栏 -->
+    <el-dialog :title="pwdTitle"
+               width="40%"
+               :visible.sync="passwordVisibleDlg">
+      <Password :user="selectedUser"
+                :api="$api.sys.user.modifyPassword">
+      </Password>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +80,7 @@ import { formatDate, expandFormatDate } from '@/utils/datetime'
 
 import Detail from './Detail'
 import Role from './Role'
+import Password from './Password'
 
 export default {
   components: {
@@ -71,7 +88,8 @@ export default {
     HyListTemplate,
 
     Detail,
-    Role
+    Role,
+    Password
   },
 
   data () {
@@ -86,6 +104,9 @@ export default {
           label: '角色',
           minWidth: 100,
           formatter: (data) => {
+            if (!data.roles) {
+              return;
+            }
             return data.roles.map((item) => item.name);
           }
         },
@@ -110,6 +131,9 @@ export default {
             prop: 'roles',
             label: '角色',
             formatter: (data) => {
+              if (!data) {
+                return;
+              }
               return data.map((item) => item.name);
             }
           },
@@ -135,6 +159,7 @@ export default {
       },
 
       roleVisibleDlg: false,
+      passwordVisibleDlg: false,
       selectedUser: null
     }
   },
@@ -145,12 +170,22 @@ export default {
       }
 
       return `选择角色:${this.selectedUser.name}`
+    },
+    pwdTitle () {
+      if (!this.selectedUser) {
+        return ''
+      }
+
+      return `修改密码:${this.selectedUser.name}`
     }
   },
 
   methods: {
     handleSelectRole () {
       this.roleVisibleDlg = true
+    },
+    handleModifyPassword () {
+      this.passwordVisibleDlg = true
     },
     handleCurrentChange (row) {
       if (!row) { return }

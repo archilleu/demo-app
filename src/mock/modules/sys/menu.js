@@ -2,10 +2,10 @@
  * 菜单管理模块
  */
 
-// 保存
-export function save () {
+// 新增
+export function add (data) {
   return {
-    url: 'sys/menu/save',
+    url: 'sys/menu/add',
     type: 'post',
     data: {
       code: 200,
@@ -14,11 +14,38 @@ export function save () {
     }
   }
 }
+
+// 编辑
+export function edit() {
+  return {
+    url: 'sys/menu/*',
+    type: 'put',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
+}
+
+// 删除
+export function del () {
+  return {
+    url: `sys/menu/*`,
+    type: 'delete',
+    data: {
+      code: 200,
+      msg: null,
+      data: 1
+    }
+  }
+}
+
 // 批量删除
 export function batchDelete () {
   return {
     url: 'sys/menu/delete',
-    type: 'post',
+    type: 'delete',
     data: {
       code: 200,
       msg: null,
